@@ -66,6 +66,7 @@ public class MainJframe extends JFrame {
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
+        contentPane.setLayout(null);
 
         // Tạo thanh menu
         JMenuBar menuBar = new JMenuBar();

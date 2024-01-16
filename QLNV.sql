@@ -193,6 +193,9 @@ ALTER TABLE PATIENTROOMS
 ALTER COLUMN  NAME VARCHAR(50)
 GO
 
+ALTER TABLE SHIFTS
+ALTER COLUMN  SHIFT_NAME VARCHAR(50)
+GO
 
 --NHẬP DỮ LIỆU
 
@@ -290,3 +293,31 @@ VALUES
     ('Room D.202', 13),
     ('Room D.301', 14),
     ('Room D.302', 14);
+GO
+
+
+INSERT INTO SHIFTS (SHIFT_NAME, SHIFT_START, SHIFT_END)
+VALUES 
+    ('Morning Shift', '04:00', '12:00'),
+    ('Afternoon Shift', '15:00', '23:00'),
+    ('Night Shift', '23:00', '07:00'),
+    ('Day Shift', '08:00', '16:00'),
+    ('Evening Shift', '16:00', '00:00'),
+    ('Late Night Shift', '23:00', '07:00'),
+    ('Early Morning Shift', '05:00', '13:00'),
+    ('Day Shift', '10:00', '18:00'),
+    ('Night Shift', '20:00', '04:00'),
+    ('Morning Shift', '07:30', '15:30'),
+    ('Afternoon Shift', '15:30', '23:30'),
+    ('Night Shift', '23:30', '07:30'),
+    ('Day Shift', '08:30', '16:30'),
+    ('Evening Shift', '16:30', '00:30'),
+    ('Night Shift', '22:30', '06:30'),
+    ('Morning Shift', '06:30', '14:30'),
+    ('Day Shift', '09:30', '17:30'),
+    ('Night Shift', '21:30', '05:30'),
+    ('Morning Shift', '08:00', '16:00'),
+    ('Afternoon Shift', '16:00', '00:00');
+GO
+
+
