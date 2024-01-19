@@ -3,13 +3,17 @@ package Gui;
 import java.awt.EventQueue;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JTextField;
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import java.awt.Color;
 
-public class Page3 extends JInternalFrame {
+public class Employees_Information extends JInternalFrame {
 
 	private static final long serialVersionUID = 1L;
-	  private static Page3 instance;
+	  private static Employees_Information instance;
 
 	/**
 	 * Launch the application.
@@ -18,7 +22,7 @@ public class Page3 extends JInternalFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Page3 frame = new Page3();
+					Employees_Information frame = new Employees_Information();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -30,17 +34,19 @@ public class Page3 extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-    public static Page3 getInstance() {
+    public static Employees_Information getInstance() {
         if (instance == null) {
-            instance = new Page3();
+            instance = new Employees_Information();
         }
         return instance;
     }
-	public Page3() {
-		setTitle("Page 3");
-		setClosable(true);
-		setMaximizable(true);
+	public Employees_Information() {
 		setIconifiable(true);
+		setClosable(true);
+		setTitle("Employees Information");
+		getContentPane().setBackground(new Color(255, 255, 255));
+		setRequestFocusEnabled(false);
+		setMaximizable(true);
 		setBounds(100, 100, 450, 300);
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
