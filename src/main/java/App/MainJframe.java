@@ -11,12 +11,17 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import App.MainJframe ;
-import Gui.Page1;
-import Gui.Page2;
-import Gui.Page3;
-import Gui.Page4;
+import Gui.Employees_Information;
+import Gui.Manage_Departments;
+import Gui.Acounts;
+import Gui.Atiendances;
+import Gui.Basic_Salary;
+import Gui.Educattions;
+import Gui.Job_Position;
 import Gui.Page5;
 import Gui.Page6;
+import Gui.Patientrooms;
+import Gui.Work_Schedules;
 
 import javax.swing.JSeparator;
 import javax.swing.UIManager;
@@ -39,6 +44,15 @@ public class MainJframe extends JFrame {
 	private JMenuItem mntmPage3;
 	private JSeparator separator_2;
 	private JMenuItem mntmPage4;
+	private JMenuItem mntmEDUCATIONS;
+	private JMenuItem mntmPatienrooms;
+	private JSeparator separator_6;
+	private JSeparator separator_7;
+	private JSeparator separator_8;
+	private JMenuItem mntmAtiendances;
+	private JMenuItem mntmAcounts;
+	private JSeparator separator_5;
+	private JMenuItem mntmWork_Schedules;
     
 
     public static void main(String[] args) {
@@ -76,49 +90,104 @@ public class MainJframe extends JFrame {
         JMenu mnMenu1 = new JMenu("Menu 1");
         menuBar.add(mnMenu1);
         
-        JMenuItem mntmPage1 = new JMenuItem("Page 1");
-        mntmPage1.addActionListener(new ActionListener() {
+        JMenuItem mntmEmployees = new JMenuItem("Employees Information");
+        mntmEmployees.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		mntmPage1ActionPerformed(e);
         	}
         });
-        mnMenu1.add(mntmPage1);
+        mnMenu1.add(mntmEmployees);
         
         JSeparator separator_2 = new JSeparator();
         mnMenu1.add(separator_2);
         
-        JMenuItem mntmPage2 = new JMenuItem("Page 2");
-        mntmPage2.addActionListener(new ActionListener() {
+        JMenuItem mntmDepartments = new JMenuItem("Manage Departments");
+        mntmDepartments.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		mntmPage2ActionPerformed(e);
         	}
         });
-        mnMenu1.add(mntmPage2);
+        mnMenu1.add(mntmDepartments);
         
         JSeparator separator_3 = new JSeparator();
         mnMenu1.add(separator_3);
         
-        JMenuItem mntmPage3 = new JMenuItem("Page 3");
-        mntmPage3.addActionListener(new ActionListener() {
+        JMenuItem mntmSALARIES = new JMenuItem("Basic Salary");
+        mntmSALARIES.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		mntmPage3ActionPerformed(e);
         	}
         });
-        mnMenu1.add(mntmPage3);
+        mnMenu1.add(mntmSALARIES);
         
         JSeparator separator_4 = new JSeparator();
         mnMenu1.add(separator_4);
         
-        JMenuItem mntmPage4 = new JMenuItem("Page 4");
-        mntmPage4.addActionListener(new ActionListener() {
+        JMenuItem mntmPOSITIONS = new JMenuItem("Job Position");
+        mntmPOSITIONS.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		mntmPage4ActionPerformed(e);
         	}
         });
-        mnMenu1.add(mntmPage4);
+        mnMenu1.add(mntmPOSITIONS);
         
-        JSeparator separator_5 = new JSeparator();
+        separator_6 = new JSeparator();
+        mnMenu1.add(separator_6);
+        
+        mntmEDUCATIONS = new JMenuItem("Educattions");
+        mntmEDUCATIONS.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		mntmEDUCATIONSActionPerformed(e);
+        	}
+        });
+        mnMenu1.add(mntmEDUCATIONS);
+        
+        separator_7 = new JSeparator();
+        mnMenu1.add(separator_7);
+        
+        mntmPatienrooms = new JMenuItem("Patientrooms");
+        mntmPatienrooms.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		mntmPatienroomsActionPerformed(e);
+        	}
+        });
+        mnMenu1.add(mntmPatienrooms);
+        
+        JSeparator separator_9 = new JSeparator();
+        mnMenu1.add(separator_9);
+        
+        mntmWork_Schedules = new JMenuItem("Work_Schedules");
+        mntmWork_Schedules.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		mntmWork_SchedulesActionPerformed(e);
+        	}
+        });
+        mnMenu1.add(mntmWork_Schedules);
+        
+        JSeparator separator_10 = new JSeparator();
+        mnMenu1.add(separator_10);
+        
+        mntmAtiendances = new JMenuItem("Atiendances");
+        mntmAtiendances.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		mntmAtiendancesActionPerformed(e);
+        	}
+        });
+        mnMenu1.add(mntmAtiendances);
+        
+        separator_5 = new JSeparator();
         mnMenu1.add(separator_5);
+        
+        mntmAcounts = new JMenuItem("Acounts");
+        mntmAcounts.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		mntmAcountsActionPerformed(e);
+        	}
+        });
+        mnMenu1.add(mntmAcounts);
+        
+        separator_8 = new JSeparator();
+        mnMenu1.add(separator_8);
 
         JMenuItem exitItem = new JMenuItem("Exit");
         mnMenu1.add(exitItem);
@@ -164,28 +233,28 @@ public class MainJframe extends JFrame {
     }
 
 	protected void mntmPage1ActionPerformed(ActionEvent e) {
-		Page1 page1 = new Page1().getInstance();
+		Employees_Information page1 = new Employees_Information().getInstance();
 		if(!page1.isVisible()) {
 			page1.setVisible(true);
 			contentPane.add(page1);
 		}
 	}
 	protected void mntmPage2ActionPerformed(ActionEvent e) {
-		Page2 page2 = new Page2().getInstance();
+		Manage_Departments page2 = new Manage_Departments().getInstance();
 		if(!page2.isVisible()) {
 			page2.setVisible(true);
 			contentPane.add(page2);
 		}
 	}
 	protected void mntmPage3ActionPerformed(ActionEvent e) {
-		Page3 page3 = new Page3().getInstance();
+		Basic_Salary page3 = new Basic_Salary().getInstance();
 		if(!page3.isVisible()) {
 			page3.setVisible(true);
 			contentPane.add(page3);
 		}
 	}
 	protected void mntmPage4ActionPerformed(ActionEvent e) {
-		Page4 page4 = new Page4().getInstance();
+		Job_Position page4 = new Job_Position().getInstance();
 		if(!page4.isVisible()) {
 			page4.setVisible(true);
 			contentPane.add(page4);
@@ -209,6 +278,41 @@ public class MainJframe extends JFrame {
 		if(!page6.isVisible()) {
 			page6.setVisible(true);
 			contentPane.add(page6);
+		}
+	}
+	protected void mntmEDUCATIONSActionPerformed(ActionEvent e) {
+		Educattions educattions = new Educattions().getInstance();
+		if(!educattions.isVisible()) {
+			educattions.setVisible(true);
+			contentPane.add(educattions);
+		}
+	}
+	protected void mntmPatienroomsActionPerformed(ActionEvent e) {
+		Patientrooms patienrooms = new Patientrooms().getInstance();
+		if(!patienrooms.isVisible()) {
+			patienrooms.setVisible(true);
+			contentPane.add(patienrooms);
+		}
+	}
+	protected void mntmWork_SchedulesActionPerformed(ActionEvent e) {
+		Work_Schedules work_schedules = new Work_Schedules().getInstance();
+		if(!work_schedules.isVisible()) {
+			work_schedules.setVisible(true);
+			contentPane.add(work_schedules);
+		}
+	}
+	protected void mntmAtiendancesActionPerformed(ActionEvent e) {
+		Atiendances atiendances = new Atiendances().getInstance();
+		if(!atiendances.isVisible()) {
+			atiendances.setVisible(true);
+			contentPane.add(atiendances);
+		}
+	}
+	protected void mntmAcountsActionPerformed(ActionEvent e) {
+		Acounts acounts = new Acounts().getInstance();
+		if(!acounts.isVisible()) {
+			acounts.setVisible(true);
+			contentPane.add(acounts);
 		}
 	}
 }
