@@ -16,15 +16,17 @@ import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.SystemColor;
 
 public class AdminLogin extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JPasswordField passwordField;
-	private JButton btnLogin;
 	private JPanel panel;
+	private Button button;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -46,46 +48,31 @@ public class AdminLogin extends JFrame {
 	 * Create the frame.
 	 */
 	public AdminLogin() {
+		setBackground(Color.WHITE);
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 1137, 911);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(255, 255, 255));
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		
-		textField = new JTextField();
-		textField.setBounds(124, 69, 170, 36);
-		textField.setBorder(new TitledBorder(null, "Email:", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(128, 128, 128)));
-		textField.setColumns(10);
-		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(124, 116, 170, 36);
-		passwordField.setBorder(new TitledBorder(null, "Password:", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(128, 128, 128)));
 		contentPane.setLayout(null);
 		
-		btnLogin = new JButton("Login");
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnLoginActionPerformed(e);
-			}
-		});
-		btnLogin.setBounds(124, 163, 170, 23);
-		btnLogin.setBackground(new Color(128, 128, 128));
-		contentPane.add(btnLogin);
-		contentPane.add(passwordField);
-		contentPane.add(textField);
-		
 		panel = new JPanel();
-		panel.setBackground(new Color(128, 128, 0));
-		panel.setBounds(87, 37, 245, 196);
+		panel.setBackground(Color.GRAY);
+		panel.setBounds(0, 0, 558, 799);
 		contentPane.add(panel);
-		panel.setLayout(null);
-	}
-	protected void btnLoginActionPerformed(ActionEvent e) {
-		MainJframe admin = new MainJframe();
-		admin.setVisible(true);
-		this.setVisible(false);
+		
+		button = new Button("Sign Up");
+		button.setForeground(SystemColor.text);
+		button.setBackground(SystemColor.textHighlight);
+		button.setBounds(742, 495, 185, 36);
+		contentPane.add(button);
+		
+		textField = new JTextField();
+		textField.setBounds(742, 318, 329, 52);
+		contentPane.add(textField);
+		textField.setColumns(10);
 	}
 }

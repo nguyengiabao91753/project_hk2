@@ -244,7 +244,7 @@ VALUES
     (80000.00, 2.5, 1.2);
 GO
 
-INSERT INTO EDUCATIONS (DEGREE_NAME, MAJOR)
+INSERT INTO EDUCAEDUCATIONSTIONS (DEGREE_NAME, MAJOR)
 VALUES 
     ('Bachelor of Science in Nursing', 'Nursing'),
     ('Master of Science in Medicine', 'Internal Medicine'),
