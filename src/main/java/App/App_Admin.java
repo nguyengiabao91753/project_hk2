@@ -5,11 +5,16 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import javax.swing.JDesktopPane;
 
 public class App_Admin extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JPanel panelLateral;
+	private JPanel panelTop;
+	private JDesktopPane desktopPane;
 
 	/**
 	 * Launch the application.
@@ -38,6 +43,19 @@ public class App_Admin extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		panelLateral = new JPanel();
+		panelLateral.setBackground(Color.WHITE);
+		panelLateral.setBounds(0,0,219,663);
+		contentPane.add(panelLateral);
+		
+		panelTop = new JPanel();
+		panelTop.setBackground(new Color(102, 0, 255));
+		panelTop.setBounds(223, 0, 957, 37);
+		contentPane.add(panelTop);
+		
+		desktopPane = new JDesktopPane();
+		desktopPane.setBounds(223, 37, 957, 626);
+		contentPane.add(desktopPane);
 	}
-
 }
