@@ -54,12 +54,14 @@ public class App_Admin extends JFrame {
 		contentPane.setLayout(null);
 		
 		panelLateral = new JPanel();
+		panelLateral.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		panelLateral.setBackground(Color.WHITE);
 		panelLateral.setBounds(0,0,219,663);
 		contentPane.add(panelLateral);
 		panelLateral.setLayout(null);
 		
 		panelTop = new JPanel();
+		panelTop.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		panelTop.setBackground(new Color(102, 0, 255));
 		panelTop.setBounds(223, 0, 957, 37);
 		contentPane.add(panelTop);
@@ -75,6 +77,7 @@ public class App_Admin extends JFrame {
 		panelTop.add(lblNewLabel_1);
 		
 		desktopPane = new JDesktopPane();
+		desktopPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		desktopPane.setBounds(223, 37, 957, 626);
 		contentPane.add(desktopPane);
 	}
