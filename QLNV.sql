@@ -331,3 +331,9 @@ END
 
 
 
+CREATE PROC getAllSchedule
+AS
+BEGIN
+	Select * from WORK_SCHEDULES
+END
+GO

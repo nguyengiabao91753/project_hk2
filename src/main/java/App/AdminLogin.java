@@ -126,7 +126,7 @@ public class AdminLogin extends JFrame {
 		lblImage = new JLabel("");
 		lblImage.setBounds(-11, 0, 676, 640);
 		lblImage.setVerticalAlignment(SwingConstants.TOP);
-		lblImage.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\medical-5459631_640.png"));
+		lblImage.setIcon(new ImageIcon("images\\medical-5459631_640.png"));
 		panel.add(lblImage);
 		contentPane.add(button);
 		contentPane.add(textField);
@@ -140,11 +140,11 @@ public class AdminLogin extends JFrame {
 		contentPane.add(passwordField);
 		
 		lblLogo = new JLabel("");
-		lblLogo.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\z5093637837436_a45c947127ed08faeb08de9ccf099707.jpg"));
-		lblLogo.setBounds(713, 82, 329, 140);
+		lblLogo.setIcon(new ImageIcon("images\\z5093637837436_a45c947127ed08faeb08de9ccf099707.jpg"));
+		lblLogo.setBounds(713, 60, 329, 170);
 		contentPane.add(lblLogo);
 		
-		BufferedImage originalImage = loadImage("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\z5093637837436_a45c947127ed08faeb08de9ccf099707.jpg");
+		BufferedImage originalImage = loadImage("images\\byd2.png");
 	    BufferedImage scaledImage = scaleImage(originalImage, 329, 260); 
 	    setScaledImage(scaledImage, lblLogo);
 		
