@@ -320,6 +320,16 @@ VALUES
     ('Afternoon Shift', '16:00', '00:00');
 GO
 
+CREATE PROC getAllAccount
+AS
+BEGIN
+	SELECT * FROM ACCOUNTS
+END
+
+
+
+
+
 
 CREATE PROC getAllSchedule
 AS
