@@ -76,7 +76,7 @@ public class MainJframe extends JFrame {
     public MainJframe() {
     	setTitle("B.Y.D");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 450, 300);
+        setBounds(100, 100, 1108, 715);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
