@@ -44,9 +44,9 @@ public class Manage_Departments extends JFrame {
     private JScrollPane scrollPane;
     private JTable table;
     private JTextField txtid;
-    private JTextField txtfullname;
-    private JCheckBox chkgender;
-    private JDateChooser dateChooser;
+    private JTextField txtname;
+    private JTextField txthead_of_department;
+    private JTextField txtroom;
     private JTextField textSearch;
     private JButton btnUpdate;
     private JButton btnInsert;
@@ -59,8 +59,7 @@ public class Manage_Departments extends JFrame {
     private JTextField txtPage;
     private JLabel lblTotal;
     private JLabel lblStatus;
-    private JLabel lblPicture;
-    private JButton btnChoose;
+    private JTextField txtChoose;
     private String fileName = null;
     private String fileOld = null;
     private String dirNew = null;
@@ -87,7 +86,7 @@ public class Manage_Departments extends JFrame {
         return instance;
     }
     public Manage_Departments() {
-        setTitle("Manage_Departments");
+        setTitle("Manage_DepartmentsE");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 895, 586);
         contentPane = new JPanel();
@@ -98,24 +97,24 @@ public class Manage_Departments extends JFrame {
         scrollPane.setBounds(15, 75, 527, 306);
 
         txtid = new JTextField();
-        txtid.setBounds(595, 323, 103, 36);
+        txtid.setBounds(595, 160, 230, 36);
         txtid.setBorder(new TitledBorder(null, "id:", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(128, 128, 128)));
         txtid.setColumns(10);
 
-        txtfullname = new JTextField();
-        txtfullname.setBounds(718, 323, 103, 36);
-        txtfullname.setColumns(10);
-        txtfullname.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "fullname:", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(128, 128, 128)));
+        txtname = new JTextField();
+        txtname.setBounds(595, 240, 230, 36);
+        txtname.setColumns(10);
+        txtname.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Name:", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(128, 128, 128)));
 
-        chkgender = new JCheckBox("gender");
-        chkgender.setBounds(595, 373, 73, 23);
-        chkgender.setHorizontalAlignment(SwingConstants.CENTER);
+        txthead_of_department = new JTextField();
+        txthead_of_department.setBounds(595, 320, 230, 36);
+        txthead_of_department.setColumns(10);
+        txthead_of_department.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Head_of_department:", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(128, 128, 128)));
 
-        dateChooser = new JDateChooser();
-        dateChooser.setBounds(710, 373, 111, 42);
-        dateChooser.setDateFormatString("yyyy-MM-dd");
-        dateChooser.setDate(new java.util.Date());
-        dateChooser.setBorder(new TitledBorder(null, "Dob:", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(128, 128, 128)));
+        txtroom = new JTextField();
+        txtroom.setBounds(595, 400, 230, 36);
+        txtroom.setColumns(10);
+        txtroom.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "txtroom:", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(128, 128, 128)));
 
         textSearch = new JTextField();
         textSearch.setBounds(15, 28, 121, 36);
@@ -160,13 +159,8 @@ public class Manage_Departments extends JFrame {
         lblStatus = new JLabel("Page 1 of 10");
         lblStatus.setBounds(487, 446, 55, 14);
 
-        lblPicture = new JLabel("");
-        lblPicture.setBounds(595, 75, 226, 233);
-        lblPicture.setBackground(new Color(0, 0, 255));
-        lblPicture.setOpaque(true);
-
-        btnChoose = new JButton("Choose Picture");
-        btnChoose.setBounds(595, 40, 226, 23);
+        txtChoose = new JTextField("-------------------------------------");
+        txtChoose.setBounds(595, 60, 230, 30);
 
         table = new JTable();
         table.setAutoCreateRowSorter(true);
@@ -177,18 +171,17 @@ public class Manage_Departments extends JFrame {
         contentPane.add(btnInsert);
         contentPane.add(btnUpdate);
         contentPane.add(btnDelete);
-        contentPane.add(btnChoose);
+        contentPane.add(txtChoose);
         contentPane.add(scrollPane);
         contentPane.add(btnFirst);
         contentPane.add(btnPrevious);
         contentPane.add(comboBox);
         contentPane.add(btnNext);
         contentPane.add(btnLast);
-        contentPane.add(lblPicture);
         contentPane.add(txtid);
-        contentPane.add(txtfullname);
-        contentPane.add(chkgender);
-        contentPane.add(dateChooser);
+        contentPane.add(txtname);
+        contentPane.add(txthead_of_department);
+        contentPane.add(txtroom);
         contentPane.add(lblStatus);
         contentPane.add(txtPage);
         contentPane.add(lblTotal);

@@ -87,7 +87,7 @@ public class Job_Position extends JFrame {
         return instance;
     }
     public Job_Position() {
-        setTitle("Job_Position");
+        setTitle("Job_PositionE");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 895, 586);
         contentPane = new JPanel();
