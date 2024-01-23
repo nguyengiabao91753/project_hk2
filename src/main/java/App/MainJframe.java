@@ -1,9 +1,13 @@
 package App;
 
 import java.awt.EventQueue;
+import java.awt.Graphics2D;
+import java.awt.Image;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -27,6 +31,7 @@ import javax.swing.JSeparator;
 import javax.swing.UIManager;
 
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 
 public class MainJframe extends JFrame {
@@ -315,4 +320,5 @@ public class MainJframe extends JFrame {
 			contentPane.add(acounts);
 		}
 	}
+	
 }
