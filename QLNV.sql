@@ -327,6 +327,18 @@ BEGIN
 END
 
 
+CREATE PROC getAccount
+@pageNumber INT , @rowOfPage INT
+AS
+BEGIN
+	SELECT *FROM ACCOUNTS
+	ORDER BY ACCOUNT_ID
+	OFFSET (@pageNumber -1)*@rowOfPage rows
+	FETCH NEXT @rowOfPage ROWS ONLY
+END
+GO
+
+
 
 
 
@@ -337,3 +349,4 @@ BEGIN
 	Select * from WORK_SCHEDULES
 END
 GO
+

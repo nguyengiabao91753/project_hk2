@@ -83,7 +83,7 @@ public class App_Admin extends JFrame {
 		contentPane.setLayout(null);
 		
 		panelLateral = new JPanel();
-		panelLateral.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+		panelLateral.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		panelLateral.setBackground(Color.WHITE);
 		panelLateral.setBounds(0,0,219,663);
 		contentPane.add(panelLateral);
@@ -117,9 +117,11 @@ public class App_Admin extends JFrame {
 		desktopPane.setBounds(223, 37, 957, 626);
 		contentPane.add(desktopPane);
 	}
+	
 	protected void lblClose(MouseEvent e) {
 		System.exit(0);
 	}
+	
 	protected void contentPaneMouseDragged(MouseEvent e) {
 		int x = e.getXOnScreen();
         int y = e.getYOnScreen();
