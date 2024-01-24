@@ -13,6 +13,9 @@ import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Gui.Work_Schedules;
+
 import java.awt.Color;
 import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
@@ -64,6 +67,7 @@ public class App_Admin extends JFrame {
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
+	Work_Schedules work;
 
 	/**
 	 * Launch the application.
@@ -422,6 +426,15 @@ public class App_Admin extends JFrame {
 		contentPane.add(desktopPane);
 	}
 	
+	public void openWorkSchedule() {
+		if(work == null || work.isClosed()) {
+			work = new Work_Schedules();
+			work.setBounds(0,0,957,626);
+			desktopPane.add(work);
+			work.show();
+		}
+	}
+	
 	protected void lblClose(MouseEvent e) {
 		System.exit(0);
 	}
@@ -584,6 +597,7 @@ public class App_Admin extends JFrame {
 				panelDepart.setVisible(false);
 				panelEdu.setVisible(false);
 				panelWork.setVisible(true);
+				openWorkSchedule();
 			}
 			opensidebar();
 		} catch (Exception e2) {

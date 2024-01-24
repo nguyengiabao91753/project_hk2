@@ -7,30 +7,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.DBCon;
-import entity.Workschedule;
+import entity.Room;
 
-public class WorkscheduleDAO {
-	public List<Workschedule> selectAllSchedule() {
-		List<Workschedule> list = new ArrayList<>();
+public class RoomDAO {
+	public List<Room> selectAllRoom() {
+		List<Room> list = new ArrayList<>();
 		try(
 				Connection con = DBCon.getConnection();
-				CallableStatement cs =  con.prepareCall("{call getAllSchedule}");
+				CallableStatement cs =  con.prepareCall("{call getAllRoom}");
 				ResultSet rs = cs.executeQuery();
 				) {
 			while(rs.next()) {
-				list.add(new Workschedule(
-						rs.getInt("schedule_id"),
-						rs.getInt("employee_id"),
-						rs.getInt("shift_id"),
+				list.add(new Room(
 						rs.getInt("room_id"),
-						rs.getDate("work_date")
+						rs.getString("name"),
+						rs.getInt("department_id")
 						));
 			}
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return list;
 	}
-	
 }
