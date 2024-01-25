@@ -7,23 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.DBCon;
-import entity.Workschedule;
+import entity.Shift;
 
-public class WorkscheduleDAO {
-	public List<Workschedule> selectAllSchedule() {
-		List<Workschedule> list = new ArrayList<>();
+public class ShiftDAO {
+	
+	public List<Shift> getAllShift() {
+		List<Shift> list = new ArrayList<>();
 		try(
 				Connection con = DBCon.getConnection();
-				CallableStatement cs =  con.prepareCall("{call getAllSchedule}");
+				CallableStatement cs =  con.prepareCall("{call getAllShift}");
 				ResultSet rs = cs.executeQuery();
 				) {
 			while(rs.next()) {
-				list.add(new Workschedule(
-						rs.getInt("schedule_id"),
-						rs.getInt("employee_id"),
+				list.add(new Shift(
 						rs.getInt("shift_id"),
-						rs.getInt("room_id"),
-						rs.getDate("work_date")
+						rs.getString("shift_name"),
+						rs.getTime("shift_start").toString(),
+						rs.getTime("shift_end").toString()
 						));
 			}
 		} catch (Exception e) {
@@ -32,5 +32,4 @@ public class WorkscheduleDAO {
 		}
 		return list;
 	}
-	
 }

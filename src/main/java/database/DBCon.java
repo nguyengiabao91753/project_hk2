@@ -9,7 +9,7 @@ public class DBCon {
     private static String portNumber = "1433";
     private static String databaseName = "QLNV";
     private static String username = "sa";
-    private static String password = "123456";
+    private static String password = "1234567890";
 
     public static String getUrl() {
         return url + serverName + ":" + portNumber + "; databaseName=" + databaseName + "; user=" + username + "; password=" + password;

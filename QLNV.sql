@@ -1,5 +1,7 @@
 ﻿USE master
 GO
+
+DROP DATABASE IF EXISTS QLNV
 CREATE DATABASE QLNV
 GO
 
@@ -12,7 +14,7 @@ CREATE TABLE EMPLOYEES
     FULL_NAME NVARCHAR(50),
     ETHNICITY NVARCHAR(50),
     DATE_OF_BIRTH DATE,
-    GENDER NVARCHAR(5),
+    GENDER NVARCHAR(10),
     ADDRESS NVARCHAR(100),
     SALARY_LEVEL INT,
     SUPERVISOR_ID INT,
@@ -199,6 +201,7 @@ GO
 
 --NHẬP DỮ LIỆU
 
+
 INSERT INTO DEPARTMENTS (DEPARTMENT_NAME, HEAD_OF_DEPARTMENT, ROOM)
 VALUES 
     ('Cardiology', 'Dr. Johnson', 'Room 301'), --TIM MẠCH
@@ -244,7 +247,7 @@ VALUES
     (80000.00, 2.5, 1.2);
 GO
 
-INSERT INTO EDUCAEDUCATIONSTIONS (DEGREE_NAME, MAJOR)
+INSERT INTO EDUCATIONS(DEGREE_NAME, MAJOR)
 VALUES 
     ('Bachelor of Science in Nursing', 'Nursing'),
     ('Master of Science in Medicine', 'Internal Medicine'),
@@ -288,11 +291,7 @@ VALUES
     ('Room C.201', 11),
     ('Room C.202', 11),
     ('Room D.101', 12),
-    ('Room D.102', 12),
-	('Room D.201', 13),
-    ('Room D.202', 13),
-    ('Room D.301', 14),
-    ('Room D.302', 14);
+    ('Room D.102', 12);
 GO
 
 
@@ -320,12 +319,30 @@ VALUES
     ('Afternoon Shift', '16:00', '00:00');
 GO
 
+ INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE)
+VALUES 
+    ('John Doe', 'Asian', '1990-05-15', 'Male', '123 Main Street, Cityville', 3, NULL, 5, 7, 4,'images/image1.png'),
+    ('Jane Smith', 'Caucasian', '1985-08-22', 'Female', '456 Oak Avenue, Townsville', 4, NULL, 5, 8, 5,'images/image1.png');
+GO
+
+INSERT INTO ACCOUNTS( USERNAME, PASSWORD)
+VALUES
+	('JohnDoe','1234567'),
+	('JaneSmith','1234567');
+GO
+
+INSERT INTO WORK_SCHEDULES(EMPLOYEE_ID, SHIFT_ID, ROOM_ID, WORK_DATE)
+VALUES
+	(1,1,1,'2024-01-07'),
+	(2,2,2,'2024-01-06');
+GO
+SELECT * FROM WORK_SCHEDULES
 CREATE PROC getAllAccount
 AS
 BEGIN
 	SELECT * FROM ACCOUNTS
 END
-
+GO
 
 CREATE PROC getAccount
 @pageNumber INT , @rowOfPage INT
@@ -350,3 +367,19 @@ BEGIN
 END
 GO
 
+<<<<<<< HEAD
+=======
+CREATE PROC getAllRoom
+AS
+BEGIN
+	SELECT * FROM PATIENTROOMS
+END
+GO
+
+CREATE PROC getAllShift
+AS
+BEGIN
+	SELECT * FROM SHIFTS
+END
+GO
+>>>>>>> b48dc66264ebc36259fa4266b2ce18d7801905a7
