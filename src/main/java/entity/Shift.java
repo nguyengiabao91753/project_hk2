@@ -39,7 +39,7 @@ public class Shift {
 	}
 	@Override
 	public String toString() {
-		return "Shift [id=" + id + ", name=" + name + ", start=" + start + ", end=" + end + "]";
+		return start+"-"+end;
 	}
 	
 	

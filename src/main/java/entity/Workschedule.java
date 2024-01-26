@@ -1,5 +1,6 @@
 package entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Workschedule {
@@ -7,9 +8,9 @@ public class Workschedule {
 	private int employee_id;
 	private int shift_id;
 	private int room_id;
-	private Date work_date;
-	
-	public Workschedule(int id, int employee_id, int shift_id, int room_id, Date work_date) {
+	private LocalDate work_date;
+	public Workschedule() {}
+	public Workschedule(int id, int employee_id, int shift_id, int room_id, LocalDate work_date) {
 		super();
 		this.id = id;
 		this.employee_id = employee_id;
@@ -41,10 +42,10 @@ public class Workschedule {
 	public void setRoom_id(int room_id) {
 		this.room_id = room_id;
 	}
-	public Date getWork_date() {
+	public LocalDate getWork_date() {
 		return work_date;
 	}
-	public void setWork_date(Date work_date) {
+	public void setWork_date(LocalDate work_date) {
 		this.work_date = work_date;
 	}
 	@Override
