@@ -1,35 +1,37 @@
 package dao;
 
 import java.awt.EventQueue;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JInternalFrame;
 
-public class Manage_DepartmentsDAO extends JInternalFrame {
+import database.DBCon;
+import entity.DEPARTMENTS;
 
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Manage_DepartmentsDAO frame = new Manage_DepartmentsDAO();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+public class Manage_DepartmentsDAO {
+	public List<DEPARTMENTS> selectDepartments() {
+		List<DEPARTMENTS> list = new ArrayList<>();
+		try(Connection con = DBCon.getConnection();
+				CallableStatement cs =  con.prepareCall("{call getAllDep}");
+				ResultSet rs = cs.executeQuery();
+			) {
+				while(rs.next()) {
+					//lấy dữ liệu 
+					list.add(new DEPARTMENTS(
+							rs.getInt("DEPARTMENT_ID"), 
+							rs.getString("DEPARTMENT_NAME"), 
+							rs.getString("HEAD_OF_DEPARTMENT"), 
+							rs.getString("ROOM")
+							));
 				}
+			}catch (Exception e) {
+				e.printStackTrace();
 			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Manage_DepartmentsDAO() {
-		setBounds(100, 100, 450, 300);
-
+		return list;
 	}
 
 }

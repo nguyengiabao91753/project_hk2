@@ -1,10 +1,10 @@
 package entity;
-public class Manage_DepartmentsE {
+public class DEPARTMENTS {
 	private int department_id ;
 	private String  department_name ;
 	private String head_of_department ;
 	private String room ;
-	public Manage_DepartmentsE() {
+	public DEPARTMENTS() {
 	}
 	/**
 	 * @param department_id
@@ -12,7 +12,7 @@ public class Manage_DepartmentsE {
 	 * @param head_of_department
 	 * @param room
 	 */
-	public Manage_DepartmentsE(int department_id, String department_name, String head_of_department, String room) {
+	public DEPARTMENTS(int department_id, String department_name, String head_of_department, String room) {
 		super();
 		this.department_id = department_id;
 		this.department_name = department_name;
@@ -43,11 +43,13 @@ public class Manage_DepartmentsE {
 	public void setRoom(String room) {
 		this.room = room;
 	}
+	
 	@Override
 	public String toString() {
-		return "Manage_DepartmentsE [department_id=" + department_id + ", department_name=" + department_name
+		return "DEPARTMENTS [department_id=" + department_id + ", department_name=" + department_name
 				+ ", head_of_department=" + head_of_department + ", room=" + room + "]";
 	}
+	
 	
 	
 

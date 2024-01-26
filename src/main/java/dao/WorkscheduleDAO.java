@@ -19,7 +19,7 @@ public class WorkscheduleDAO {
 				) {
 			while(rs.next()) {
 				list.add(new Workschedule(
-						rs.getInt("id"),
+						rs.getInt("schedule_id"),
 						rs.getInt("employee_id"),
 						rs.getInt("shift_id"),
 						rs.getInt("room_id"),
