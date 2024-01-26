@@ -5,37 +5,40 @@ import java.time.LocalDate;
 
 public class Employee {
 	private int id;
-	private String name;
-	private String ethncity;
+	private String full_name;
+	private String ethnicity;
 	private LocalDate date_of_birth;
 	private boolean gender;
-	private String adress;
+	private String address;
 	private int salary_level;
 	private int supervisor_id;
 	private int department_id;
 	private int education_id;
 	private int position_id;
 	private String picture;
+	private int level;
 	
 	public Employee() {
 		
 	}
 
-	public Employee(int id, String name, String ethncity, LocalDate date_of_birth, boolean gender, String adress,
-			int salary_level, int supervisor_id, int department_id, int education_id, int position_id, String picture) {
+	public Employee(int id, String full_name, String ethnicity, LocalDate date_of_birth, boolean gender, String address,
+			int salary_level, int supervisor_id, int department_id, int education_id, int position_id, String picture,
+			int level) {
 		super();
 		this.id = id;
-		this.name = name;
-		this.ethncity = ethncity;
+		this.full_name = full_name;
+		this.ethnicity = ethnicity;
 		this.date_of_birth = date_of_birth;
 		this.gender = gender;
-		this.adress = adress;
+		this.address = address;
 		this.salary_level = salary_level;
 		this.supervisor_id = supervisor_id;
 		this.department_id = department_id;
 		this.education_id = education_id;
 		this.position_id = position_id;
 		this.picture = picture;
+		this.level = level;
 	}
 
 	public int getId() {
@@ -46,20 +49,20 @@ public class Employee {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getFull_name() {
+		return full_name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFull_name(String full_name) {
+		this.full_name = full_name;
 	}
 
-	public String getEthncity() {
-		return ethncity;
+	public String getEthnicity() {
+		return ethnicity;
 	}
 
-	public void setEthncity(String ethncity) {
-		this.ethncity = ethncity;
+	public void setEthnicity(String ethnicity) {
+		this.ethnicity = ethnicity;
 	}
 
 	public LocalDate getDate_of_birth() {
@@ -78,12 +81,12 @@ public class Employee {
 		this.gender = gender;
 	}
 
-	public String getAdress() {
-		return adress;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setAdress(String adress) {
-		this.adress = adress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public int getSalary_level() {
@@ -134,13 +137,23 @@ public class Employee {
 		this.picture = picture;
 	}
 
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
 	@Override
 	public String toString() {
-		return "Employee [id=" + id + ", name=" + name + ", ethncity=" + ethncity + ", date_of_birth=" + date_of_birth
-				+ ", gender=" + gender + ", adress=" + adress + ", salary_level=" + salary_level + ", supervisor_id="
-				+ supervisor_id + ", department_id=" + department_id + ", education_id=" + education_id
-				+ ", position_id=" + position_id + ", picture=" + picture + "]";
+		return "Employee [id=" + id + ", full_name=" + full_name + ", ethnicity=" + ethnicity + ", date_of_birth="
+				+ date_of_birth + ", gender=" + gender + ", address=" + address + ", salary_level=" + salary_level
+				+ ", supervisor_id=" + supervisor_id + ", department_id=" + department_id + ", education_id="
+				+ education_id + ", position_id=" + position_id + ", picture=" + picture + ", level=" + level + "]";
 	}
 	
 	
+	
+
 }

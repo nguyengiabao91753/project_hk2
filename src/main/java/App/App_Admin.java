@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Gui.EmployeeForm;
 import Gui.Work_Schedules;
 
 import java.awt.Color;
@@ -40,6 +41,8 @@ import javax.swing.JOptionPane;
 
 
 public class App_Admin extends JFrame {
+	
+	EmployeeForm femp;
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -523,7 +526,8 @@ public class App_Admin extends JFrame {
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
 			}
-			opensidebar();
+//			opensidebar();
+			loadEmployeeForm();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -638,5 +642,15 @@ public class App_Admin extends JFrame {
 		}
 	}
 	protected void btnStaMouseClicked(MouseEvent e) {
+	}
+	
+	void loadEmployeeForm() {
+		if (femp == null || femp.isClosed()) {
+	        femp = new EmployeeForm();
+	        femp.setBounds(0, 0, 957, 627);
+	        desktopPane.add(femp);
+	        femp.show();
+	    }
+
 	}
 }
