@@ -11,10 +11,15 @@ import java.awt.Image;
 
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+<<<<<<< HEAD
 import Gui.EmployeeForm;
+=======
+import Gui.Atiendances;
+>>>>>>> 88b0e6830a09bd4c9089819ea3b14cecca335d17
 import Gui.Work_Schedules;
 
 import java.awt.Color;
@@ -41,8 +46,6 @@ import javax.swing.JOptionPane;
 
 
 public class App_Admin extends JFrame {
-	
-	EmployeeForm femp;
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -71,6 +74,8 @@ public class App_Admin extends JFrame {
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
 	Work_Schedules work;
+	Atiendances attendance;
+	EmployeeForm femp;
 
 	/**
 	 * Launch the application.
@@ -434,11 +439,28 @@ public class App_Admin extends JFrame {
 	}
 	
 	public void openWorkSchedule() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+        for (JInternalFrame frame : frames) {
+            frame.doDefaultCloseAction();
+        }
 		if(work == null || work.isClosed()) {
 			work = new Work_Schedules();
 			work.setBounds(0,0,957,626);
 			desktopPane.add(work);
 			work.show();
+		}
+	}
+	public void openAttendance() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+        for (JInternalFrame frame : frames) {
+            frame.doDefaultCloseAction();
+        }
+		if(attendance == null || attendance.isClosed()) {
+			attendance = new Atiendances();
+			attendance.setBounds(0,0,957,626);
+			
+			desktopPane.add(attendance);
+			attendance.show();
 		}
 	}
 	
@@ -623,6 +645,7 @@ public class App_Admin extends JFrame {
 				panelDepart.setVisible(false);
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
+				openAttendance();
 			}
 			opensidebar();
 		} catch (Exception e2) {

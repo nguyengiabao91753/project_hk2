@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import database.DBCon;
 import entity.Workschedule;
 
@@ -23,7 +25,7 @@ public class WorkscheduleDAO {
 						rs.getInt("employee_id"),
 						rs.getInt("shift_id"),
 						rs.getInt("room_id"),
-						rs.getDate("work_date")
+						rs.getDate("work_date").toLocalDate()
 						));
 			}
 		} catch (Exception e) {
@@ -31,6 +33,39 @@ public class WorkscheduleDAO {
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+	public void update(Workschedule worknew) {
+		try(
+				var con = DBCon.getConnection();
+				var cs = con.prepareCall("{call updateSchedule(?,?,?,?,?)}");
+				) {
+			cs.setInt(1, worknew.getId());
+			cs.setInt(2, worknew.getEmployee_id());
+			cs.setInt(3, worknew.getShift_id());
+			cs.setInt(4, worknew.getRoom_id());
+			cs.setDate(5, java.sql.Date.valueOf(worknew.getWork_date()));
+			
+			if(cs.executeUpdate() >0) {
+				JOptionPane.showMessageDialog(null, "Update Success");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	
+	public void insert(Workschedule worknew) {
+		try(
+				var con = DBCon.getConnection();
+				var cs = con.prepareCall("{call insertSchedule(?,?,?,?)}")
+				) {
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 	}
 	
 }
