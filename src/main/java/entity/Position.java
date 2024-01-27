@@ -1,15 +1,15 @@
 package entity;
-public class Job_PositionE {
+public class Position {
 	private int position_id ;
 	private String position_name ;
-	public Job_PositionE() {
+	public Position() {
 		
 	}
 	/**
 	 * @param position_id
 	 * @param position_name
 	 */
-	public Job_PositionE(int position_id, String position_name) {
+	public Position(int position_id, String position_name) {
 		super();
 		this.position_id = position_id;
 		this.position_name = position_name;
@@ -28,7 +28,7 @@ public class Job_PositionE {
 	}
 	@Override
 	public String toString() {
-		return "Job_PositionE [position_id=" + position_id + ", position_name=" + position_name + "]";
+		return "Position [position_id=" + position_id + ", position_name=" + position_name + "]";
 	}
 	
 }

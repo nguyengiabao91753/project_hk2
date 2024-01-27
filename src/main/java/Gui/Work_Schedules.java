@@ -7,32 +7,42 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import com.toedter.calendar.JDateChooser;
 
+import crud.Addschedule;
 import dao.RoomDAO;
 import dao.ShiftDAO;
 import dao.WorkscheduleDAO;
 import entity.Room;
 import entity.Shift;
+import entity.Workschedule;
 
 import javax.swing.border.LineBorder;
 import java.awt.Font;
 import java.awt.SystemColor;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultRowSorter;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JButton;
 
 public class Work_Schedules extends JInternalFrame {
 	
@@ -59,7 +69,16 @@ public class Work_Schedules extends JInternalFrame {
 	
 	RoomDAO roomdao = new RoomDAO();
 	ShiftDAO shiftdao = new ShiftDAO();
+	
 	WorkscheduleDAO workdao = new WorkscheduleDAO();
+	private JButton btnFirst;
+	private JButton btnPrevious;
+	private JButton btnNext;
+	private JButton btnLast;
+	private JTextField textPageNum;
+	private JButton btnAdd;
+	
+	Addschedule add;
 	/**
 	 * Launch the application.
 	 */
@@ -107,31 +126,50 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(scrollPane);
 		
 		table = new JTable();
+		table.setFillsViewportHeight(true);
+		table.setAutoCreateRowSorter(true);
+		
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				tableMouseClicked(e);
 			}
 		});
-		table.setFillsViewportHeight(true);
 		table.setBorder(new LineBorder(new Color(192, 192, 192)));
 		scrollPane.setColumnHeaderView(table);
 		
 		textSearch = new JTextField();
+		textSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textSearchActionPerformed(e);
+			}
+		});
 		textSearch.setBorder(new TitledBorder(null, "Search: ", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(128, 128, 128)));
 		textSearch.setBounds(267, 11, 105, 36);
 		getContentPane().add(textSearch);
 		textSearch.setColumns(10);
 		
 		lblAdd = new JLabel("ADD");
+		lblAdd.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblAddMouseClicked(e);
+			}
+		});
 		lblAdd.setForeground(new Color(255, 255, 255));
 		lblAdd.setOpaque(true);
 		lblAdd.setBackground(new Color(51, 0, 255));
 		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAdd.setBounds(855, 421, 76, 27);
+		lblAdd.setBounds(855, 456, 76, 27);
 		getContentPane().add(lblAdd);
 		
 		lblUpdate = new JLabel("UPDATE");
+		lblUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblUpdateMouseClicked(e);
+			}
+		});
 		lblUpdate.setForeground(Color.WHITE);
 		lblUpdate.setBackground(new Color(0, 255, 64));
 		lblUpdate.setOpaque(true);
@@ -152,12 +190,12 @@ public class Work_Schedules extends JInternalFrame {
 		lblId.setBorder(new LineBorder(SystemColor.activeCaptionBorder));
 		lblId.setOpaque(true);
 		lblId.setBackground(Color.WHITE);
-		lblId.setBounds(117, 98, 105, 25);
+		lblId.setBounds(99, 98, 149, 25);
 		getContentPane().add(lblId);
 		
 		dateChooser = new JDateChooser();
 		dateChooser.setBorder(new LineBorder(SystemColor.activeCaptionBorder));
-		dateChooser.setBounds(117, 251, 105, 31);
+		dateChooser.setBounds(99, 251, 149, 31);
 		getContentPane().add(dateChooser);
 		
 		lblNewLabel = new JLabel("ID:");
@@ -193,22 +231,58 @@ public class Work_Schedules extends JInternalFrame {
 		cbbRoom = new JComboBox();
 		cbbRoom.setBorder(new LineBorder(SystemColor.activeCaptionBorder));
 		cbbRoom.setBackground(Color.WHITE);
-		cbbRoom.setBounds(117, 170, 105, 30);
+		cbbRoom.setBounds(99, 170, 149, 30);
 		getContentPane().add(cbbRoom);
 		
 		cbbShift = new JComboBox();
 		cbbShift.setBorder(new LineBorder(SystemColor.activeCaptionBorder));
 		cbbShift.setBackground(Color.WHITE);
-		cbbShift.setBounds(117, 211, 105, 30);
+		cbbShift.setBounds(99, 211, 149, 30);
 		getContentPane().add(cbbShift);
 		
 		txtEmployee = new JTextField();
-		txtEmployee.setBounds(117, 134, 105, 27);
+		txtEmployee.setBounds(99, 134, 149, 27);
 		getContentPane().add(txtEmployee);
 		txtEmployee.setColumns(10);
 		
+		btnFirst = new JButton("First");
+		btnFirst.setBounds(318, 416, 89, 23);
+		getContentPane().add(btnFirst);
+		
+		btnPrevious = new JButton("Previous'");
+		btnPrevious.setBounds(417, 416, 89, 23);
+		getContentPane().add(btnPrevious);
+		
+		btnNext = new JButton("Next");
+		btnNext.setBounds(728, 416, 89, 23);
+		getContentPane().add(btnNext);
+		
+		btnLast = new JButton("Last");
+		btnLast.setBounds(842, 416, 89, 23);
+		getContentPane().add(btnLast);
+		
+		textPageNum = new JTextField();
+		textPageNum.setHorizontalAlignment(SwingConstants.CENTER);
+		textPageNum.setText("1");
+		textPageNum.setBounds(557, 416, 86, 20);
+		getContentPane().add(textPageNum);
+		textPageNum.setColumns(10);
+		
+		btnAdd = new JButton("ADD");
+		btnAdd.setBackground(new Color(0, 102, 255));
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnAddActionPerformed(e);
+			}
+		});
+		btnAdd.setBounds(307, 475, 89, 23);
+		getContentPane().add(btnAdd);
+		
 		loadWorkSchedule();
 	}
+//	public void String nameEmpolyee(int a) {
+//		List<Employee> listEmp = 
+//	}
 	public String nameRoom(int a) {
 		List<Room> listRoom = roomdao.selectAllRoom();
 		for (Room room : listRoom) {
@@ -227,9 +301,9 @@ public class Work_Schedules extends JInternalFrame {
 		}
 		return null;
 	}
+	
 	public void loadWorkSchedule() {
 		DefaultTableModel model = new DefaultTableModel();
-		
 		model.addColumn("Id");
 		model.addColumn("Employee_id");
 		model.addColumn("Room");
@@ -245,6 +319,18 @@ public class Work_Schedules extends JInternalFrame {
 		}));
 		
 		table.setModel(model);
+		
+	}
+	public void refresh() {
+		DefaultTableModel model = (DefaultTableModel)table.getModel();
+		model.setRowCount(0); 
+		workdao.selectAllSchedule().stream().forEach(work -> model.addRow(new Object[] {
+				work.getId(),
+				work.getEmployee_id(),
+				nameRoom(work.getRoom_id()),
+				nameShift(work.getShift_id()),
+				work.getWork_date()
+		}));
 	}
 	protected void tableMouseClicked(MouseEvent e) {
 		int rowIndex = table.getSelectedRow();
@@ -252,17 +338,31 @@ public class Work_Schedules extends JInternalFrame {
 		txtEmployee.setText(table.getValueAt(rowIndex, 1).toString());
 		
 		var roommodel = new DefaultComboBoxModel();
+		var shiftmodel = new DefaultComboBoxModel();
 		
 		List<Room> listRoom = roomdao.selectAllRoom();
+		List<Shift> listshift = shiftdao.getAllShift();
 		
 		roommodel.addAll(listRoom);
+		shiftmodel.addAll(listshift);
+		
 		cbbRoom.setModel(roommodel);
+		cbbShift.setModel(shiftmodel);
+		
 		for (Room room : listRoom) {
 			var room_select = table.getValueAt(rowIndex, 2).toString();
 			if(room_select.equals(room.getName())) {
 				cbbRoom.setSelectedIndex(room.getId()-1);
 			}
 		}
+		
+		for(Shift shift : listshift) {
+			var shift_selected = table.getValueAt(rowIndex, 3).toString();
+			if(shift_selected.equals(shift.getStart()+"-"+shift.getEnd())){
+				cbbShift.setSelectedIndex(shift.getId()-1);
+			}
+		}
+		
 		try {
 			dateChooser.setDate(
 					new SimpleDateFormat("yyyy-MM-dd").parse(table.getValueAt(rowIndex, 4).toString())
@@ -271,5 +371,38 @@ public class Work_Schedules extends JInternalFrame {
 			// TODO: handle exception
 		}
 		
+	}
+	protected void textSearchActionPerformed(ActionEvent e) {
+		String find = textSearch.getText();
+		DefaultRowSorter<?,?> sorter = (DefaultRowSorter<?,?>)table.getRowSorter();
+		sorter.setRowFilter(RowFilter.regexFilter(find));
+		sorter.setSortKeys(null);
+	}
+	protected void lblAddMouseClicked(MouseEvent e) {
+		Addschedule add = null;
+		if(add == null || add.isClosed()) {
+			add  = new Addschedule();
+			add.setVisible(true);
+		}
+	}
+	protected void btnAddActionPerformed(ActionEvent e) {
+		
+		if(add == null || add.isClosed()) {
+			add  = new Addschedule();
+			add.setBounds(0,0,957,626);
+			add.show();
+			add.toFront();
+		}
+	}
+	protected void lblUpdateMouseClicked(MouseEvent e) {
+		Workschedule worknew = new Workschedule();
+		worknew.setId(Integer.parseInt(lblId.getText()));
+		worknew.setEmployee_id(Integer.parseInt(txtEmployee.getText()));
+		worknew.setShift_id(cbbShift.getSelectedIndex()+1);
+		worknew.setRoom_id(cbbRoom.getSelectedIndex()+1);
+		worknew.setWork_date(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()));
+		
+		workdao.update(worknew);
+		refresh();
 	}
 }

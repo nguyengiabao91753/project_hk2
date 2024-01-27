@@ -377,3 +377,12 @@ BEGIN
 	Select * from DEPARTMENTS
 END
 GO 
+
+//Job_Positions
+
+CREATE PROC getAllPos
+AS
+BEGIN
+	Select * from POSITIONS
+END
+GO

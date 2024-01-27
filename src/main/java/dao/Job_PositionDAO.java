@@ -9,19 +9,20 @@ import javax.swing.JInternalFrame;
 
 import database.DBCon;
 import entity.Job_PositionE;
+import entity.Position;
 
 public class Job_PositionDAO {
-	public List<Job_PositionE> selectDepartments() {
-		List<Job_PositionE> list = new ArrayList<>();
+	public List<Position> selectPosition() {
+		List<Position> list = new ArrayList<>();
 		try(Connection con = DBCon.getConnection();
-				CallableStatement cs =  con.prepareCall("{call getAllCus}");
+				CallableStatement cs =  con.prepareCall("{call getAllPos}");
 				ResultSet rs = cs.executeQuery();
 			) {
 				while(rs.next()) {
 					//lấy dữ liệu 
-					list.add(new Job_PositionE(
-							rs.getInt("POSITION_ID"), 
-							rs.getString("POSITION_NAME")
+					list.add(new Position(
+							rs.getInt("position_id"), 
+							rs.getString("position_name")
 							));
 				}
 			}catch (Exception e) {

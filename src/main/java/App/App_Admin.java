@@ -11,10 +11,12 @@ import java.awt.Image;
 
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Gui.Manage_Departments;
+import Gui.Atiendances;
 import Gui.Work_Schedules;
 
 import java.awt.Color;
@@ -38,6 +40,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import java.awt.FlowLayout;
 
 
 public class App_Admin extends JFrame {
@@ -71,6 +74,9 @@ public class App_Admin extends JFrame {
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
 	Work_Schedules work;
+	Atiendances attendance;
+	private JButton btnPosition;
+	private JPanel panelPos;
 
 	/**
 	 * Launch the application.
@@ -156,7 +162,7 @@ public class App_Admin extends JFrame {
 		panelLateral = new JPanel();
 
 		panelLateral.setBackground(Color.WHITE);
-		panelLateral.setBounds(0,0,219,663);
+		panelLateral.setBounds(10,0,219,663);
 		contentPane.add(panelLateral);
 		
 		btnSta = new JButton("<html>\r\n\t<p>\tStatistical</p>\r\n</html>");
@@ -398,6 +404,36 @@ public class App_Admin extends JFrame {
 		lblNewLabel_2.setBounds(80, 47, 120, 14);
 		panelLateral.add(lblNewLabel_2);
 		
+		btnPosition = new JButton(" Position");
+		btnPosition.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnPositionMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnPositionMouseExited(e);
+			}
+		});
+		btnPosition.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnPositionActionPerformed(e);
+			}
+		});
+		btnPosition.setHorizontalAlignment(SwingConstants.LEFT);
+		btnPosition.setFocusPainted(false);
+		btnPosition.setBorderPainted(false);
+		btnPosition.setBackground(Color.WHITE);
+		btnPosition.setBounds(10, 423, 187, 37);
+		panelLateral.add(btnPosition);
+		
+		panelPos = new JPanel();
+		panelPos.setVisible(false);
+		panelPos.setBackground(new Color(102, 0, 255));
+		panelPos.setBounds(199, 423, 9, 37);
+		panelLateral.add(panelPos);
+		panelPos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
 		panelTop = new JPanel();
 		panelTop.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		panelTop.setBackground(new Color(102, 0, 255));
@@ -434,11 +470,28 @@ public class App_Admin extends JFrame {
 	}
 	
 	public void openWorkSchedule() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+        for (JInternalFrame frame : frames) {
+            frame.doDefaultCloseAction();
+        }
 		if(work == null || work.isClosed()) {
 			work = new Work_Schedules();
 			work.setBounds(0,0,957,626);
 			desktopPane.add(work);
 			work.show();
+		}
+	}
+	public void openAttendance() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+        for (JInternalFrame frame : frames) {
+            frame.doDefaultCloseAction();
+        }
+		if(attendance == null || attendance.isClosed()) {
+			attendance = new Atiendances();
+			attendance.setBounds(0,0,957,626);
+			
+			desktopPane.add(attendance);
+			attendance.show();
 		}
 	}
 	
@@ -465,6 +518,7 @@ public class App_Admin extends JFrame {
 				panelDepart.setVisible(false);
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
+				panelPos.setVisible(false);
 			}
 			opensidebar();
 			
@@ -491,6 +545,7 @@ public class App_Admin extends JFrame {
 				panelDepart.setVisible(false);
 				panelEdu.setVisible(true);
 				panelWork.setVisible(false);
+				panelPos.setVisible(false);
 			}
 			opensidebar();
 			
@@ -508,6 +563,7 @@ public class App_Admin extends JFrame {
 				panelDepart.setVisible(true);
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
+				panelPos.setVisible(false);
 			}
 			opensidebar();
 		} catch (Exception e2) {
@@ -524,6 +580,7 @@ public class App_Admin extends JFrame {
 				panelDepart.setVisible(false);
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
+				panelPos.setVisible(false);
 			}
 			opensidebar();
 		} catch (Exception e2) {
@@ -588,6 +645,7 @@ public class App_Admin extends JFrame {
 				panelDepart.setVisible(false);
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
+				panelPos.setVisible(false);
 			}
 			opensidebar();
 		} catch (Exception e2) {
@@ -605,6 +663,7 @@ public class App_Admin extends JFrame {
 				panelEdu.setVisible(false);
 				panelWork.setVisible(true);
 				openWorkSchedule();
+				panelPos.setVisible(false);
 			}
 			opensidebar();
 		} catch (Exception e2) {
@@ -621,6 +680,8 @@ public class App_Admin extends JFrame {
 				panelDepart.setVisible(false);
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
+				panelPos.setVisible(false);
+				openAttendance();
 			}
 			opensidebar();
 		} catch (Exception e2) {
@@ -650,5 +711,30 @@ public class App_Admin extends JFrame {
 			desktopPane.add(femp);
 			femp.show();
 		}
+	}
+	protected void btnPositionActionPerformed(ActionEvent e) {
+		try {
+			if(btnPosition.isVisible() == true) {
+				panelSta.setVisible(false);
+				panelEmp.setVisible(false);
+				panelAcc.setVisible(false);
+				panelAtt.setVisible(false);
+				panelDepart.setVisible(false);
+				panelEdu.setVisible(false);
+				panelWork.setVisible(false);
+				panelPos.setVisible(false);
+			}
+			opensidebar();
+		} catch (Exception e2) {
+			// TODO: handle exception
+		}
+	}
+	protected void btnPositionMouseEntered(MouseEvent e) {
+		btnPosition.setBackground(new Color(106,90,205));
+		btnPosition.setForeground(Color.white);
+	}
+	protected void btnPositionMouseExited(MouseEvent e) {
+		btnPosition.setBackground(Color.white);
+		btnPosition.setForeground(Color.black);
 	}
 }

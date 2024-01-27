@@ -22,15 +22,16 @@ public class Manage_DepartmentsDAO {
 				while(rs.next()) {
 					//lấy dữ liệu 
 					list.add(new DEPARTMENTS(
-							rs.getInt("DEPARTMENT_ID"), 
-							rs.getString("DEPARTMENT_NAME"), 
-							rs.getString("HEAD_OF_DEPARTMENT"), 
-							rs.getString("ROOM")
+							rs.getInt("department_id"), 
+							rs.getString("department_name"), 
+							rs.getString("head_of_department"), 
+							rs.getString("room")
 							));
 				}
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+		    e.printStackTrace();
+		    System.out.println("Error Message: " + e.getMessage());
+		}
 		return list;
 	}
 
