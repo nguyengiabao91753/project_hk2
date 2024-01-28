@@ -25,7 +25,7 @@ public class EmployeeDAO {
 				emp.setFull_name(rs.getString("full_name"));
 				emp.setEthnicity(rs.getString("ethnicity"));
 				emp.setDate_of_birth(rs.getDate("date_of_birth").toLocalDate());
-				emp.setGender(rs.getBoolean("gender"));
+				emp.setGender(rs.getString("gender"));
 				emp.setAddress(rs.getString("address"));
 				emp.setSalary_level(rs.getInt("salary_level"));
 				emp.setSupervisor_id(rs.getInt("supervisor_id"));
@@ -33,7 +33,8 @@ public class EmployeeDAO {
 				emp.setEducation_id(rs.getInt("education_id"));
 				emp.setPosition_id(rs.getInt("position_id"));
 				emp.setPicture(rs.getString("image"));
-				emp.setLevel(rs.getInt("level"));
+				emp.setLevel(rs.getString("level"));
+				list.add(emp);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -57,7 +58,7 @@ public class EmployeeDAO {
 				emp.setFull_name(rs.getString("full_name"));
 				emp.setEthnicity(rs.getString("ethnicity"));
 				emp.setDate_of_birth(rs.getDate("date_of_birth").toLocalDate());
-				emp.setGender(rs.getBoolean("gender"));
+				emp.setGender(rs.getString("gender"));
 				emp.setAddress(rs.getString("address"));
 				emp.setSalary_level(rs.getInt("salary_level"));
 				emp.setSupervisor_id(rs.getInt("supervisor_id"));
@@ -65,7 +66,7 @@ public class EmployeeDAO {
 				emp.setEducation_id(rs.getInt("education_id"));
 				emp.setPosition_id(rs.getInt("position_id"));
 				emp.setPicture(rs.getString("image"));
-				emp.setLevel(rs.getInt("level"));
+				emp.setLevel(rs.getString("level"));
 				list.add(emp);
 			}
 			
@@ -89,6 +90,33 @@ public class EmployeeDAO {
 			e.printStackTrace();
 		}
 		return count;
+	}
+	
+	//Update
+	public void update(Employee emp) {
+		try(
+				var con = DBCon.getConnection();
+				var cs = con.prepareCall("{call updateEmployee(?,?,?,?,?,?,?,?,?,?,?,?,?)}")
+			) {
+			cs.setString(1, emp.getFull_name());
+			cs.setString(2, emp.getEthnicity());
+			cs.setDate(3, java.sql.Date.valueOf(emp.getDate_of_birth()));
+			cs.setString(4, emp.getGender());
+			cs.setString(5, emp.getAddress());
+			cs.setInt(6, emp.getSalary_level());
+			cs.setInt(7, emp.getSupervisor_id());
+			cs.setInt(8, emp.getDepartment_id());
+			cs.setInt(9, emp.getEducation_id());
+			cs.setInt(10, emp.getPosition_id());
+			cs.setString(11, emp.getPicture());
+			cs.setString(12, emp.getLevel());
+			cs.setInt(13, emp.getId());
+			
+			JOptionPane.showMessageDialog(null, cs.executeUpdate() >0 ? "update success" : "nothing to update" );
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 //	public void insert(Employee emp) {

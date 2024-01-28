@@ -332,6 +332,7 @@ public class Work_Schedules extends JInternalFrame {
 				work.getWork_date()
 		}));
 	}
+	
 	protected void tableMouseClicked(MouseEvent e) {
 		int rowIndex = table.getSelectedRow();
 		lblId.setText(table.getValueAt(rowIndex, 0).toString());
@@ -368,7 +369,7 @@ public class Work_Schedules extends JInternalFrame {
 					new SimpleDateFormat("yyyy-MM-dd").parse(table.getValueAt(rowIndex, 4).toString())
 					);
 		} catch (Exception e2) {
-			// TODO: handle exception
+			e2.printStackTrace();
 		}
 		
 	}

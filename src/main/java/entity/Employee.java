@@ -1,14 +1,16 @@
 package entity;
 
 import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 public class Employee {
 	private int id;
 	private String full_name;
 	private String ethnicity;
 	private LocalDate date_of_birth;
-	private boolean gender;
+	private String gender;
 	private String address;
 	private int salary_level;
 	private int supervisor_id;
@@ -16,15 +18,15 @@ public class Employee {
 	private int education_id;
 	private int position_id;
 	private String picture;
-	private int level;
+	private String level;
 	
 	public Employee() {
 		
 	}
 
-	public Employee(int id, String full_name, String ethnicity, LocalDate date_of_birth, boolean gender, String address,
+	public Employee(int id, String full_name, String ethnicity, LocalDate date_of_birth, String gender, String address,
 			int salary_level, int supervisor_id, int department_id, int education_id, int position_id, String picture,
-			int level) {
+			String level) {
 		super();
 		this.id = id;
 		this.full_name = full_name;
@@ -73,11 +75,11 @@ public class Employee {
 		this.date_of_birth = date_of_birth;
 	}
 
-	public boolean isGender() {
+	public String getGender() {
 		return gender;
 	}
 
-	public void setGender(boolean gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
 
@@ -137,11 +139,11 @@ public class Employee {
 		this.picture = picture;
 	}
 
-	public int getLevel() {
+	public String getLevel() {
 		return level;
 	}
 
-	public void setLevel(int level) {
+	public void setLevel(String level) {
 		this.level = level;
 	}
 
@@ -152,8 +154,7 @@ public class Employee {
 				+ ", supervisor_id=" + supervisor_id + ", department_id=" + department_id + ", education_id="
 				+ education_id + ", position_id=" + position_id + ", picture=" + picture + ", level=" + level + "]";
 	}
-	
-	
-	
 
+
+	
 }

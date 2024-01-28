@@ -176,7 +176,7 @@ ADD IMAGE VARCHAR(255) NULL
 GO
 
 ALTER TABLE EMPLOYEES
-ADD LEVEL INT NULL
+ADD LEVEL VARCHAR(50) NULL
 GO
 
 ALTER TABLE EMPLOYEES
@@ -370,7 +370,7 @@ BEGIN
 END
 GO
 
-DROP PROC countEmployee
+DROP PROC getAllEmployee
 GO
 
 
@@ -411,7 +411,12 @@ BEGIN
 END
 GO
 
-
+CREATE PROC getAllEducation
+AS
+BEGIN
+	Select * from EDUCATIONS
+END
+GO
 
 CREATE PROC getAllRoom
 AS
@@ -427,8 +432,7 @@ BEGIN
 END
 GO
 
-<<<<<<< HEAD
-=======
+
 CREATE PROC updateSchedule
     @SCHEDULE_ID INT,
     @EMPLOYEE_ID INT,
@@ -442,4 +446,47 @@ BEGIN
 	WHERE SCHEDULE_ID = @SCHEDULE_ID
 END
 GO
->>>>>>> 88b0e6830a09bd4c9089819ea3b14cecca335d17
+
+
+CREATE PROC getAllSalary
+AS
+BEGIN
+	SELECT * FROM SALARIES
+END
+GO
+
+CREATE PROC getAllDepartment
+AS
+BEGIN
+	SELECT * FROM DEPARTMENTS
+END
+GO
+
+CREATE PROC getAllPosition
+AS
+BEGIN
+	SELECT * FROM POSITIONS
+END
+GO
+
+CREATE PROC updateEmployee
+	@fullname NVARCHAR(50), 
+	@ethnicity NVARCHAR(50) ,
+	@dateofbirth DATE ,
+	@gender NVARCHAR(10) , 
+	@address NVARCHAR(100),
+	@salarylevel INT , 
+	@supervisorid INT ,
+	@departmentid INT , 
+	@educationid INT , 
+	@positionid INT ,
+	@image VARCHAR(255) ,
+	@level VARCHAR(50) ,
+	@id INT
+AS
+BEGIN
+	UPDATE EMPLOYEES
+	SET FULL_NAME = @fullname, ETHNICITY = @ethnicity , DATE_OF_BIRTH = @dateofbirth , GENDER = @gender , ADDRESS = @address , SALARY_LEVEL = @salarylevel , SUPERVISOR_ID = @supervisorid , DEPARTMENT_ID = @departmentid , EDUCATION_ID = @educationid , POSITION_ID =@positionid , IMAGE = @image , LEVEL = @level
+	WHERE EMPLOYEE_ID = @id
+END
+GO

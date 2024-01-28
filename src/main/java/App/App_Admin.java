@@ -15,11 +15,11 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-<<<<<<< HEAD
+
 import Gui.EmployeeForm;
-=======
+
 import Gui.Atiendances;
->>>>>>> 88b0e6830a09bd4c9089819ea3b14cecca335d17
+
 import Gui.Work_Schedules;
 
 import java.awt.Color;
@@ -618,6 +618,7 @@ public class App_Admin extends JFrame {
 			// TODO: handle exception
 		}
 	}
+	
 	protected void btnWorkScheduleActionPerformed(ActionEvent e) {
 		try {
 			if(btnWorkSchedule.isVisible() == true) {
@@ -635,6 +636,7 @@ public class App_Admin extends JFrame {
 			// TODO: handle exception
 		}
 	}
+	
 	protected void btnAttendenceActionPerformed(ActionEvent e) {
 		try {
 			if(btnAttendence.isVisible() == true) {
@@ -652,6 +654,7 @@ public class App_Admin extends JFrame {
 			// TODO: handle exception
 		}
 	}
+	
 	protected void lblMenuMouseClicked(MouseEvent e) {
 		if(panelLateral.getBounds().width == 219) {
 			panelLateral.setBounds(0,0,68,664);
@@ -664,7 +667,9 @@ public class App_Admin extends JFrame {
 			
 		}
 	}
+	
 	protected void btnStaMouseClicked(MouseEvent e) {
+		
 	}
 	
 	void loadEmployeeForm() {
@@ -674,6 +679,5 @@ public class App_Admin extends JFrame {
 	        desktopPane.add(femp);
 	        femp.show();
 	    }
-
 	}
 }
