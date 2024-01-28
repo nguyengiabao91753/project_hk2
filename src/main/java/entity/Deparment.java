@@ -1,24 +1,18 @@
 package entity;
-public class DEPARTMENTS {
+public class Deparment {
 	private int department_id ;
 	private String  department_name ;
 	private String head_of_department ;
 	private String room ;
-	public DEPARTMENTS() {
-	}
-	/**
-	 * @param department_id
-	 * @param department_name
-	 * @param head_of_department
-	 * @param room
-	 */
-	public DEPARTMENTS(int department_id, String department_name, String head_of_department, String room) {
+	public Deparment() {}
+	public Deparment(int department_id, String department_name, String head_of_department, String room) {
 		super();
 		this.department_id = department_id;
 		this.department_name = department_name;
 		this.head_of_department = head_of_department;
 		this.room = room;
 	}
+	
 	public int getDepartment_id() {
 		return department_id;
 	}
@@ -43,12 +37,14 @@ public class DEPARTMENTS {
 	public void setRoom(String room) {
 		this.room = room;
 	}
-	
 	@Override
 	public String toString() {
-		return "DEPARTMENTS [department_id=" + department_id + ", department_name=" + department_name
+		return "Deparment [department_id=" + department_id + ", department_name=" + department_name
 				+ ", head_of_department=" + head_of_department + ", room=" + room + "]";
 	}
+	
+	
+	
 	
 	
 	

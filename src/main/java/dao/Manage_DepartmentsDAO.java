@@ -10,18 +10,18 @@ import java.util.List;
 import javax.swing.JInternalFrame;
 
 import database.DBCon;
-import entity.DEPARTMENTS;
+import entity.Deparment;
 
 public class Manage_DepartmentsDAO {
-	public List<DEPARTMENTS> selectDepartments() {
-		List<DEPARTMENTS> list = new ArrayList<>();
+	public List<Deparment> selectDepartments() {
+		List<Deparment> list = new ArrayList<>();
 		try(Connection con = DBCon.getConnection();
 				CallableStatement cs =  con.prepareCall("{call getAllDep}");
 				ResultSet rs = cs.executeQuery();
 			) {
 				while(rs.next()) {
 					//lấy dữ liệu 
-					list.add(new DEPARTMENTS(
+					list.add(new Deparment(
 							rs.getInt("department_id"), 
 							rs.getString("department_name"), 
 							rs.getString("head_of_department"), 

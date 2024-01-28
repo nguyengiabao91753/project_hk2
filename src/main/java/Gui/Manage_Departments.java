@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import dao.Manage_DepartmentsDAO;
 import dao.RoomDAO;
 import dao.ShiftDAO;
-import entity.DEPARTMENTS;
+import entity.Deparment;
 import entity.Room;
 import entity.Shift;
 
@@ -205,7 +205,6 @@ public class Manage_Departments extends JInternalFrame {
 		modelo.addColumn("DEPARTMENT_NAME");
 		modelo.addColumn("HEAD_OF_DEPARTMENT");
 		modelo.addColumn("ROOM");
-		tbemp.setModel(modelo);
 		
 		lblTextsearch = new JLabel(" Search :");
 		lblTextsearch.setFont(new Font("Times New Roman", Font.BOLD, 15));
@@ -302,7 +301,7 @@ public class Manage_Departments extends JInternalFrame {
 	    txtID.setText(tbemp.getValueAt(rowIndex, 0).toString());
 	    txtName.setText(tbemp.getValueAt(rowIndex, 1).toString());
 
-	    List<DEPARTMENTS> listDeparment = DepDAO.selectDepartments();
+	    List<Deparment> listDeparment = DepDAO.selectDepartments();
 
 	    var deparmentmodel = new DefaultComboBoxModel();
 	    var roommodel = new DefaultComboBoxModel();
@@ -314,18 +313,18 @@ public class Manage_Departments extends JInternalFrame {
 	    cboRoom.setModel(roommodel);
 
 	 // Lấy dữ liệu từ cột 3 (head_of_department)
-	    var dep_select = tbemp.getValueAt(rowIndex, 2).toString();
-	    for (DEPARTMENTS dep : listDeparment) {
-	        if (dep_select.equals(dep.getHead_of_department())) {
+	    var headOfDepartment = listDeparment.get(rowIndex).getHead_of_department();
+	    for (Deparment dep : listDeparment) {
+	        if (headOfDepartment.equals(dep.getHead_of_department())) {
 	            cboDeparment.setSelectedIndex(dep.getDepartment_id() -1);
 	            break; // Dừng sau khi tìm thấy giá trị
 	        }
 	    }
 
 	    // Lấy dữ liệu từ cột 4 (room)
-	    var room_selected = tbemp.getValueAt(rowIndex, 3).toString();
-	    for (DEPARTMENTS room : listDeparment) {
-	        if (room_selected.equals(room.getRoom())) {
+	    var Room = listDeparment.get(rowIndex).getRoom();
+	    for (Deparment room : listDeparment) {
+	        if (Room.equals(room.getRoom())) {
 	            cboRoom.setSelectedIndex(room.getDepartment_id() -1);
 	            break; // Dừng sau khi tìm thấy giá trị
 	        }
