@@ -5,10 +5,15 @@ import java.awt.EventQueue;
 import javax.swing.JInternalFrame;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import com.toedter.calendar.JDateChooser;
 
+import App.App_Admin;
+import Gui.Work_Schedules;
 import dao.RoomDAO;
 import dao.ShiftDAO;
+import dao.WorkscheduleDAO;
 import entity.Room;
 import entity.Shift;
 import entity.Workschedule;
@@ -16,6 +21,8 @@ import entity.Workschedule;
 import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Font;
@@ -55,6 +62,8 @@ public class Addschedule extends JInternalFrame {
 	private JPanel panel_1;
 	private JComboBox cbbShift;
 	private JButton btnSubmit;
+	
+	private static Addschedule instance ;
 
 	/**
 	 * Launch the application.
@@ -73,7 +82,13 @@ public class Addschedule extends JInternalFrame {
 			}
 		});
 	}
-
+	
+	public static Addschedule getInstance() {
+        if (instance == null) {
+            instance = new Addschedule();
+        }
+        return instance;
+    }
 	/**
 	 * Create the frame.
 	 */
@@ -173,28 +188,47 @@ public class Addschedule extends JInternalFrame {
 				lblNewLabel_2MouseClicked(e);
 			}
 		});
-
+		loadcbb();
 	}
 	protected void lblNewLabel_2MouseClicked(MouseEvent e) {
-		System.exit(0);
+		this.setVisible(false);
 	}
-	private void loadcbb() {
+	protected void loadcbb() {
 		// TODO Auto-generated method stub
 		var shiftmodel = new DefaultComboBoxModel();
 		var roommodel = new DefaultComboBoxModel();
-		List<Shift> listshift = new ArrayList<>();
-		List<Room> listroom = new ArrayList<>();
+		
+		
 		ShiftDAO shiftdao = new ShiftDAO();
 		RoomDAO roomdao = new RoomDAO();
+		List<Shift> listshift = shiftdao.getAllShift();
+		List<Room> listroom = roomdao.selectAllRoom();
+		
 		
 		shiftmodel.addAll(listshift);
 		roommodel.addAll(listroom);
+		
 		cbbShift.setModel(shiftmodel);
+		cbbRoom.setModel(roommodel);
 		
 	}	
 	protected void btnNewButtonActionPerformed(ActionEvent e) {
 		Workschedule newwork = new Workschedule();
 		newwork.setEmployee_id(Integer.parseInt(txtEmp.getText()));
 		newwork.setShift_id(cbbShift.getSelectedIndex()+1);
+		newwork.setRoom_id(cbbShift.getSelectedIndex()+1);
+		newwork.setWork_date(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()));
+		WorkscheduleDAO workdao = new WorkscheduleDAO();
+		if(workdao.insert(newwork)) {
+			JOptionPane.showMessageDialog(null, "Add successfully!");
+			Work_Schedules work = new Work_Schedules();
+			work.setVisible(true);;
+			App_Admin app = new App_Admin();
+			app.desktopPane.add(work);
+			this.hide();
+		}else {
+			JOptionPane.showMessageDialog(null, "Add Fail!");
+		}
+		
 	}
 }

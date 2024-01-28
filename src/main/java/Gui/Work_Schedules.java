@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import com.toedter.calendar.JDateChooser;
 
+import App.App_Admin;
 import crud.Addschedule;
 import dao.RoomDAO;
 import dao.ShiftDAO;
@@ -36,6 +37,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyVetoException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -43,6 +45,7 @@ import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
+import javax.swing.ImageIcon;
 
 public class Work_Schedules extends JInternalFrame {
 	
@@ -51,9 +54,7 @@ public class Work_Schedules extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
 	private static Work_Schedules instance ;
 	private JScrollPane scrollPane;
-	private JTable table;
 	private JTextField textSearch;
-	private JLabel lblAdd;
 	private JLabel lblUpdate;
 	private JLabel lblDelete;
 	private JLabel lblId;
@@ -71,14 +72,19 @@ public class Work_Schedules extends JInternalFrame {
 	ShiftDAO shiftdao = new ShiftDAO();
 	
 	WorkscheduleDAO workdao = new WorkscheduleDAO();
-	private JButton btnFirst;
-	private JButton btnPrevious;
-	private JButton btnNext;
-	private JButton btnLast;
 	private JTextField textPageNum;
 	private JButton btnAdd;
+	private JPanel panel;
+	private App_Admin app;
+	private JLabel lblNewLabel_5;
+	private JLabel lblNewLabel_6;
+	private JTable table;
 	
-	Addschedule add;
+	
+	public void setApp(App_Admin app) {
+		this.app = app;
+	}
+
 	/**
 	 * Launch the application.
 	 */
@@ -126,17 +132,13 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(scrollPane);
 		
 		table = new JTable();
-		table.setFillsViewportHeight(true);
-		table.setAutoCreateRowSorter(true);
-		
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				tableMouseClicked(e);
 			}
 		});
-		table.setBorder(new LineBorder(new Color(192, 192, 192)));
-		scrollPane.setColumnHeaderView(table);
+		scrollPane.setViewportView(table);
 		
 		textSearch = new JTextField();
 		textSearch.addActionListener(new ActionListener() {
@@ -148,20 +150,6 @@ public class Work_Schedules extends JInternalFrame {
 		textSearch.setBounds(267, 11, 105, 36);
 		getContentPane().add(textSearch);
 		textSearch.setColumns(10);
-		
-		lblAdd = new JLabel("ADD");
-		lblAdd.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				lblAddMouseClicked(e);
-			}
-		});
-		lblAdd.setForeground(new Color(255, 255, 255));
-		lblAdd.setOpaque(true);
-		lblAdd.setBackground(new Color(51, 0, 255));
-		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAdd.setBounds(855, 456, 76, 27);
-		getContentPane().add(lblAdd);
 		
 		lblUpdate = new JLabel("UPDATE");
 		lblUpdate.addMouseListener(new MouseAdapter() {
@@ -178,6 +166,12 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(lblUpdate);
 		
 		lblDelete = new JLabel("DELETE");
+		lblDelete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblDeleteMouseClicked(e);
+			}
+		});
 		lblDelete.setForeground(Color.WHITE);
 		lblDelete.setOpaque(true);
 		lblDelete.setBackground(new Color(255, 0, 0));
@@ -245,29 +239,6 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(txtEmployee);
 		txtEmployee.setColumns(10);
 		
-		btnFirst = new JButton("First");
-		btnFirst.setBounds(318, 416, 89, 23);
-		getContentPane().add(btnFirst);
-		
-		btnPrevious = new JButton("Previous'");
-		btnPrevious.setBounds(417, 416, 89, 23);
-		getContentPane().add(btnPrevious);
-		
-		btnNext = new JButton("Next");
-		btnNext.setBounds(728, 416, 89, 23);
-		getContentPane().add(btnNext);
-		
-		btnLast = new JButton("Last");
-		btnLast.setBounds(842, 416, 89, 23);
-		getContentPane().add(btnLast);
-		
-		textPageNum = new JTextField();
-		textPageNum.setHorizontalAlignment(SwingConstants.CENTER);
-		textPageNum.setText("1");
-		textPageNum.setBounds(557, 416, 86, 20);
-		getContentPane().add(textPageNum);
-		textPageNum.setColumns(10);
-		
 		btnAdd = new JButton("ADD");
 		btnAdd.setBackground(new Color(0, 102, 255));
 		btnAdd.addActionListener(new ActionListener() {
@@ -275,10 +246,35 @@ public class Work_Schedules extends JInternalFrame {
 				btnAddActionPerformed(e);
 			}
 		});
-		btnAdd.setBounds(307, 475, 89, 23);
+		btnAdd.setBounds(267, 416, 89, 23);
 		getContentPane().add(btnAdd);
 		
+		panel = new JPanel();
+		panel.setOpaque(false);
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(10, 0, 937, 541);
+		getContentPane().add(panel);
+		panel.setLayout(null);
+		
+		lblNewLabel_5 = new JLabel("");
+		lblNewLabel_5.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-next-24 (1).png"));
+		lblNewLabel_5.setBounds(852, 418, 29, 24);
+		panel.add(lblNewLabel_5);
+		
+		textPageNum = new JTextField();
+		textPageNum.setBounds(760, 418, 86, 24);
+		panel.add(textPageNum);
+		textPageNum.setHorizontalAlignment(SwingConstants.CENTER);
+		textPageNum.setText("1");
+		textPageNum.setColumns(10);
+		
+		lblNewLabel_6 = new JLabel("");
+		lblNewLabel_6.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-last-24.png"));
+		lblNewLabel_6.setBounds(876, 418, 29, 24);
+		panel.add(lblNewLabel_6);
+		
 		loadWorkSchedule();
+		table.setRowHeight(32);
 	}
 //	public void String nameEmpolyee(int a) {
 //		List<Employee> listEmp = 
@@ -317,9 +313,7 @@ public class Work_Schedules extends JInternalFrame {
 				nameShift(work.getShift_id()),
 				work.getWork_date()
 		}));
-		
 		table.setModel(model);
-		
 	}
 	public void refresh() {
 		DefaultTableModel model = (DefaultTableModel)table.getModel();
@@ -331,6 +325,48 @@ public class Work_Schedules extends JInternalFrame {
 				nameShift(work.getShift_id()),
 				work.getWork_date()
 		}));
+	}
+	protected void textSearchActionPerformed(ActionEvent e) {
+		String find = textSearch.getText();
+		DefaultRowSorter<?,?> sorter = (DefaultRowSorter<?,?>)table.getRowSorter();
+		sorter.setRowFilter(RowFilter.regexFilter(find));
+		sorter.setSortKeys(null);
+	}
+	protected void btnAddActionPerformed(ActionEvent e) {
+		
+//		if(add == null || add.isClosed()) {
+//			add  = new Addschedule();
+//			add.setBounds(0,0,957,626);
+//			add.show();
+//			add.toFront();
+//		}
+		
+		Addschedule add = new Addschedule().getInstance();
+		if(!add.isVisible()) {
+			add.setVisible(true);
+			
+			app.desktopPane.add(add);
+			add.toFront();
+			this.hide();
+			//app.pack();
+		}
+	}
+	protected void lblUpdateMouseClicked(MouseEvent e) {
+		Workschedule worknew = new Workschedule();
+		worknew.setId(Integer.parseInt(lblId.getText()));
+		worknew.setEmployee_id(Integer.parseInt(txtEmployee.getText()));
+		worknew.setShift_id(cbbShift.getSelectedIndex()+1);
+		worknew.setRoom_id(cbbRoom.getSelectedIndex()+1);
+		worknew.setWork_date(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()));
+		
+		workdao.update(worknew);
+		refresh();
+	}
+	protected void lblDeleteMouseClicked(MouseEvent e) {
+		JOptionPane.showConfirmDialog(null,"Are you sure want to delete?","Delete",JOptionPane.YES_NO_OPTION);
+		int a = Integer.parseInt(lblId.getText());
+		workdao.delete(a);
+		refresh();
 	}
 	protected void tableMouseClicked(MouseEvent e) {
 		int rowIndex = table.getSelectedRow();
@@ -368,41 +404,7 @@ public class Work_Schedules extends JInternalFrame {
 					new SimpleDateFormat("yyyy-MM-dd").parse(table.getValueAt(rowIndex, 4).toString())
 					);
 		} catch (Exception e2) {
-			// TODO: handle exception
+			e2.printStackTrace();
 		}
-		
-	}
-	protected void textSearchActionPerformed(ActionEvent e) {
-		String find = textSearch.getText();
-		DefaultRowSorter<?,?> sorter = (DefaultRowSorter<?,?>)table.getRowSorter();
-		sorter.setRowFilter(RowFilter.regexFilter(find));
-		sorter.setSortKeys(null);
-	}
-	protected void lblAddMouseClicked(MouseEvent e) {
-		Addschedule add = null;
-		if(add == null || add.isClosed()) {
-			add  = new Addschedule();
-			add.setVisible(true);
-		}
-	}
-	protected void btnAddActionPerformed(ActionEvent e) {
-		
-		if(add == null || add.isClosed()) {
-			add  = new Addschedule();
-			add.setBounds(0,0,957,626);
-			add.show();
-			add.toFront();
-		}
-	}
-	protected void lblUpdateMouseClicked(MouseEvent e) {
-		Workschedule worknew = new Workschedule();
-		worknew.setId(Integer.parseInt(lblId.getText()));
-		worknew.setEmployee_id(Integer.parseInt(txtEmployee.getText()));
-		worknew.setShift_id(cbbShift.getSelectedIndex()+1);
-		worknew.setRoom_id(cbbRoom.getSelectedIndex()+1);
-		worknew.setWork_date(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()));
-		
-		workdao.update(worknew);
-		refresh();
 	}
 }
