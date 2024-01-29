@@ -21,6 +21,7 @@ import Gui.EmployeeForm;
 import Gui.Atiendances;
 
 import Gui.Work_Schedules;
+import crud.Addemployee;
 
 import java.awt.Color;
 import javax.swing.JDesktopPane;
@@ -51,7 +52,7 @@ public class App_Admin extends JFrame {
 	private JPanel contentPane;
 	private JPanel panelLateral;
 	private JPanel panelTop;
-	private JDesktopPane desktopPane;
+	public JDesktopPane desktopPane;
 	private JLabel lblMenu;
 	private JLabel lblClose;
 	private int xx ,xy;
@@ -76,6 +77,7 @@ public class App_Admin extends JFrame {
 	Work_Schedules work;
 	Atiendances attendance;
 	EmployeeForm femp;
+	
 
 	/**
 	 * Launch the application.
@@ -433,7 +435,7 @@ public class App_Admin extends JFrame {
 		panelTop.add(lblClose);
 		
 		desktopPane = new JDesktopPane();
-		desktopPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		desktopPane.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		desktopPane.setBounds(223, 37, 957, 626);
 		contentPane.add(desktopPane);
 	}
@@ -447,6 +449,7 @@ public class App_Admin extends JFrame {
 			work = new Work_Schedules();
 			work.setBounds(0,0,957,626);
 			desktopPane.add(work);
+			work.setApp(this);
 			work.show();
 		}
 	}
@@ -548,7 +551,7 @@ public class App_Admin extends JFrame {
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
 			}
-//			opensidebar();
+			opensidebar();
 			loadEmployeeForm();
 		} catch (Exception e2) {
 			// TODO: handle exception

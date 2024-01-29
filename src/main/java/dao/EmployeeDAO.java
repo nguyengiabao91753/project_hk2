@@ -84,7 +84,7 @@ public class EmployeeDAO {
 				var rs = cs.executeQuery();
 		) {
 			while(rs.next()) {
-				count = rs.getInt("Total");
+				count = rs.getInt("total");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -119,23 +119,51 @@ public class EmployeeDAO {
 		}
 	}
 	
-//	public void insert(Employee emp) {
-//		try(
-//				var con = DBCon.getConnection();
-//				var cs = con.prepareCall("{call insertEmployee(?,?,?,?)}")
-//			) {
-//			cs.setString(1, cus.getFullname());
-//			cs.setBoolean(2, cus.isGender());
-//			cs.setString(3, cus.getPicture());
-//			cs.setDate(4, java.sql.Date.valueOf(cus.getDob()));
-//			
-//			
-//			JOptionPane.showMessageDialog(null, cs.executeUpdate() >0 ? "insert success" : "nothing to insert" );
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+	//Insert
+	public boolean insert(Employee emp) {
+		try(
+				var con = DBCon.getConnection();
+				var cs = con.prepareCall("{call insertEmployee(?,?,?,?,?,?,?,?,?,?,?,?,?)}")
+			) {
+			cs.setInt(1, emp.getId());
+			cs.setString(2, emp.getFull_name());
+			cs.setString(3, emp.getEthnicity());
+			cs.setDate(4, java.sql.Date.valueOf(emp.getDate_of_birth()));
+			cs.setString(5, emp.getGender());
+			cs.setString(6, emp.getAddress());
+			cs.setInt(7, emp.getSalary_level());
+			cs.setInt(8, emp.getSupervisor_id());
+			cs.setInt(9, emp.getDepartment_id());
+			cs.setInt(10, emp.getEducation_id());
+			cs.setInt(11, emp.getPosition_id());
+			cs.setString(12, emp.getPicture());
+			cs.setString(13, emp.getLevel());
+			
+			if(cs.executeUpdate() >0) {
+				return true;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	//Delete
+	public void delete(Employee emp) {
+		try(
+				var con = DBCon.getConnection();
+				var cs = con.prepareCall("{call deleteEmployee(?)}")
+				) {
+			cs.setInt(1, emp.getId());
+			if(cs.executeUpdate() >0) {
+				JOptionPane.showMessageDialog(null, "Delete Success");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 }
 
 

@@ -9,8 +9,12 @@ import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,11 +24,13 @@ import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
+
 import dao.DepartmentDAO;
 import dao.EducationDAO;
 import dao.EmployeeDAO;
 import dao.PositionDAO;
 import dao.SalaryDAO;
+
 import entity.Department;
 import entity.Education;
 import entity.Employee;
@@ -42,6 +48,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -53,7 +60,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.toedter.calendar.JDateChooser;
+
+import App.App_Admin;
+import crud.Addemployee;
+import crud.Addschedule;
+
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.border.MatteBorder;
 
 public class EmployeeForm extends JInternalFrame {
 
@@ -79,12 +93,14 @@ public class EmployeeForm extends JInternalFrame {
 	private JLabel lblPositionId;
 	private JLabel lblImage;
 	private JButton btnUpdate;
-	private JButton btnInsert;
-	private JButton btnNewButton_1;
+	private JButton btnDelete;
+	private JButton btnPicture;
 	private JTable table;
 	private JScrollPane scrollPane;
 	private JLabel lblLevel;
 	private JComboBox cbxLevel;
+	private App_Admin app;
+
 	
 	Integer pageNumber = 1 ;
 	Integer rowOfPage = 10 ;
@@ -110,11 +126,24 @@ public class EmployeeForm extends JInternalFrame {
 	EducationDAO educationDao = new EducationDAO();
 	PositionDAO positionDao = new PositionDAO();
 	private JTextField txtSearch;
+	private JButton btnInsert;
+	private JButton btnFirst;
+	private JButton btnPrevious;
+	private JButton btnNext;
+	private JButton btnLast;
+	private JTextField txtPage;
+	private JComboBox comboBox;
 
 
 	/**
 	 * Launch the application.
 	 */
+	
+	public void setApp(App_Admin app) {
+		this.app = app;
+	}
+	
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -127,6 +156,8 @@ public class EmployeeForm extends JInternalFrame {
 			}
 		});
 	}
+
+
 
 	/**
 	 * Create the frame.
@@ -234,18 +265,28 @@ public class EmployeeForm extends JInternalFrame {
 				btnUpdateActionPerformed(e);
 			}
 		});
-		btnUpdate.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\Custom-Icon-Design-Mono-General-1-Success.512-fotor-2024012517561.png"));
 		btnUpdate.setBackground(Color.GREEN);
-		btnUpdate.setBounds(22, 528, 195, 23);
+		btnUpdate.setBounds(22, 528, 86, 23);
 		getContentPane().add(btnUpdate);
 		
-		btnInsert = new JButton("Delete");
-		btnInsert.setBounds(22, 566, 195, 23);
-		getContentPane().add(btnInsert);
+		btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnDeleteActionPerformed(e);
+			}
+		});
+		btnDelete.setBackground(Color.RED);
+		btnDelete.setBounds(131, 528, 86, 23);
+		getContentPane().add(btnDelete);
 		
-		btnNewButton_1 = new JButton("Choose Image");
-		btnNewButton_1.setBounds(22, 461, 195, 23);
-		getContentPane().add(btnNewButton_1);
+		btnPicture = new JButton("Choose Image");
+		btnPicture.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnPictureActionPerformed(e);
+			}
+		});
+		btnPicture.setBounds(22, 461, 195, 23);
+		getContentPane().add(btnPicture);
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(227, 49, 730, 435);
@@ -256,6 +297,10 @@ public class EmployeeForm extends JInternalFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				tableMouseClicked(e);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				tableMousePressed(e);
 			}
 		});
 		table.setFillsViewportHeight(true);
@@ -272,12 +317,12 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(cbxLevel);
 		
 		lblTotal = new JLabel("Total Employee : 0");
-		lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblTotal.setBounds(779, 498, 152, 23);
+		lblTotal.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTotal.setBounds(771, 562, 152, 23);
 		getContentPane().add(lblTotal);
 		
 		lblStatus = new JLabel("page 1 of 6");
-		lblStatus.setBounds(241, 498, 138, 23);
+		lblStatus.setBounds(302, 562, 77, 23);
 		getContentPane().add(lblStatus);
 		
 		cbxSupervisorId = new JComboBox();
@@ -314,6 +359,79 @@ public class EmployeeForm extends JInternalFrame {
 		txtSearch.setBounds(239, 2, 140, 36);
 		getContentPane().add(txtSearch);
 		txtSearch.setColumns(10);
+		
+		btnInsert = new JButton("Add");
+		btnInsert.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnInsertActionPerformed(e);
+			}
+		});
+		btnInsert.setBackground(Color.BLUE);
+		btnInsert.setBounds(77, 562, 86, 23);
+		getContentPane().add(btnInsert);
+		
+		btnFirst = new JButton("First");
+		btnFirst.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnFirstActionPerformed(e);
+			}
+		});
+		btnFirst.setMnemonic('F');
+		btnFirst.setBounds(227, 528, 102, 23);
+		getContentPane().add(btnFirst);
+		
+		btnPrevious = new JButton("Previous");
+		btnPrevious.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnPreviousActionPerformed(e);
+			}
+		});
+		btnPrevious.setMnemonic('P');
+		btnPrevious.setBounds(339, 528, 102, 23);
+		getContentPane().add(btnPrevious);
+		
+		btnNext = new JButton("Next");
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnNextActionPerformed(e);
+			}
+		});
+		btnNext.setMnemonic('P');
+		btnNext.setBounds(743, 528, 102, 23);
+		getContentPane().add(btnNext);
+		
+		btnLast = new JButton("Last");
+		btnLast.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnLastActionPerformed(e);
+			}
+		});
+		btnLast.setMnemonic('L');
+		btnLast.setBounds(855, 528, 102, 23);
+		getContentPane().add(btnLast);
+		
+		txtPage = new JTextField();
+		txtPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		txtPage.setBackground(Color.LIGHT_GRAY);
+		txtPage.setText("1");
+		txtPage.setHorizontalAlignment(SwingConstants.CENTER);
+		txtPage.setColumns(10);
+		txtPage.setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 0, 255)));
+		txtPage.setBounds(536, 563, 111, 20);
+		getContentPane().add(txtPage);
+		
+		comboBox = new JComboBox();
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				comboBoxActionPerformed(e);
+			}
+		});
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"10", "20", "25", "50"}));
+		comboBox.setBounds(536, 528, 111, 22);
+		getContentPane().add(comboBox);
 		loadEmployee();
 	}
 	
@@ -559,5 +677,134 @@ public class EmployeeForm extends JInternalFrame {
 		fileName =null;
 		lblPicture.setIcon(null);
 		refresh();
+	}
+	
+	protected void btnPictureActionPerformed(ActionEvent e) {
+		var chooser = new JFileChooser();
+		chooser.setDialogTitle("open image");
+		chooser.setFileFilter(
+				new FileNameExtensionFilter("image", "png", "jpg", "gif")
+		);
+		chooser.setAcceptAllFileFilterUsed(false);
+		int result = chooser.showOpenDialog(null);
+		if(result == JFileChooser.APPROVE_OPTION) {
+			File f = chooser.getSelectedFile();
+			fileName = f.getName();
+			dirOld = f.getAbsolutePath();
+			
+			lblPicture.setIcon(
+				new ImageIcon(
+					new ImageIcon(
+						f.getAbsolutePath()).getImage()
+						.getScaledInstance(
+						lblPicture.getWidth(),
+						lblPicture.getHeight(),
+						Image.SCALE_SMOOTH)
+				)
+			);
+		}
+	}
+	
+	
+	protected void btnInsertActionPerformed(ActionEvent e) {
+	        Addemployee add = Addemployee.getInstance();
+
+	        if (!add.isVisible()) {
+	            add.setVisible(true);
+	            app.desktopPane.add(add);
+	            add.toFront();
+	            this.hide();
+	        }
+	}
+	
+	protected void btnDeleteActionPerformed(ActionEvent e) {
+		Employee emp = new Employee();
+		emp.setId(Integer.parseInt(txtEmployeeId.getText()));
+		EmployeeDAO dao = new EmployeeDAO();
+		dao.delete(emp);
+		
+		//Load lại dữ liệu
+		refresh();
+	}
+	
+	protected void tableMousePressed(MouseEvent e) {
+		JPopupMenu menu = new JPopupMenu("delete...");
+		JMenuItem item = new JMenuItem("delete row" , 'd');
+		menu.add(item);
+		
+		item.addActionListener(this::deleteRow);
+		
+		if(e.getButton() == MouseEvent.BUTTON3) {
+			
+			int r = table.rowAtPoint(e.getPoint());
+			table.setRowSelectionInterval(r, r);
+			menu.show(table , e.getX() , e.getY());
+		}
+	}
+	
+	private void deleteRow(ActionEvent e) {
+		Employee emp = new Employee();
+		int rowindex = table.getSelectedRow();
+		emp.setId(
+				Integer.parseInt(
+						table.getValueAt( rowindex,0).toString()
+				)
+		);
+		EmployeeDAO dao = new EmployeeDAO();
+		dao.delete(emp);
+		
+		//Load lại dữ liệu
+		refresh();
+	}
+	
+	protected void btnFirstActionPerformed(ActionEvent e) {
+		pageNumber =1;
+		txtPage.setText(pageNumber.toString());
+		refresh();
+	}
+	
+	
+	protected void btnLastActionPerformed(ActionEvent e) {
+		pageNumber = totalPage.intValue();
+		txtPage.setText(pageNumber.toString());
+		refresh();
+	}
+	
+	
+	protected void comboBoxActionPerformed(ActionEvent e) {
+		if(table!=null) {
+			pageNumber =1 ;
+			txtPage.setText(pageNumber.toString());
+			rowOfPage = Integer.parseInt(comboBox.getSelectedItem().toString());
+			refresh();
+		}
+	}
+	
+	protected void txtPageActionPerformed(ActionEvent e) {
+		int page = Integer.parseInt(txtPage.getText());
+		
+		if(page >= 1 && page <= totalPage.intValue()) {
+			pageNumber = page;
+			refresh();
+		}else {
+			JOptionPane.showMessageDialog(txtPage, "page must be 1 to" + totalPage.intValue());
+			txtPage.setText(pageNumber.toString());
+		}
+	}
+	
+	protected void btnPreviousActionPerformed(ActionEvent e) {
+		if(pageNumber > 1) {
+			pageNumber--;
+			txtPage.setText(pageNumber.toString());
+			refresh();
+		}
+	}
+	
+	protected void btnNextActionPerformed(ActionEvent e) {
+		if(pageNumber < totalPage.intValue()) {
+			pageNumber++;
+			txtPage.setText(pageNumber.toString());
+			refresh();
+		}
 	}
 }

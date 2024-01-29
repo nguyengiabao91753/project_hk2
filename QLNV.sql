@@ -343,7 +343,7 @@ INSERT INTO WORK_SCHEDULES(EMPLOYEE_ID, SHIFT_ID, ROOM_ID, WORK_DATE)
 VALUES
 	(1,1,1,'2024-01-07'),
 	(2,2,2,'2024-01-06');
-GO
+GO 10
 SELECT * FROM WORK_SCHEDULES
 CREATE PROC getAllAccount
 AS
@@ -394,14 +394,22 @@ END
 GO
 
 CREATE PROC insertEmployee
-@fullname NVARCHAR(50), @ethnicity NVARCHAR(50), @date_of_birth DATE, @gender BIT ,@address NVARCHAR(50),@salary_level INT,@picture VARCHAR(200) ,@level INT
+@employee_id INT,@fullname NVARCHAR(50), @ethnicity NVARCHAR(50), @date_of_birth DATE, @gender NVARCHAR(10),@address NVARCHAR(100),@salary_level INT,@supervisor_id INT,@department_id INT,@education_id INT,@position_id INT,@picture VARCHAR(255),@level VARCHAR(50)
 AS
 BEGIN
-	INSERT INTO EMPLOYEES(FULL_NAME,ETHNICITY,DATE_OF_BIRTH,GENDER,ADDRESS,SALARY_LEVEL,IMAGE,LEVEL)
-	VALUES(@fullname, @ethnicity, @date_of_birth, @gender,@address,@salary_level,@picture,@level)
+	INSERT INTO EMPLOYEES(EMPLOYEE_ID,FULL_NAME,ETHNICITY,DATE_OF_BIRTH,GENDER,ADDRESS,SALARY_LEVEL,SUPERVISOR_ID,DEPARTMENT_ID,EDUCATION_ID,POSITION_ID,IMAGE,LEVEL)
+	VALUES(@employee_id,@fullname, @ethnicity, @date_of_birth, @gender,@address,@salary_level,@supervisor_id,@department_id,@education_id,@position_id,@picture,@level)
 END
 GO
 
+CREATE PROC deleteEmployee
+@id int
+AS
+BEGIN
+	DELETE FROM EMPLOYEES
+	WHERE EMPLOYEE_ID = @id
+END
+GO
 
 
 CREATE PROC getAllSchedule
@@ -448,6 +456,7 @@ END
 GO
 
 
+
 CREATE PROC getAllSalary
 AS
 BEGIN
@@ -488,5 +497,46 @@ BEGIN
 	UPDATE EMPLOYEES
 	SET FULL_NAME = @fullname, ETHNICITY = @ethnicity , DATE_OF_BIRTH = @dateofbirth , GENDER = @gender , ADDRESS = @address , SALARY_LEVEL = @salarylevel , SUPERVISOR_ID = @supervisorid , DEPARTMENT_ID = @departmentid , EDUCATION_ID = @educationid , POSITION_ID =@positionid , IMAGE = @image , LEVEL = @level
 	WHERE EMPLOYEE_ID = @id
+=======
+CREATE PROC insertSchedule
+	@EMPLOYEE_ID INT,
+    @SHIFT_ID INT,
+	@ROOM_ID INT,
+    @WORK_DATE DATE
+AS
+BEGIN
+	INSERT INTO WORK_SCHEDULES (EMPLOYEE_ID, SHIFT_ID, ROOM_ID, WORK_DATE)
+	VALUES
+		(@EMPLOYEE_ID, @SHIFT_ID,@ROOM_ID,@WORK_DATE)
 END
+GO
+
+
+CREATE PROC deleteSchedule
+@id int
+AS
+BEGIN
+	DELETE FROM WORK_SCHEDULES
+	WHERE SCHEDULE_ID = @id
+END
+GO
+
+CREATE PROC getSchedule
+@pagenumber INT, @rowOfPage INT
+AS
+BEGIN
+	SELECT *
+	FROM WORK_SCHEDULES
+	ORDER BY SCHEDULE_ID
+	OFFSET (@pagenumber -1)* @rowOfPage rows
+	FETCH NEXT @rowOfPage ROWS ONLY
+END
+GO
+
+CREATE PROC COUNTWORK
+AS
+BEGIN
+	SELECT COUNT(SCHEDULE_ID) total
+	FROM WORK_SCHEDULES
+End
 GO
