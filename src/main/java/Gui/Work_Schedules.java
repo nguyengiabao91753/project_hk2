@@ -255,7 +255,7 @@ public class Work_Schedules extends JInternalFrame {
 				lblnextMouseClicked(e);
 			}
 		});
-		lblnext.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-next-24 (1).png"));
+		lblnext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
 		lblnext.setBounds(878, 416, 24, 24);
 		getContentPane().add(lblnext);
 		
@@ -278,7 +278,7 @@ public class Work_Schedules extends JInternalFrame {
 				lbllastMouseClicked(e);
 			}
 		});
-		lbllast.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-last-24.png"));
+		lbllast.setIcon(new ImageIcon("images\\icons8-last-24.png"));
 		lbllast.setBounds(907, 416, 24, 24);
 		getContentPane().add(lbllast);
 		
@@ -317,7 +317,7 @@ public class Work_Schedules extends JInternalFrame {
 				lblpreviousMouseClicked(e);
 			}
 		});
-		lblprevious.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-next-24 (2).png"));
+		lblprevious.setIcon(new ImageIcon("C:images\\icons8-next-24 (2).png"));
 		lblprevious.setBounds(817, 416, 24, 24);
 		getContentPane().add(lblprevious);
 		
@@ -328,7 +328,7 @@ public class Work_Schedules extends JInternalFrame {
 				lblfirstMouseClicked(e);
 			}
 		});
-		lblfirst.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-last-24 (1).png"));
+		lblfirst.setIcon(new ImageIcon("images\\icons8-last-24 (1).png"));
 		lblfirst.setBounds(790, 416, 24, 24);
 		getContentPane().add(lblfirst);
 		
@@ -405,7 +405,7 @@ public class Work_Schedules extends JInternalFrame {
 //			add.toFront();
 //		}
 		
-		Addschedule add = new Addschedule().getInstance();
+		Addschedule add =  Addschedule.getInstance();
 		if(!add.isVisible()) {
 			add.setVisible(true);
 			

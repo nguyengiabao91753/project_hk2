@@ -15,8 +15,13 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+
+import Gui.EmployeeForm;
+
 import Gui.Atiendances;
+
 import Gui.Work_Schedules;
+import crud.Addemployee;
 
 import java.awt.Color;
 import javax.swing.JDesktopPane;
@@ -71,6 +76,8 @@ public class App_Admin extends JFrame {
 	private JLabel lblNewLabel_2;
 	Work_Schedules work;
 	Atiendances attendance;
+	EmployeeForm femp;
+	
 
 	/**
 	 * Launch the application.
@@ -155,6 +162,10 @@ public class App_Admin extends JFrame {
 		
 		panelLateral = new JPanel();
 
+		panelLateral.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+
+
 		panelLateral.setBackground(Color.WHITE);
 		panelLateral.setBounds(0,0,219,663);
 		contentPane.add(panelLateral);
@@ -176,7 +187,7 @@ public class App_Admin extends JFrame {
 				btnStaMouseClicked(e);
 			}
 		});
-		btnSta.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-chart-24.png"));
+		btnSta.setIcon(new ImageIcon("images\\icons8-chart-24.png"));
 		btnSta.setBackground(new Color(255, 255, 255));
 		btnSta.setHorizontalAlignment(SwingConstants.LEFT);
 		btnSta.addActionListener(new ActionListener() {
@@ -198,7 +209,7 @@ public class App_Admin extends JFrame {
 				btnEmployeeMouseExited(e);
 			}
 		});
-		btnEmployee.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-employee-24.png"));
+		btnEmployee.setIcon(new ImageIcon("images\\icons8-employee-24.png"));
 		btnEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnEmployeeActionPerformed(e);
@@ -226,7 +237,7 @@ public class App_Admin extends JFrame {
 				btnAccountMouseExited(e);
 			}
 		});
-		btnAccount.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-employee-24 (1).png"));
+		btnAccount.setIcon(new ImageIcon("images\\icons8-employee-24 (1).png"));
 		btnAccount.setHorizontalAlignment(SwingConstants.LEFT);
 		btnAccount.setFocusPainted(false);
 		btnAccount.setBorderPainted(false);
@@ -249,7 +260,7 @@ public class App_Admin extends JFrame {
 				btnWorkScheduleMouseExited(e);
 			}
 		});
-		btnWorkSchedule.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-schedule-26.png"));
+		btnWorkSchedule.setIcon(new ImageIcon("images\\icons8-schedule-26.png"));
 		btnWorkSchedule.setHorizontalAlignment(SwingConstants.LEFT);
 		btnWorkSchedule.setFocusPainted(false);
 		btnWorkSchedule.setBorderPainted(false);
@@ -272,7 +283,7 @@ public class App_Admin extends JFrame {
 				btnAttendenceMouseExited(e);
 			}
 		});
-		btnAttendence.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-attendance-25.png"));
+		btnAttendence.setIcon(new ImageIcon("images\\icons8-attendance-25.png"));
 		btnAttendence.setHorizontalAlignment(SwingConstants.LEFT);
 		btnAttendence.setFocusPainted(false);
 		btnAttendence.setBorderPainted(false);
@@ -290,7 +301,7 @@ public class App_Admin extends JFrame {
 				btnDepartmentMouseExited(e);
 			}
 		});
-		btnDepartment.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-hospital-24.png"));
+		btnDepartment.setIcon(new ImageIcon("images\\icons8-hospital-24.png"));
 		btnDepartment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnDepartmentActionPerformed(e);
@@ -313,7 +324,7 @@ public class App_Admin extends JFrame {
 				btnEducationMouseExited(e);
 			}
 		});
-		btnEducation.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-graduate-24.png"));
+		btnEducation.setIcon(new ImageIcon("images\\icons8-graduate-24.png"));
 		btnEducation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnSta_6ActionPerformed(e);
@@ -380,7 +391,7 @@ public class App_Admin extends JFrame {
 		
 		lblNewLabel = new JLabel("");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-hospital-48.png"));
+		lblNewLabel.setIcon(new ImageIcon("images\\icons8-hospital-48.png"));
 		lblNewLabel.setBounds(5, 11, 50, 50);
 		panelLateral.add(lblNewLabel);
 		
@@ -424,7 +435,7 @@ public class App_Admin extends JFrame {
 		panelTop.add(lblClose);
 		
 		desktopPane = new JDesktopPane();
-		desktopPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		desktopPane.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		desktopPane.setBounds(223, 37, 957, 626);
 		contentPane.add(desktopPane);
 	}
@@ -459,6 +470,7 @@ public class App_Admin extends JFrame {
 	protected void lblClose(MouseEvent e) {
 		System.exit(0);
 	}
+	
 	protected void contentPaneMouseDragged(MouseEvent e) {
 		int x = e.getXOnScreen();
         int y = e.getYOnScreen();
@@ -540,6 +552,7 @@ public class App_Admin extends JFrame {
 				panelWork.setVisible(false);
 			}
 			opensidebar();
+			loadEmployeeForm();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -608,6 +621,7 @@ public class App_Admin extends JFrame {
 			// TODO: handle exception
 		}
 	}
+	
 	protected void btnWorkScheduleActionPerformed(ActionEvent e) {
 		try {
 			if(btnWorkSchedule.isVisible() == true) {
@@ -625,6 +639,7 @@ public class App_Admin extends JFrame {
 			// TODO: handle exception
 		}
 	}
+	
 	protected void btnAttendenceActionPerformed(ActionEvent e) {
 		try {
 			if(btnAttendence.isVisible() == true) {
@@ -642,6 +657,7 @@ public class App_Admin extends JFrame {
 			// TODO: handle exception
 		}
 	}
+	
 	protected void lblMenuMouseClicked(MouseEvent e) {
 		if(panelLateral.getBounds().width == 219) {
 			panelLateral.setBounds(0,0,68,664);
@@ -654,6 +670,18 @@ public class App_Admin extends JFrame {
 			
 		}
 	}
+	
 	protected void btnStaMouseClicked(MouseEvent e) {
+		
+	}
+	
+	void loadEmployeeForm() {
+		if (femp == null || femp.isClosed()) {
+	        femp = new EmployeeForm();
+	        femp.setBounds(0, 0, 957, 627);
+	        desktopPane.add(femp);
+	        femp.setApp(this);
+	        femp.show();
+	    }
 	}
 }

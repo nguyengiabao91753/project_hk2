@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import App.MainJframe ;
-import Gui.Employees_Information;
 import Gui.Manage_Departments;
 import Gui.Acounts;
 import Gui.Atiendances;
@@ -98,7 +97,7 @@ public class MainJframe extends JFrame {
         JMenuItem mntmEmployees = new JMenuItem("Employees Information");
         mntmEmployees.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		mntmPage1ActionPerformed(e);
+//        		mntmPage1ActionPerformed(e);
         	}
         });
         mnMenu1.add(mntmEmployees);
@@ -237,13 +236,13 @@ public class MainJframe extends JFrame {
         });
     }
 
-	protected void mntmPage1ActionPerformed(ActionEvent e) {
-		Employees_Information page1 = new Employees_Information().getInstance();
-		if(!page1.isVisible()) {
-			page1.setVisible(true);
-			contentPane.add(page1);
-		}
-	}
+//	protected void mntmPage1ActionPerformed(ActionEvent e) {
+//		Employees_Information page1 = new Employees_Information().getInstance();
+//		if(!page1.isVisible()) {
+//			page1.setVisible(true);
+//			contentPane.add(page1);
+//		}
+//	}
 	protected void mntmPage2ActionPerformed(ActionEvent e) {
 		Manage_Departments page2 = new Manage_Departments().getInstance();
 		if(!page2.isVisible()) {
