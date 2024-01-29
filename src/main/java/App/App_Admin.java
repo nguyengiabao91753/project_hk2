@@ -51,7 +51,7 @@ public class App_Admin extends JFrame {
 	private JPanel contentPane;
 	private JPanel panelLateral;
 	private JPanel panelTop;
-	private JDesktopPane desktopPane;
+	public JDesktopPane desktopPane;
 	private JLabel lblMenu;
 	private JLabel lblClose;
 	private int xx ,xy;
@@ -478,6 +478,7 @@ public class App_Admin extends JFrame {
 			work = new Work_Schedules();
 			work.setBounds(0,0,957,626);
 			desktopPane.add(work);
+			work.setApp(this);
 			work.show();
 		}
 	}

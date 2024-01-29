@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import com.toedter.calendar.JDateChooser;
 
+import App.App_Admin;
 import crud.Addschedule;
 import dao.RoomDAO;
 import dao.ShiftDAO;
@@ -36,6 +37,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyVetoException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -43,6 +45,8 @@ import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import javax.swing.JSeparator;
 
 public class Work_Schedules extends JInternalFrame {
 	
@@ -51,11 +55,7 @@ public class Work_Schedules extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
 	private static Work_Schedules instance ;
 	private JScrollPane scrollPane;
-	private JTable table;
 	private JTextField textSearch;
-	private JLabel lblAdd;
-	private JLabel lblUpdate;
-	private JLabel lblDelete;
 	private JLabel lblId;
 	private JDateChooser dateChooser;
 	private JLabel lblNewLabel;
@@ -67,18 +67,32 @@ public class Work_Schedules extends JInternalFrame {
 	private JComboBox cbbShift;
 	private JTextField txtEmployee;
 	
+	Integer pageNumber =1;
+	Integer rowOfPage =10;
+	Double totalPage =0.0;
+	Integer totalCount =0;
+	
+	
 	RoomDAO roomdao = new RoomDAO();
 	ShiftDAO shiftdao = new ShiftDAO();
 	
 	WorkscheduleDAO workdao = new WorkscheduleDAO();
-	private JButton btnFirst;
-	private JButton btnPrevious;
-	private JButton btnNext;
-	private JButton btnLast;
-	private JTextField textPageNum;
 	private JButton btnAdd;
+	private App_Admin app;
+	private JTable table;
+	private JLabel lblnext;
+	private JTextField textPage;
+	private JLabel lbllast;
+	private JLabel lblDelete;
+	private JLabel lblUpdate;
+	private JLabel lblprevious;
+	private JLabel lblfirst;
 	
-	Addschedule add;
+	
+	public void setApp(App_Admin app) {
+		this.app = app;
+	}
+
 	/**
 	 * Launch the application.
 	 */
@@ -98,6 +112,22 @@ public class Work_Schedules extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
+	public void hidenextlast() {
+		if(pageNumber==1) {
+			lblfirst.setVisible(false);
+			lblprevious.setVisible(false);
+		}else {
+			lblfirst.setVisible(true);
+			lblprevious.setVisible(true);
+		}
+		if(pageNumber == totalPage.intValue()) {
+			lblnext.setVisible(false);
+			lbllast.setVisible(false);
+		}else {
+			lblnext.setVisible(true);
+			lbllast.setVisible(true);
+		}
+	}
 	public void quit() {
 		Barca = ((javax.swing.plaf.basic.BasicInternalFrameUI) getUI()).getNorthPane();
 		DimensionBarca =Barca.getPreferredSize();
@@ -126,17 +156,13 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(scrollPane);
 		
 		table = new JTable();
-		table.setFillsViewportHeight(true);
-		table.setAutoCreateRowSorter(true);
-		
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				tableMouseClicked(e);
 			}
 		});
-		table.setBorder(new LineBorder(new Color(192, 192, 192)));
-		scrollPane.setColumnHeaderView(table);
+		scrollPane.setViewportView(table);
 		
 		textSearch = new JTextField();
 		textSearch.addActionListener(new ActionListener() {
@@ -148,42 +174,6 @@ public class Work_Schedules extends JInternalFrame {
 		textSearch.setBounds(267, 11, 105, 36);
 		getContentPane().add(textSearch);
 		textSearch.setColumns(10);
-		
-		lblAdd = new JLabel("ADD");
-		lblAdd.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				lblAddMouseClicked(e);
-			}
-		});
-		lblAdd.setForeground(new Color(255, 255, 255));
-		lblAdd.setOpaque(true);
-		lblAdd.setBackground(new Color(51, 0, 255));
-		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAdd.setBounds(855, 456, 76, 27);
-		getContentPane().add(lblAdd);
-		
-		lblUpdate = new JLabel("UPDATE");
-		lblUpdate.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				lblUpdateMouseClicked(e);
-			}
-		});
-		lblUpdate.setForeground(Color.WHITE);
-		lblUpdate.setBackground(new Color(0, 255, 64));
-		lblUpdate.setOpaque(true);
-		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUpdate.setBounds(29, 313, 76, 27);
-		getContentPane().add(lblUpdate);
-		
-		lblDelete = new JLabel("DELETE");
-		lblDelete.setForeground(Color.WHITE);
-		lblDelete.setOpaque(true);
-		lblDelete.setBackground(new Color(255, 0, 0));
-		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDelete.setBounds(146, 313, 76, 27);
-		getContentPane().add(lblDelete);
 		
 		lblId = new JLabel("");
 		lblId.setEnabled(false);
@@ -245,29 +235,6 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(txtEmployee);
 		txtEmployee.setColumns(10);
 		
-		btnFirst = new JButton("First");
-		btnFirst.setBounds(318, 416, 89, 23);
-		getContentPane().add(btnFirst);
-		
-		btnPrevious = new JButton("Previous'");
-		btnPrevious.setBounds(417, 416, 89, 23);
-		getContentPane().add(btnPrevious);
-		
-		btnNext = new JButton("Next");
-		btnNext.setBounds(728, 416, 89, 23);
-		getContentPane().add(btnNext);
-		
-		btnLast = new JButton("Last");
-		btnLast.setBounds(842, 416, 89, 23);
-		getContentPane().add(btnLast);
-		
-		textPageNum = new JTextField();
-		textPageNum.setHorizontalAlignment(SwingConstants.CENTER);
-		textPageNum.setText("1");
-		textPageNum.setBounds(557, 416, 86, 20);
-		getContentPane().add(textPageNum);
-		textPageNum.setColumns(10);
-		
 		btnAdd = new JButton("ADD");
 		btnAdd.setBackground(new Color(0, 102, 255));
 		btnAdd.addActionListener(new ActionListener() {
@@ -275,10 +242,85 @@ public class Work_Schedules extends JInternalFrame {
 				btnAddActionPerformed(e);
 			}
 		});
-		btnAdd.setBounds(307, 475, 89, 23);
+		btnAdd.setBounds(267, 416, 89, 23);
 		getContentPane().add(btnAdd);
 		
 		loadWorkSchedule();
+		table.setRowHeight(32);
+		
+		lblnext = new JLabel("");
+		lblnext.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblnextMouseClicked(e);
+			}
+		});
+		lblnext.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-next-24 (1).png"));
+		lblnext.setBounds(878, 416, 24, 24);
+		getContentPane().add(lblnext);
+		
+		textPage = new JTextField();
+		textPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textPageActionPerformed(e);
+			}
+		});
+		textPage.setText("1");
+		textPage.setHorizontalAlignment(SwingConstants.CENTER);
+		textPage.setColumns(10);
+		textPage.setBounds(840, 416, 38, 24);
+		getContentPane().add(textPage);
+		
+		lbllast = new JLabel("");
+		lbllast.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lbllastMouseClicked(e);
+			}
+		});
+		lbllast.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-last-24.png"));
+		lbllast.setBounds(907, 416, 24, 24);
+		getContentPane().add(lbllast);
+		
+		lblDelete = new JLabel("DELETE");
+		lblDelete.setOpaque(true);
+		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDelete.setForeground(Color.WHITE);
+		lblDelete.setBackground(Color.RED);
+		lblDelete.setBounds(159, 304, 76, 27);
+		getContentPane().add(lblDelete);
+		
+		lblUpdate = new JLabel("UPDATE");
+		lblUpdate.setOpaque(true);
+		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUpdate.setForeground(Color.WHITE);
+		lblUpdate.setBackground(new Color(0, 255, 64));
+		lblUpdate.setBounds(42, 304, 76, 27);
+		getContentPane().add(lblUpdate);
+		
+		lblprevious = new JLabel("");
+		lblprevious.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblpreviousMouseClicked(e);
+			}
+		});
+		lblprevious.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-next-24 (2).png"));
+		lblprevious.setBounds(817, 416, 24, 24);
+		getContentPane().add(lblprevious);
+		
+		lblfirst = new JLabel("");
+		lblfirst.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblfirstMouseClicked(e);
+			}
+		});
+		lblfirst.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-last-24 (1).png"));
+		lblfirst.setBounds(790, 416, 24, 24);
+		getContentPane().add(lblfirst);
+		
+		hidenextlast();
 	}
 //	public void String nameEmpolyee(int a) {
 //		List<Employee> listEmp = 
@@ -310,27 +352,56 @@ public class Work_Schedules extends JInternalFrame {
 		model.addColumn("Shift");
 		model.addColumn("Work date");
 		
-		workdao.selectAllSchedule().stream().forEach(work -> model.addRow(new Object[] {
+		//tìm trong bảng customer tổng số dòng
+		 totalCount = workdao.countSchedule();
+		//tìm số trang của bảng 
+		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
+		
+		workdao.getSchedule(pageNumber, rowOfPage).stream().forEach(work -> model.addRow(new Object[] {
 				work.getId(),
 				work.getEmployee_id(),
 				nameRoom(work.getRoom_id()),
 				nameShift(work.getShift_id()),
 				work.getWork_date()
 		}));
-		
 		table.setModel(model);
-		
 	}
 	public void refresh() {
 		DefaultTableModel model = (DefaultTableModel)table.getModel();
 		model.setRowCount(0); 
-		workdao.selectAllSchedule().stream().forEach(work -> model.addRow(new Object[] {
+		workdao.getSchedule(pageNumber, rowOfPage).stream().forEach(work -> model.addRow(new Object[] {
 				work.getId(),
 				work.getEmployee_id(),
 				nameRoom(work.getRoom_id()),
 				nameShift(work.getShift_id()),
 				work.getWork_date()
 		}));
+		hidenextlast();
+	}
+	protected void textSearchActionPerformed(ActionEvent e) {
+		String find = textSearch.getText();
+		DefaultRowSorter<?,?> sorter = (DefaultRowSorter<?,?>)table.getRowSorter();
+		sorter.setRowFilter(RowFilter.regexFilter(find));
+		sorter.setSortKeys(null);
+	}
+	protected void btnAddActionPerformed(ActionEvent e) {
+		
+//		if(add == null || add.isClosed()) {
+//			add  = new Addschedule();
+//			add.setBounds(0,0,957,626);
+//			add.show();
+//			add.toFront();
+//		}
+		
+		Addschedule add = new Addschedule().getInstance();
+		if(!add.isVisible()) {
+			add.setVisible(true);
+			
+			app.desktopPane.add(add);
+			add.toFront();
+			this.hide();
+			//app.pack();
+		}
 	}
 	protected void tableMouseClicked(MouseEvent e) {
 		int rowIndex = table.getSelectedRow();
@@ -368,41 +439,41 @@ public class Work_Schedules extends JInternalFrame {
 					new SimpleDateFormat("yyyy-MM-dd").parse(table.getValueAt(rowIndex, 4).toString())
 					);
 		} catch (Exception e2) {
-			// TODO: handle exception
-		}
-		
-	}
-	protected void textSearchActionPerformed(ActionEvent e) {
-		String find = textSearch.getText();
-		DefaultRowSorter<?,?> sorter = (DefaultRowSorter<?,?>)table.getRowSorter();
-		sorter.setRowFilter(RowFilter.regexFilter(find));
-		sorter.setSortKeys(null);
-	}
-	protected void lblAddMouseClicked(MouseEvent e) {
-		Addschedule add = null;
-		if(add == null || add.isClosed()) {
-			add  = new Addschedule();
-			add.setVisible(true);
+			e2.printStackTrace();
 		}
 	}
-	protected void btnAddActionPerformed(ActionEvent e) {
-		
-		if(add == null || add.isClosed()) {
-			add  = new Addschedule();
-			add.setBounds(0,0,957,626);
-			add.show();
-			add.toFront();
+	protected void lblnextMouseClicked(MouseEvent e) {
+		if(pageNumber < totalPage.intValue()) {
+			pageNumber++;
+			textPage.setText(pageNumber.toString());
+			refresh();
+		}
+
+	}
+	protected void lblpreviousMouseClicked(MouseEvent e) {
+		if(pageNumber >0) {
+			pageNumber--;
+			textPage.setText(pageNumber.toString());
+			refresh();
 		}
 	}
-	protected void lblUpdateMouseClicked(MouseEvent e) {
-		Workschedule worknew = new Workschedule();
-		worknew.setId(Integer.parseInt(lblId.getText()));
-		worknew.setEmployee_id(Integer.parseInt(txtEmployee.getText()));
-		worknew.setShift_id(cbbShift.getSelectedIndex()+1);
-		worknew.setRoom_id(cbbRoom.getSelectedIndex()+1);
-		worknew.setWork_date(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()));
-		
-		workdao.update(worknew);
+	protected void textPageActionPerformed(ActionEvent e) {
+		int num = Integer.parseInt(textPage.getText()) ;
+		if(num>0 && num<totalPage.intValue()) {
+			pageNumber = num;
+			refresh();
+		}else {
+			JOptionPane.showMessageDialog(null, "Page Number is invalid");
+		}
+	}
+	protected void lbllastMouseClicked(MouseEvent e) {
+		pageNumber = totalPage.intValue();
+		textPage.setText(pageNumber.toString());
+		refresh();
+	}
+	protected void lblfirstMouseClicked(MouseEvent e) {
+		pageNumber = 1;
+		textPage.setText(pageNumber.toString());
 		refresh();
 	}
 }
