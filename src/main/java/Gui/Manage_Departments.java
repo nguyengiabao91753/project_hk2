@@ -1,7 +1,5 @@
 package Gui;
-
 import java.awt.EventQueue;
-
 import javax.swing.JInternalFrame;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
@@ -18,13 +16,16 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import entity.Deparment;
+import App.App_Admin;
+import entity.Department;
 import dao.Manage_DepartmentsDAO;
 import dao.RoomDAO;
 import dao.ShiftDAO;
-import entity.Deparment;
+import dao.WorkscheduleDAO;
+import entity.Department;
 import entity.Room;
 import entity.Shift;
+import entity.Workschedule;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -57,25 +58,27 @@ public class Manage_Departments extends JInternalFrame {
 	private JLabel lblRoom;
 	private JButton btnInsert;
 	private JButton btnUpdate;
-	
-	private DefaultTableModel modelo ;
 	private JTable tbemp;
 	private JScrollPane scrollPane;
 	Manage_DepartmentsDAO DepDAO = new Manage_DepartmentsDAO();
-	Integer pageNumber =1;
+	RoomDAO RoomDAO = new RoomDAO();
+	
+	Integer pagenumber =1;
 	Integer rowOfPage =10;
 	Double totalPage =0.0;
 	Integer totalCount =0;
+	
 	private JLabel lblTextsearch;
 	private JTextField textSearch;
 	private JButton btnDelete;
 	private JTextField txtDeparment;
-	private JTextField txtRoom;
 	private JButton btnPrevious;
 	private JButton btnNext;
 	private JTextField txtPage;
 	private JTextField textField;
 	private JLabel lblNewLabel;
+	private JButton btnReset;
+	private JTextField txtRoom;
 
 	/**
 	 * Launch the application.
@@ -96,6 +99,7 @@ public class Manage_Departments extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
+	
 	public void Quit() {
 		Barca = ((javax.swing.plaf.basic.BasicInternalFrameUI) getUI()).getNorthPane();
 		DimensionBarca =Barca.getPreferredSize();
@@ -106,44 +110,45 @@ public class Manage_Departments extends JInternalFrame {
 	public Manage_Departments() {
 		Quit();
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
-		getContentPane().setBackground(new Color(255, 255, 255));
+		getContentPane().setBackground(SystemColor.control);
 		setBounds(223, 37, 957, 626);
 		getContentPane().setLayout(null);
 		
 		txtID = new JTextField();
+		txtID.setEnabled(false);
 		txtID.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		txtID.setBounds(108, 48, 150, 30);
+		txtID.setBounds(108, 50, 150, 30);
 		getContentPane().add(txtID);
 		txtID.setColumns(10);
 		
 		txtName = new JTextField();
 		txtName.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		txtName.setBounds(108, 103, 150, 30);
+		txtName.setBounds(108, 95, 150, 30);
 		getContentPane().add(txtName);
 		txtName.setColumns(10);
 		
 		lblID = new JLabel("ID :");
 		lblID.setBackground(SystemColor.controlHighlight);
 		lblID.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblID.setBounds(10, 48, 100, 30);
+		lblID.setBounds(10, 50, 100, 30);
 		getContentPane().add(lblID);
 		
 		lblName = new JLabel("NAME :");
 		lblName.setBackground(SystemColor.controlHighlight);
 		lblName.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblName.setBounds(10, 103, 100, 30);
+		lblName.setBounds(20, 95, 80, 30);
 		getContentPane().add(lblName);
 		
 		lblDeparment = new JLabel("DEPARTMENT :");
 		lblDeparment.setBackground(SystemColor.controlHighlight);
 		lblDeparment.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblDeparment.setBounds(10, 154, 100, 30);
+		lblDeparment.setBounds(10, 140, 95, 30);
 		getContentPane().add(lblDeparment);
 		
 		lblRoom = new JLabel("ROOM :");
 		lblRoom.setBackground(SystemColor.controlHighlight);
 		lblRoom.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblRoom.setBounds(10, 205, 100, 30);
+		lblRoom.setBounds(10, 185, 100, 30);
 		getContentPane().add(lblRoom);
 		
 		btnInsert = new JButton("INSERT");
@@ -163,12 +168,12 @@ public class Manage_Departments extends JInternalFrame {
 				btnGetIntoMouseExited(e);
 			}
 		});
-		btnInsert.setBackground(new Color(255, 255, 255));
-		btnInsert.setBounds(134, 264, 122, 35);
+		btnInsert.setBackground(SystemColor.textHighlight);
+		btnInsert.setBounds(136, 295, 122, 35);
 		getContentPane().add(btnInsert);
 		
 		btnUpdate = new JButton("UPDATE");
-		btnUpdate.setBackground(new Color(102, 51, 255));
+		btnUpdate.setBackground(Color.YELLOW);
 		btnUpdate.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		btnUpdate.addMouseListener(new MouseAdapter() {
 			@Override
@@ -185,7 +190,7 @@ public class Manage_Departments extends JInternalFrame {
 				btnUpdateActionPerformed(e);
 			}
 		});
-		btnUpdate.setBounds(135, 319, 122, 35);
+		btnUpdate.setBounds(134, 341, 122, 35);
 		getContentPane().add(btnUpdate);
 		
 		scrollPane = new JScrollPane();
@@ -206,11 +211,7 @@ public class Manage_Departments extends JInternalFrame {
 		scrollPane.setViewportView(tbemp);
 		tbemp.setBorder(new LineBorder(SystemColor.controlHighlight, 2));	
 		
-		modelo = new DefaultTableModel();
-		modelo.addColumn("DEPARTMENT_ID");
-		modelo.addColumn("DEPARTMENT_NAME");
-		modelo.addColumn("HEAD_OF_DEPARTMENT");
-		modelo.addColumn("ROOM");
+
 		
 		lblTextsearch = new JLabel(" Search :");
 		lblTextsearch.setFont(new Font("Times New Roman", Font.BOLD, 15));
@@ -228,7 +229,7 @@ public class Manage_Departments extends JInternalFrame {
 		getContentPane().add(textSearch);
 		
 		btnDelete = new JButton("DELETE");
-		btnDelete.setBackground(new Color(102, 51, 255));
+		btnDelete.setBackground(Color.RED);
 		btnDelete.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
@@ -245,22 +246,27 @@ public class Manage_Departments extends JInternalFrame {
 				btnDeleteActionPerformed(e);
 			}
 		});
-		btnDelete.setBounds(136, 371, 122, 35);
+		btnDelete.setBounds(136, 387, 122, 35);
 		getContentPane().add(btnDelete);
 		
 		txtDeparment = new JTextField();
 		txtDeparment.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		txtDeparment.setColumns(10);
-		txtDeparment.setBounds(108, 154, 150, 30);
+		txtDeparment.setBounds(108, 140, 150, 30);
 		getContentPane().add(txtDeparment);
 		
-		txtRoom = new JTextField();
-		txtRoom.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		txtRoom.setColumns(10);
-		txtRoom.setBounds(108, 205, 150, 30);
-		getContentPane().add(txtRoom);
-		
 		btnPrevious = new JButton("Previous");
+		btnPrevious.setBackground(SystemColor.inactiveCaption);
+		btnPrevious.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnPreviousMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnPreviousMouseExited(e);
+			}
+		});
 		btnPrevious.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnPrevious.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -271,6 +277,17 @@ public class Manage_Departments extends JInternalFrame {
 		getContentPane().add(btnPrevious);
 		
 		btnNext = new JButton("Next");
+		btnNext.setBackground(SystemColor.inactiveCaption);
+		btnNext.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnNextMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnNextMouseExited(e);
+			}
+		});
 		btnNext.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -302,19 +319,57 @@ public class Manage_Departments extends JInternalFrame {
 		lblNewLabel.setBounds(820, 426, 40, 25);
 		getContentPane().add(lblNewLabel);
 		
-		loaDeparment();
+		loadDepartment();
+		tbemp.setRowHeight(32);
+		
+		btnReset = new JButton("RESET");
+		btnReset.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnResetMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnResetMouseExited(e);
+			}
+		});
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnResetActionPerformed(e);
+			}
+		});
+		btnReset.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		btnReset.setBackground(SystemColor.inactiveCaption);
+		btnReset.setBounds(136, 249, 122, 35);
+		getContentPane().add(btnReset);
+		
+		txtRoom = new JTextField();
+		txtRoom.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		txtRoom.setColumns(10);
+		txtRoom.setBounds(108, 185, 150, 30);
+		getContentPane().add(txtRoom);
+
 	}
 	
 	//load
-	public void loaDeparment() {
-		DepDAO.selectDepartments().stream().forEach(Dep -> modelo.addRow(new Object[] {
+	public void loadDepartment() {
+		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn("Department_Id");
+		model.addColumn("Department_Name");
+		model.addColumn("Dead_Of_Department");
+		model.addColumn("Room");
+		//tìm trong bảng tổng số dòng
+		 totalCount = DepDAO.countDepartments();
+		//tìm số trang của bảng 
+		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
+		DepDAO.getDepartments(pagenumber, rowOfPage).stream().forEach(Dep -> model.addRow(new Object[] {
 			Dep.getDepartment_id(),
 			Dep.getDepartment_name(),
 			Dep.getHead_of_department(),
 			Dep.getRoom()
 		}));
 		
-		tbemp.setModel(modelo);
+		tbemp.setModel(model);
 	}
 
 	protected void btnGetIntoMouseEntered(MouseEvent e) {
@@ -322,61 +377,53 @@ public class Manage_Departments extends JInternalFrame {
 		btnInsert.setForeground(Color.black);
 	}
 	protected void btnGetIntoMouseExited(MouseEvent e) {
-		btnInsert.setBackground(Color.green);
+		btnInsert.setBackground(SystemColor.textHighlight);
 		btnInsert.setForeground(Color.black);
-	}
-	
+	}	
 	public void refresh() {
 		DefaultTableModel model = (DefaultTableModel)tbemp.getModel();
 		model.setRowCount(0); 
-		DepDAO.selectAllDeparment(pageNumber, rowOfPage).stream().forEach(Dep -> model.addRow(new Object[] {
+		DepDAO.getDepartments(pagenumber, rowOfPage).stream().forEach(Dep -> model.addRow(new Object[] {
 				Dep.getDepartment_id(),
 				Dep.getDepartment_name(),
 				Dep.getHead_of_department(),
 				Dep.getRoom(),
 		}));
 	}
-	
-	public void loadDepartment() {
-		DefaultTableModel model = new DefaultTableModel();
-		model.addColumn("department_id");
-		model.addColumn("department_name");
-		model.addColumn("head_of_department");
-		model.addColumn("room");	
-		//tìm trong bảng Dep tổng số dòng :
-		 totalCount = DepDAO.countDepartments();
-		//tìm số trang của bảng 
-		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
+	public int validateDepartment() {
+		int count = 0 ;
+		Manage_DepartmentsDAO DepDAO = new Manage_DepartmentsDAO();
+		List<Department> listDep = DepDAO.selectAllDepartment();
+		if( txtName.getText() == null || txtDeparment.getText() == null ||  txtName.getText() == null) {
+			JOptionPane.showMessageDialog(null, "Please fill in all information");
+			count++;
+		}
 		
-		DepDAO.selectAllDeparment(pageNumber, rowOfPage).stream().forEach(Dep -> model.addRow(new Object[] {
-				Dep.getDepartment_id(),
-				Dep.getDepartment_name(),
-				Dep.getHead_of_department(),
-				Dep.getRoom(),
-		}));
-		tbemp.setModel(model);
+		return count;
 	}
-	
 	protected void btnInsertActionPerformed(ActionEvent e) {
-		//insert
-		var Dep = new Deparment();
-		Dep.setDepartment_name(txtName.getText());
-		Dep.setHead_of_department(txtDeparment.getText());
-		Dep.setRoom(txtRoom.getText());
-		var dao = new Manage_DepartmentsDAO();
-		dao.insert(Dep);
+		if(validateDepartment() !=0) {
+			return;
+		}else {
+		var Dep = new Department();
+		Dep.setDepartment_name(txtName.getText()+1);
+		Dep.setHead_of_department(txtDeparment.getText()+1);
+		Dep.setRoom(txtRoom.getText()+1);
+		DepDAO.insert(Dep);
 		// load lai du lieu
 		loadDepartment();
 		refresh();
+		}
 	}
+	
 	protected void btnUpdateActionPerformed(ActionEvent e) {
 		
-		var Dep = new Deparment();
-		Dep.setDepartment_id(Integer.parseInt(txtID.getText()));
-		Dep.setDepartment_name(txtName.getText());
-		Dep.setHead_of_department(txtDeparment.getText());
-		Dep.setRoom(txtRoom.getText());
-		// load lai du lieu
+		Department DepNew = new Department();
+		DepNew.setDepartment_id(Integer.parseInt(txtID.getText()));
+		DepNew.setDepartment_name(txtName.getText());
+		DepNew.setHead_of_department(txtDeparment.getText());
+		DepNew.setRoom(txtRoom.getText());
+		DepDAO.update(DepNew);
 		loadDepartment();
 		refresh();
 	}
@@ -391,10 +438,9 @@ public class Manage_Departments extends JInternalFrame {
 		btnUpdate.setForeground(Color.black);
 	}
 	protected void btnDeleteActionPerformed(ActionEvent e) {
-		var Dep = new Deparment();
-		Dep.setDepartment_id(Integer.parseInt(txtID.getText()));//do ko phai la string nen lai parse ve
-		var dao = new Manage_DepartmentsDAO();
-		dao.delete(Dep);
+		JOptionPane.showConfirmDialog(null,"Are you sure want to delete?","Delete",JOptionPane.YES_NO_OPTION);
+		int a = Integer.parseInt(txtID.getText());
+		DepDAO.delete(a);
 		refresh();
 	}
 	protected void btnDeleteMouseEntered(MouseEvent e) {
@@ -413,6 +459,7 @@ public class Manage_Departments extends JInternalFrame {
 	}
 	
 	protected void tbempMouseClicked(MouseEvent e) {
+		
 	    int rowIndex = tbemp.getSelectedRow();
 	    txtID.setText(tbemp.getValueAt(rowIndex, 0).toString());
 	    txtName.setText(tbemp.getValueAt(rowIndex, 1).toString());
@@ -420,27 +467,61 @@ public class Manage_Departments extends JInternalFrame {
 	    txtRoom.setText(tbemp.getValueAt(rowIndex, 3).toString());
 	    }
 	protected void btnPreviousActionPerformed(ActionEvent e) {
-		if(pageNumber>1) {
-			pageNumber--;
-			txtPage.setText(pageNumber.toString());
+		if(pagenumber>1) {
+			pagenumber--;
+			txtPage.setText(pagenumber.toString());
 			refresh();
 		}
 	}
 	protected void txtPageActionPerformed(ActionEvent e) {
 		int num = Integer.parseInt(txtPage.getText()) ;
 		if(num>0 && num<totalPage.intValue()) {
-			pageNumber = num;
+			pagenumber = num;
 			refresh();
 		}else {
 			JOptionPane.showMessageDialog(null, "Page Number is invalid");
 		}
 	}
 	protected void btnNextActionPerformed(ActionEvent e) {
-		if(pageNumber<totalPage.intValue()) {
-			pageNumber++;
-			txtPage.setText(pageNumber.toString());
+		if(pagenumber<totalPage.intValue()) {
+			pagenumber++;
+			txtPage.setText(pagenumber.toString());
 			// load lại dữ liệu
 			refresh();
 		}
+	}
+	protected void btnResetActionPerformed(ActionEvent e) {
+	    int rowIndex = tbemp.getSelectedRow();
+	    if (rowIndex != -1) { // Kiểm tra xem đã chọn hàng nào hay chưa
+		    txtID.setText(tbemp.getValueAt(rowIndex, 0).toString());
+	        txtName.setText("");
+	        txtDeparment.setText("");
+	        txtRoom.setText("");
+	    }
+
+	}
+	protected void btnResetMouseEntered(MouseEvent e) {
+		btnReset.setBackground(new Color(106,90,205));
+		btnReset.setForeground(Color.black);
+	}
+	protected void btnResetMouseExited(MouseEvent e) {
+		btnReset.setBackground(SystemColor.inactiveCaption);
+		btnReset.setForeground(Color.black);
+	}
+	protected void btnPreviousMouseEntered(MouseEvent e) {
+		btnPrevious.setBackground(new Color(106,90,205));
+		btnPrevious.setForeground(Color.black);
+	}
+	protected void btnNextMouseEntered(MouseEvent e) {
+		btnNext.setBackground(new Color(106,90,205));
+		btnNext.setForeground(Color.black);
+	}
+	protected void btnPreviousMouseExited(MouseEvent e) {
+		btnPrevious.setBackground(SystemColor.inactiveCaption);
+		btnPrevious.setForeground(Color.black);
+	}
+	protected void btnNextMouseExited(MouseEvent e) {
+		btnNext.setBackground(SystemColor.inactiveCaption);
+		btnNext.setForeground(Color.black);
 	}
 }

@@ -255,7 +255,7 @@ public class Work_Schedules extends JInternalFrame {
 				lblnextMouseClicked(e);
 			}
 		});
-		lblnext.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-next-24 (1).png"));
+		lblnext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
 		lblnext.setBounds(878, 416, 24, 24);
 		getContentPane().add(lblnext);
 		
@@ -278,11 +278,17 @@ public class Work_Schedules extends JInternalFrame {
 				lbllastMouseClicked(e);
 			}
 		});
-		lbllast.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-last-24.png"));
+		lbllast.setIcon(new ImageIcon("images\\icons8-last-24.png"));
 		lbllast.setBounds(907, 416, 24, 24);
 		getContentPane().add(lbllast);
 		
 		lblDelete = new JLabel("DELETE");
+		lblDelete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblDeleteMouseClicked(e);
+			}
+		});
 		lblDelete.setOpaque(true);
 		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDelete.setForeground(Color.WHITE);
@@ -291,6 +297,12 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(lblDelete);
 		
 		lblUpdate = new JLabel("UPDATE");
+		lblUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblUpdateMouseClicked(e);
+			}
+		});
 		lblUpdate.setOpaque(true);
 		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUpdate.setForeground(Color.WHITE);
@@ -305,7 +317,7 @@ public class Work_Schedules extends JInternalFrame {
 				lblpreviousMouseClicked(e);
 			}
 		});
-		lblprevious.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-next-24 (2).png"));
+		lblprevious.setIcon(new ImageIcon("C:images\\icons8-next-24 (2).png"));
 		lblprevious.setBounds(817, 416, 24, 24);
 		getContentPane().add(lblprevious);
 		
@@ -316,7 +328,7 @@ public class Work_Schedules extends JInternalFrame {
 				lblfirstMouseClicked(e);
 			}
 		});
-		lblfirst.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-last-24 (1).png"));
+		lblfirst.setIcon(new ImageIcon("images\\icons8-last-24 (1).png"));
 		lblfirst.setBounds(790, 416, 24, 24);
 		getContentPane().add(lblfirst);
 		
@@ -393,7 +405,7 @@ public class Work_Schedules extends JInternalFrame {
 //			add.toFront();
 //		}
 		
-		Addschedule add = new Addschedule().getInstance();
+		Addschedule add =  Addschedule.getInstance();
 		if(!add.isVisible()) {
 			add.setVisible(true);
 			
@@ -475,5 +487,89 @@ public class Work_Schedules extends JInternalFrame {
 		pageNumber = 1;
 		textPage.setText(pageNumber.toString());
 		refresh();
+	}
+	protected void lblDeleteMouseClicked(MouseEvent e) {
+		JOptionPane.showConfirmDialog(null,"Are you sure want to delete?","Delete",JOptionPane.YES_NO_OPTION);
+		int a = Integer.parseInt(lblId.getText());
+		workdao.delete(a);
+		refresh();
+	}
+
+	public int validateInp() {
+		int count=0;
+		int shift_id=0;
+		int room_id=0;
+		RoomDAO roomdao = new RoomDAO();
+		ShiftDAO shiftdao = new ShiftDAO();
+		WorkscheduleDAO workdao = new WorkscheduleDAO();
+		List<Workschedule> listwork = workdao.selectAllSchedule();
+		List<Room> listroom = roomdao.selectAllRoom();
+		List<Shift> listshift = shiftdao.getAllShift();
+		for (Shift shift : listshift) {
+			if(shift.toString().equals(cbbShift.getSelectedItem())) {
+				shift_id = shift.getId();
+				break;
+			}
+		}
+		
+		for (Room room : listroom) {
+			if(room.toString().equals(cbbRoom.getSelectedItem())) {
+				room_id = room.getId();
+				break;
+			}
+		}
+		
+		
+		if( txtEmployee.getText() == null || dateChooser.getDate() == null || cbbRoom.getSelectedItem() ==null || cbbShift.getSelectedItem() == null) {
+			JOptionPane.showMessageDialog(null, "Please fill in all information");
+			count++;
+		} else if(!Addschedule.isNumeric(txtEmployee.getText())) {
+			JOptionPane.showMessageDialog(null, "Employee_id must be a number!");
+			count++;
+		}
+		else {
+			for (Workschedule workschedule : listwork) {
+				if(workschedule.getEmployee_id() == Integer.parseInt(txtEmployee.getText()) && workschedule.getWork_date().equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) 
+						&& workschedule.getShift_id() == (cbbShift.getSelectedIndex()+1) && workschedule.getRoom_id() != (cbbRoom.getSelectedIndex()+1)) {
+					JOptionPane.showMessageDialog(null, "Employee cannot work the same shift on the same date in a different room.");
+					count++;
+					return count;
+				}
+			}
+			
+			for (Workschedule workschedule : listwork) {
+				var shift_name="";
+				for (Shift shift : listshift) {
+					if(shift.getId() == workschedule.getShift_id()) {
+						shift_name = shift.toString();
+						break;
+					}
+				}
+				if(workschedule.getEmployee_id() == Integer.parseInt(txtEmployee.getText()) && workschedule.getWork_date().equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) 
+						&& workschedule.getRoom_id() != (cbbRoom.getSelectedIndex()+1) && Addschedule.doShiftsOverlap(shift_name,cbbShift.getSelectedItem().toString())) {
+					JOptionPane.showMessageDialog(null, "Employee cannot work overlapping shifts in the same room on the same date.");
+					count++;
+					return count++;
+				}
+			}
+		}
+		
+		
+		return count;
+	}
+	protected void lblUpdateMouseClicked(MouseEvent e) {
+		if(validateInp() != 0) {
+			return;
+		}else {
+		Workschedule worknew = new Workschedule();
+		worknew.setId(Integer.parseInt(lblId.getText()));
+		worknew.setEmployee_id(Integer.parseInt(txtEmployee.getText()));
+		worknew.setShift_id(cbbShift.getSelectedIndex()+1);
+		worknew.setRoom_id(cbbRoom.getSelectedIndex()+1);
+		worknew.setWork_date(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()));
+
+		workdao.update(worknew);
+		refresh();
+		}
 	}
 }

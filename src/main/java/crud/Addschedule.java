@@ -21,9 +21,11 @@ import entity.Workschedule;
 import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.awt.Font;
 import java.awt.Color;
@@ -212,11 +214,130 @@ public class Addschedule extends JInternalFrame {
 		cbbRoom.setModel(roommodel);
 		
 	}	
+	public static boolean doShiftsOverlap(String shift1, String shift2) {
+	    // Parse shifts in "HH:mm:ss-HH:mm:ss" format
+	    SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+	    
+	    try {
+	        String[] shift1Parts = shift1.split("-");
+	        String[] shift2Parts = shift2.split("-");
+
+	        Date shift1Start = format.parse(shift1Parts[0]);
+	        Date shift1End = format.parse(shift1Parts[1]);
+
+	        Date shift2Start = format.parse(shift2Parts[0]);
+	        Date shift2End = format.parse(shift2Parts[1]);
+
+	        // Check for overlap
+//	        return (shift2End.before(shift1Start) || shift1End.before(shift2Start));
+	        return (shift1Start.before(shift2End) && shift2Start.before(shift1End));
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false; // Handle parsing errors
+	    }
+	}
+//	public int shift_id() {
+//		int id=0;
+//		ShiftDAO shiftdao = new ShiftDAO();
+//		List<Shift> listshift = shiftdao.getAllShift();
+//		for (Shift shift : listshift) {
+//			if(shift.toString().equals(cbbShift.getSelectedItem())) {
+//				id= shift.getId();
+//				
+//			}
+//		}
+//		return id;
+//	}
+//	public int room_id() {
+//		RoomDAO roomdao = new RoomDAO();
+//		List<Room> listroom = roomdao.selectAllRoom();
+//		for (Room room : listroom) {
+//			if(room.toString().equals(cbbRoom.getSelectedItem())) {
+//				return  room.getId();
+//				
+//			}
+//		}
+//		return 0;
+//	}
+	
+	public static boolean isNumeric(String str) {
+	    try {
+	        Integer.parseInt(str);
+	        return true;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	}
+	
+	public int validateSchedule() {
+		int count =0;
+		int shift_id=0;
+		int room_id=0;
+		RoomDAO roomdao = new RoomDAO();
+		ShiftDAO shiftdao = new ShiftDAO();
+		WorkscheduleDAO workdao = new WorkscheduleDAO();
+		List<Workschedule> listwork = workdao.selectAllSchedule();
+		List<Room> listroom = roomdao.selectAllRoom();
+		List<Shift> listshift = shiftdao.getAllShift();
+		for (Shift shift : listshift) {
+			if(shift.toString().equals(cbbShift.getSelectedItem())) {
+				shift_id = shift.getId();
+				break;
+			}
+		}
+		
+		for (Room room : listroom) {
+			if(room.toString().equals(cbbRoom.getSelectedItem())) {
+				room_id = room.getId();
+				break;
+			}
+		}
+		
+		
+		if( txtEmp.getText() == null || dateChooser.getDate() == null || cbbRoom.getSelectedItem() ==null || cbbShift.getSelectedItem() == null) {
+			JOptionPane.showMessageDialog(null, "Please fill in all information");
+			count++;
+		} else if(!isNumeric(txtEmp.getText())) {
+			JOptionPane.showMessageDialog(null, "Employee_id must be a number!");
+			count++;
+		}
+		else {
+			for (Workschedule workschedule : listwork) {
+				if(workschedule.getEmployee_id() == Integer.parseInt(txtEmp.getText()) && workschedule.getWork_date().equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) 
+						&& workschedule.getShift_id() == (cbbShift.getSelectedIndex()+1) && workschedule.getRoom_id() != (cbbRoom.getSelectedIndex()+1)) {
+					JOptionPane.showMessageDialog(null, "Employee cannot work the same shift on the same date in a different room.");
+					count++;
+					return count;
+				}
+			}
+			
+			for (Workschedule workschedule : listwork) {
+				var shift_name="";
+				for (Shift shift : listshift) {
+					if(shift.getId() == workschedule.getShift_id()) {
+						shift_name = shift.toString();
+						break;
+					}
+				}
+				if(workschedule.getEmployee_id() == Integer.parseInt(txtEmp.getText()) && workschedule.getWork_date().equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) 
+						&& workschedule.getRoom_id() != (cbbRoom.getSelectedIndex()+1) && doShiftsOverlap(shift_name,cbbShift.getSelectedItem().toString())) {
+					JOptionPane.showMessageDialog(null, "Employee cannot work overlapping shifts in the same room on the same date.");
+					count++;
+					return count++;
+				}
+			}
+		}
+		return count;
+	}
 	protected void btnNewButtonActionPerformed(ActionEvent e) {
+		if(validateSchedule() !=0) {
+			return;
+		}else {
 		Workschedule newwork = new Workschedule();
 		newwork.setEmployee_id(Integer.parseInt(txtEmp.getText()));
 		newwork.setShift_id(cbbShift.getSelectedIndex()+1);
-		newwork.setRoom_id(cbbShift.getSelectedIndex()+1);
+		newwork.setRoom_id(cbbRoom.getSelectedIndex()+1);
 		newwork.setWork_date(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()));
 		WorkscheduleDAO workdao = new WorkscheduleDAO();
 		if(workdao.insert(newwork)) {
@@ -229,6 +350,6 @@ public class Addschedule extends JInternalFrame {
 		}else {
 			JOptionPane.showMessageDialog(null, "Add Fail!");
 		}
-		
+		}
 	}
 }

@@ -176,6 +176,14 @@ ADD IMAGE VARCHAR(255) NULL
 GO
 
 ALTER TABLE EMPLOYEES
+ADD LEVEL VARCHAR(50) NULL
+GO
+
+ALTER TABLE EMPLOYEES
+DROP COLUMN LEVEL;
+
+
+ALTER TABLE EMPLOYEES
 ALTER COLUMN  SUPERVISOR_ID INT NULL
 GO
 
@@ -344,14 +352,77 @@ BEGIN
 END
 GO
 
+CREATE PROC getAccount
+@pageNumber INT , @rowOfPage INT
+AS
+BEGIN
+	SELECT *FROM ACCOUNTS
+	ORDER BY ACCOUNT_ID
+	OFFSET (@pageNumber -1)*@rowOfPage rows
+	FETCH NEXT @rowOfPage ROWS ONLY
+END
+GO
+
+CREATE PROC getAllEmployee
+AS
+BEGIN
+	SELECT * FROM EMPLOYEES
+END
+GO
+
+DROP PROC getAllEmployee
+GO
 
 
+
+CREATE PROC getEmployee
+@pageNumber INT , @rowOfPage INT
+AS
+BEGIN
+	SELECT *FROM EMPLOYEES
+	ORDER BY EMPLOYEE_ID
+	OFFSET (@pageNumber -1)*@rowOfPage rows
+	FETCH NEXT @rowOfPage ROWS ONLY
+END
+GO
+
+CREATE PROC countEmployee
+AS
+BEGIN
+	SELECT COUNT(EMPLOYEE_ID) TOTAL FROM EMPLOYEES
+END
+GO
+
+CREATE PROC insertEmployee
+@employee_id INT,@fullname NVARCHAR(50), @ethnicity NVARCHAR(50), @date_of_birth DATE, @gender NVARCHAR(10),@address NVARCHAR(100),@salary_level INT,@supervisor_id INT,@department_id INT,@education_id INT,@position_id INT,@picture VARCHAR(255),@level VARCHAR(50)
+AS
+BEGIN
+	INSERT INTO EMPLOYEES(EMPLOYEE_ID,FULL_NAME,ETHNICITY,DATE_OF_BIRTH,GENDER,ADDRESS,SALARY_LEVEL,SUPERVISOR_ID,DEPARTMENT_ID,EDUCATION_ID,POSITION_ID,IMAGE,LEVEL)
+	VALUES(@employee_id,@fullname, @ethnicity, @date_of_birth, @gender,@address,@salary_level,@supervisor_id,@department_id,@education_id,@position_id,@picture,@level)
+END
+GO
+
+CREATE PROC deleteEmployee
+@id int
+AS
+BEGIN
+	DELETE FROM EMPLOYEES
+	WHERE EMPLOYEE_ID = @id
+END
+GO
 
 
 CREATE PROC getAllSchedule
 AS
 BEGIN
 	Select * from WORK_SCHEDULES
+END
+GO
+
+CREATE PROC getAllEducation
+AS
+BEGIN
+	Select * from EDUCATIONS
 END
 GO
 
@@ -369,9 +440,19 @@ BEGIN
 END
 GO
 
+<<<<<<< HEAD
 //Manage_Departments
 
 CREATE PROC getAllDep
+=======
+
+CREATE PROC updateSchedule
+    @SCHEDULE_ID INT,
+    @EMPLOYEE_ID INT,
+    @SHIFT_ID INT,
+	@ROOM_ID INT,
+    @WORK_DATE DATE
+>>>>>>> 9e0e9d44d337c0923dfabccec616f535c5acc319
 AS
 BEGIN
 	Select * from DEPARTMENTS
@@ -387,6 +468,49 @@ BEGIN
 END
 GO
 
+
+
+CREATE PROC getAllSalary
+AS
+BEGIN
+	SELECT * FROM SALARIES
+END
+GO
+
+CREATE PROC getAllDepartment
+AS
+BEGIN
+	SELECT * FROM DEPARTMENTS
+END
+GO
+
+CREATE PROC getAllPosition
+AS
+BEGIN
+	SELECT * FROM POSITIONS
+END
+GO
+
+CREATE PROC updateEmployee
+	@fullname NVARCHAR(50), 
+	@ethnicity NVARCHAR(50) ,
+	@dateofbirth DATE ,
+	@gender NVARCHAR(10) , 
+	@address NVARCHAR(100),
+	@salarylevel INT , 
+	@supervisorid INT ,
+	@departmentid INT , 
+	@educationid INT , 
+	@positionid INT ,
+	@image VARCHAR(255) ,
+	@level VARCHAR(50) ,
+	@id INT
+AS
+BEGIN
+	UPDATE EMPLOYEES
+	SET FULL_NAME = @fullname, ETHNICITY = @ethnicity , DATE_OF_BIRTH = @dateofbirth , GENDER = @gender , ADDRESS = @address , SALARY_LEVEL = @salarylevel , SUPERVISOR_ID = @supervisorid , DEPARTMENT_ID = @departmentid , EDUCATION_ID = @educationid , POSITION_ID =@positionid , IMAGE = @image , LEVEL = @level
+	WHERE EMPLOYEE_ID = @id
+=======
 CREATE PROC insertSchedule
 	@EMPLOYEE_ID INT,
     @SHIFT_ID INT,
@@ -427,5 +551,28 @@ AS
 BEGIN
 	SELECT COUNT(SCHEDULE_ID) total
 	FROM WORK_SCHEDULES
+End
+GO
+
+///position
+--LẤY từ dòng nào đến , và lấy bao nhiêu dòng .
+CREATE PROC getPosition
+@pageNumber int , @rowsOfPage int 
+AS
+BEGIN
+	SELECT * FROM POSITIONS
+	ORDER BY POSITION_ID
+	OFFSET (@pageNumber - 1)*@rowsOfPage ROWS
+	FETCH NEXT @rowsOfPage ROWS ONLY
 END
+GO
+
+CREATE Proc countPosition
+AS
+BEGIN
+	SELECT COUNT(POSITION_ID) total FROM POSITIONS
+END
+GO
+
+SELECT * FROM POSITIONS
 GO

@@ -16,8 +16,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Gui.Manage_Departments;
+
+import Gui.EmployeeForm;
+import Gui.Job_Position;
 import Gui.Atiendances;
+
 import Gui.Work_Schedules;
+import crud.Addemployee;
 
 import java.awt.Color;
 import javax.swing.JDesktopPane;
@@ -45,8 +50,9 @@ import java.awt.FlowLayout;
 
 public class App_Admin extends JFrame {
 	
-	Manage_Departments femp ;
-
+	EmployeeForm femp ;
+	Manage_Departments dep;
+	Job_Position Pos ;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panelLateral;
@@ -77,7 +83,6 @@ public class App_Admin extends JFrame {
 	Atiendances attendance;
 	private JButton btnPosition;
 	private JPanel panelPos;
-
 	/**
 	 * Launch the application.
 	 */
@@ -99,6 +104,22 @@ public class App_Admin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	public void openDepart() {
+		if(dep == null || dep.isClosed()) {
+			dep = new Manage_Departments() ;
+			dep.setBounds(0,0,957,627);
+			desktopPane.add(dep);
+			dep.show();
+		}
+	}
+	public void openPos() {
+		if(Pos == null || Pos.isClosed()) {
+			Pos = new Job_Position() ;
+			Pos.setBounds(0,0,957,627);
+			desktopPane.add(Pos);
+			Pos.show();
+		}
+	}
 	public void EsconderBotones() {
 		btnSta.setBounds(10, 105, 187, 37);
 		btnSta.setText("");
@@ -160,6 +181,10 @@ public class App_Admin extends JFrame {
 		contentPane.setLayout(null);
 		
 		panelLateral = new JPanel();
+
+		panelLateral.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+
 
 		panelLateral.setBackground(Color.WHITE);
 		panelLateral.setBounds(10,0,219,663);
@@ -414,6 +439,10 @@ public class App_Admin extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				btnPositionMouseExited(e);
 			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				btnPositionMouseClicked(e);
+			}
 		});
 		btnPosition.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -466,6 +495,8 @@ public class App_Admin extends JFrame {
 		desktopPane = new JDesktopPane();
 		desktopPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		desktopPane.setBounds(223, 48, 957, 626);
+		desktopPane.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		desktopPane.setBounds(223, 37, 957, 626);
 		contentPane.add(desktopPane);
 	}
 	
@@ -499,6 +530,7 @@ public class App_Admin extends JFrame {
 	protected void lblClose(MouseEvent e) {
 		System.exit(0);
 	}
+	
 	protected void contentPaneMouseDragged(MouseEvent e) {
 		int x = e.getXOnScreen();
         int y = e.getYOnScreen();
@@ -567,6 +599,7 @@ public class App_Admin extends JFrame {
 				panelPos.setVisible(false);
 			}
 			opensidebar();
+			openDepart();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -584,6 +617,7 @@ public class App_Admin extends JFrame {
 				panelPos.setVisible(false);
 			}
 			opensidebar();
+			loadEmployeeForm();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -653,6 +687,7 @@ public class App_Admin extends JFrame {
 			// TODO: handle exception
 		}
 	}
+	
 	protected void btnWorkScheduleActionPerformed(ActionEvent e) {
 		try {
 			if(btnWorkSchedule.isVisible() == true) {
@@ -671,6 +706,7 @@ public class App_Admin extends JFrame {
 			// TODO: handle exception
 		}
 	}
+	
 	protected void btnAttendenceActionPerformed(ActionEvent e) {
 		try {
 			if(btnAttendence.isVisible() == true) {
@@ -689,6 +725,7 @@ public class App_Admin extends JFrame {
 			// TODO: handle exception
 		}
 	}
+	
 	protected void lblMenuMouseClicked(MouseEvent e) {
 		if(panelLateral.getBounds().width == 219) {
 			panelLateral.setBounds(0,0,68,664);
@@ -701,17 +738,12 @@ public class App_Admin extends JFrame {
 			
 		}
 	}
+	
 	protected void btnStaMouseClicked(MouseEvent e) {
 	}	
 	
 	
 	protected void btnDepartmentMouseClicked(MouseEvent e) {
-		if(femp == null || femp.isClosed()) {
-			femp = new Manage_Departments() ;
-			femp.setBounds(0,0,957,627);
-			desktopPane.add(femp);
-			femp.show();
-		}
 	}
 	protected void btnPositionActionPerformed(ActionEvent e) {
 		try {
@@ -723,9 +755,10 @@ public class App_Admin extends JFrame {
 				panelDepart.setVisible(false);
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
-				panelPos.setVisible(false);
+				panelPos.setVisible(true);
 			}
 			opensidebar();
+			openPos();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -737,5 +770,18 @@ public class App_Admin extends JFrame {
 	protected void btnPositionMouseExited(MouseEvent e) {
 		btnPosition.setBackground(Color.white);
 		btnPosition.setForeground(Color.black);
+		
+	}
+	
+	void loadEmployeeForm() {
+		if (femp == null || femp.isClosed()) {
+	        femp = new EmployeeForm();
+	        femp.setBounds(0, 0, 957, 627);
+	        desktopPane.add(femp);
+	        femp.setApp(this);
+	        femp.show();
+	    }
+	}
+	protected void btnPositionMouseClicked(MouseEvent e) {
 	}
 }
