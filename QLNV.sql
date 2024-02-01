@@ -394,13 +394,15 @@ END
 GO
 
 CREATE PROC insertEmployee
-@employee_id INT,@fullname NVARCHAR(50), @ethnicity NVARCHAR(50), @date_of_birth DATE, @gender NVARCHAR(10),@address NVARCHAR(100),@salary_level INT,@supervisor_id INT,@department_id INT,@education_id INT,@position_id INT,@picture VARCHAR(255),@level VARCHAR(50)
+@fullname NVARCHAR(50), @ethnicity NVARCHAR(50), @date_of_birth DATE, @gender NVARCHAR(10),@address NVARCHAR(100),@salary_level INT,@supervisor_id INT,@department_id INT,@education_id INT,@position_id INT,@picture VARCHAR(255),@level VARCHAR(50)
 AS
 BEGIN
-	INSERT INTO EMPLOYEES(EMPLOYEE_ID,FULL_NAME,ETHNICITY,DATE_OF_BIRTH,GENDER,ADDRESS,SALARY_LEVEL,SUPERVISOR_ID,DEPARTMENT_ID,EDUCATION_ID,POSITION_ID,IMAGE,LEVEL)
-	VALUES(@employee_id,@fullname, @ethnicity, @date_of_birth, @gender,@address,@salary_level,@supervisor_id,@department_id,@education_id,@position_id,@picture,@level)
+	INSERT INTO EMPLOYEES(FULL_NAME,ETHNICITY,DATE_OF_BIRTH,GENDER,ADDRESS,SALARY_LEVEL,SUPERVISOR_ID,DEPARTMENT_ID,EDUCATION_ID,POSITION_ID,IMAGE,LEVEL)
+	VALUES(@fullname, @ethnicity, @date_of_birth, @gender,@address,@salary_level,@supervisor_id,@department_id,@education_id,@position_id,@picture,@level)
 END
 GO
+Drop proc insertEmployee
+go
 
 CREATE PROC deleteEmployee
 @id int
@@ -561,3 +563,32 @@ BEGIN
 	FETCH NEXT @rowOfPage ROWS ONLY
 END
 GO
+
+CREATE PROC countAccount
+AS
+BEGIN
+	SELECT COUNT(ACCOUNT_ID) TOTAL FROM ACCOUNTS
+END
+GO
+
+CREATE PROC updateAccount
+@username VARCHAR(50),@password VARCHAR(50),@id INT
+AS
+BEGIN
+	UPDATE ACCOUNTS
+	SET USERNAME = @username , PASSWORD = @password
+	WHERE ACCOUNT_ID = @id
+END
+GO
+
+CREATE PROC insertAccount
+@id int , @username VARCHAR(50) , @password VARCHAR(50)
+AS
+BEGIN
+	INSERT INTO ACCOUNTS(ACCOUNT_ID,USERNAME,PASSWORD)
+	VALUES(@id,@username,@password)
+END
+GO
+	
+
+

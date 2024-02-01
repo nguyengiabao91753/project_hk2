@@ -16,7 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import App.MainJframe ;
 import Gui.Manage_Departments;
-import Gui.Acounts;
+
 import Gui.Atiendances;
 import Gui.Basic_Salary;
 import Gui.Educattions;
@@ -185,7 +185,7 @@ public class MainJframe extends JFrame {
         mntmAcounts = new JMenuItem("Acounts");
         mntmAcounts.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		mntmAcountsActionPerformed(e);
+//        		mntmAcountsActionPerformed(e);
         	}
         });
         mnMenu1.add(mntmAcounts);
@@ -312,12 +312,12 @@ public class MainJframe extends JFrame {
 			contentPane.add(atiendances);
 		}
 	}
-	protected void mntmAcountsActionPerformed(ActionEvent e) {
-		Acounts acounts = new Acounts().getInstance();
-		if(!acounts.isVisible()) {
-			acounts.setVisible(true);
-			contentPane.add(acounts);
-		}
-	}
+//	protected void mntmAcountsActionPerformed(ActionEvent e) {
+//		Acounts acounts = new Acounts().getInstance();
+//		if(!acounts.isVisible()) {
+//			acounts.setVisible(true);
+//			contentPane.add(acounts);
+//		}
+//	}
 	
 }

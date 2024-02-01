@@ -41,6 +41,8 @@ import java.text.SimpleDateFormat;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
 
 public class Atiendances extends JInternalFrame {
 
@@ -71,6 +73,13 @@ public class Atiendances extends JInternalFrame {
 	private JLabel lblEmployeeid;
 	
 	AttendanceDAO attdao = new AttendanceDAO();
+	private JLabel lblUpdate;
+	private JLabel lblDelete;
+	private JTextField txtPage;
+	private JLabel lblNext;
+	private JLabel lblLast;
+	private JLabel lblPrevious;
+	private JLabel lblFirst;
 
 	/**
 	 * Launch the application.
@@ -248,6 +257,50 @@ public class Atiendances extends JInternalFrame {
 		lblEmployeeid.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblEmployeeid.setBounds(30, 170, 87, 20);
 		getContentPane().add(lblEmployeeid);
+		
+		lblUpdate = new JLabel("Update");
+		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUpdate.setOpaque(true);
+		lblUpdate.setBackground(Color.GREEN);
+		lblUpdate.setForeground(new Color(255, 255, 255));
+		lblUpdate.setBounds(30, 466, 76, 27);
+		getContentPane().add(lblUpdate);
+		
+		lblDelete = new JLabel("Delete");
+		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDelete.setOpaque(true);
+		lblDelete.setBackground(Color.RED);
+		lblDelete.setForeground(new Color(255, 255, 255));
+		lblDelete.setBounds(168, 466, 76, 27);
+		getContentPane().add(lblDelete);
+		
+		txtPage = new JTextField();
+		txtPage.setHorizontalAlignment(SwingConstants.CENTER);
+		txtPage.setText("1");
+		txtPage.setBounds(840, 416, 38, 24);
+		getContentPane().add(txtPage);
+		txtPage.setColumns(10);
+		
+		lblNext = new JLabel("");
+		lblNext.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-next-24 (1).png"));
+		lblNext.setBounds(878, 416, 24, 24);
+		getContentPane().add(lblNext);
+		
+		lblLast = new JLabel("");
+		lblLast.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-last-24.png"));
+		lblLast.setBounds(905, 416, 24, 24);
+		getContentPane().add(lblLast);
+		
+		lblPrevious = new JLabel("");
+		lblPrevious.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-next-24 (2).png"));
+		lblPrevious.setBounds(817, 416, 24, 24);
+		getContentPane().add(lblPrevious);
+		
+		lblFirst = new JLabel("");
+		lblFirst.setBackground(new Color(240, 240, 240));
+		lblFirst.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-last-24 (1).png"));
+		lblFirst.setBounds(790, 416, 24, 24);
+		getContentPane().add(lblFirst);
 		
 		loadAtt();
 

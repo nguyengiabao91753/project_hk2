@@ -17,10 +17,11 @@ import javax.swing.border.EmptyBorder;
 
 
 import Gui.EmployeeForm;
-
+import Gui.Accounts;
 import Gui.Atiendances;
 
 import Gui.Work_Schedules;
+import crud.Addaccount;
 import crud.Addemployee;
 
 import java.awt.Color;
@@ -77,6 +78,8 @@ public class App_Admin extends JFrame {
 	Work_Schedules work;
 	Atiendances attendance;
 	EmployeeForm femp;
+	Accounts acc;
+	Addemployee aemp;
 	
 
 	/**
@@ -617,6 +620,7 @@ public class App_Admin extends JFrame {
 				panelWork.setVisible(false);
 			}
 			opensidebar();
+			loadAccountForm();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -667,7 +671,6 @@ public class App_Admin extends JFrame {
 			EsconderBotones();
 		}else {
 			opensidebar();
-			
 		}
 	}
 	
@@ -676,6 +679,11 @@ public class App_Admin extends JFrame {
 	}
 	
 	void loadEmployeeForm() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+        for (JInternalFrame frame : frames) {
+            frame.doDefaultCloseAction();
+        }
+		
 		if (femp == null || femp.isClosed()) {
 	        femp = new EmployeeForm();
 	        femp.setBounds(0, 0, 957, 627);
@@ -683,5 +691,25 @@ public class App_Admin extends JFrame {
 	        femp.setApp(this);
 	        femp.show();
 	    }
+		
 	}
+	
+	
+	
+	void loadAccountForm() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+        for (JInternalFrame frame : frames) {
+            frame.doDefaultCloseAction();
+        }
+        
+        if (acc == null || acc.isClosed()) {
+	        acc = new Accounts();
+	        acc.setBounds(0, 0, 957, 627);
+	        desktopPane.add(acc);
+	        acc.setApp(this);
+	        acc.show();
+	    }
+	}
+
+	
 }

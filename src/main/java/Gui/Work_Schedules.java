@@ -266,7 +266,8 @@ public class Work_Schedules extends JInternalFrame {
 		table.setRowHeight(32);
 		
 		lblnext = new JLabel("");
-		lblnext.setBackground(new Color(255, 255, 255));
+		lblnext.setOpaque(true);
+		lblnext.setBackground(Color.LIGHT_GRAY);
 		lblnext.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -294,6 +295,7 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(textPage);
 		
 		lbllast = new JLabel("");
+		lbllast.setOpaque(true);
 		lbllast.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -301,7 +303,7 @@ public class Work_Schedules extends JInternalFrame {
 			}
 		});
 		lbllast.setIcon(new ImageIcon("images\\icons8-last-24.png"));
-		lbllast.setBounds(907, 416, 24, 24);
+		lbllast.setBounds(905, 416, 24, 24);
 		getContentPane().add(lbllast);
 		
 		lblDelete = new JLabel("DELETE");
@@ -349,6 +351,7 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(lblUpdate);
 		
 		lblprevious = new JLabel("");
+		lblprevious.setOpaque(true);
 		lblprevious.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -360,6 +363,7 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(lblprevious);
 		
 		lblfirst = new JLabel("");
+		lblfirst.setOpaque(true);
 		lblfirst.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
