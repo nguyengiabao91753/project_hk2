@@ -40,6 +40,10 @@ import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -55,7 +59,6 @@ public class Addemployee extends JInternalFrame {
 	private JLabel lblClose;
 	private JLabel lblEmployee;
 	private JLabel lblNewLabel_2;
-	private JLabel lblEmployeeId;
 	private JLabel lblName;
 	private JLabel lblEthnicity;
 	private JLabel lblDateOfBirth;
@@ -67,13 +70,11 @@ public class Addemployee extends JInternalFrame {
 	private JLabel lblEducationId;
 	private JLabel lblPositionId;
 	private JLabel lblImage;
-	private JTextField txtEmployeeId;
 	private JTextField txtFullName;
 	private JTextField txtEthnicity;
 	private JDateChooser dateChooser;
 	private JComboBox cbxGender;
 	private JTextField txtAddress;
-	private JComboBox cbxSalary;
 	private JComboBox cbxSupervisorId;
 	private JComboBox cbxDepartmentId;
 	private JComboBox cbxEducationId;
@@ -85,6 +86,7 @@ public class Addemployee extends JInternalFrame {
 	private JButton btnCreate;
 	private JComboBox cbxPositionId;
 	private static Addemployee instance;
+	private App_Admin app;
 	
 	SalaryDAO salaryDao = new SalaryDAO();
 	EmployeeDAO employeeDao = new EmployeeDAO();
@@ -96,9 +98,15 @@ public class Addemployee extends JInternalFrame {
 	private String fileOld = null;
 	private String dirNew = null;
 	private String dirOld = null;
+	private JTextField txtSalary;
 	/**
 	 * Launch the application.
 	 */
+	
+	public void setApp(App_Admin app) {
+		this.app = app;
+	}
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -138,7 +146,7 @@ public class Addemployee extends JInternalFrame {
 		
 		getContentPane().setFont(new Font("Tahoma", Font.BOLD, 11));
 		setTitle("Add Employee");
-		setBounds(100, 100, 496, 661);
+		setBounds(223,5,480,627);
 		getContentPane().setLayout(null);
 		
 		panel = new JPanel();
@@ -168,11 +176,6 @@ public class Addemployee extends JInternalFrame {
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblNewLabel_2.setBounds(126, 18, 63, 14);
 		panel.add(lblNewLabel_2);
-		
-		lblEmployeeId = new JLabel("Employee ID :");
-		lblEmployeeId.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblEmployeeId.setBounds(42, 77, 86, 14);
-		getContentPane().add(lblEmployeeId);
 		
 		lblName = new JLabel("Full name :");
 		lblName.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -229,11 +232,6 @@ public class Addemployee extends JInternalFrame {
 		lblImage.setBounds(42, 439, 86, 14);
 		getContentPane().add(lblImage);
 		
-		txtEmployeeId = new JTextField();
-		txtEmployeeId.setColumns(10);
-		txtEmployeeId.setBounds(151, 74, 278, 20);
-		getContentPane().add(txtEmployeeId);
-		
 		txtFullName = new JTextField();
 		txtFullName.setColumns(10);
 		txtFullName.setBounds(151, 105, 278, 20);
@@ -249,7 +247,7 @@ public class Addemployee extends JInternalFrame {
 		getContentPane().add(dateChooser);
 		
 		cbxGender = new JComboBox();
-		cbxGender.setModel(new DefaultComboBoxModel(new String[] {"Male,Female"}));
+		cbxGender.setModel(new DefaultComboBoxModel(new String[] {"Male", "Female"}));
 		cbxGender.setBounds(151, 198, 278, 22);
 		getContentPane().add(cbxGender);
 		
@@ -257,10 +255,6 @@ public class Addemployee extends JInternalFrame {
 		txtAddress.setColumns(10);
 		txtAddress.setBounds(151, 229, 278, 20);
 		getContentPane().add(txtAddress);
-		
-		cbxSalary = new JComboBox();
-		cbxSalary.setBounds(151, 259, 278, 22);
-		getContentPane().add(cbxSalary);
 		
 		cbxSupervisorId = new JComboBox();
 		cbxSupervisorId.setBounds(151, 290, 278, 22);
@@ -286,7 +280,7 @@ public class Addemployee extends JInternalFrame {
 		getContentPane().add(lblLevel);
 		
 		cbxLevel = new JComboBox();
-		cbxLevel.setModel(new DefaultComboBoxModel(new String[] {"Admin,User"}));
+		cbxLevel.setModel(new DefaultComboBoxModel(new String[] {"", "Admin", "User"}));
 		cbxLevel.setBounds(151, 520, 278, 22);
 		getContentPane().add(cbxLevel);
 		
@@ -303,10 +297,14 @@ public class Addemployee extends JInternalFrame {
 		panel_1 = new JPanel();
 		panel_1.setLayout(null);
 		panel_1.setBackground(new Color(235, 234, 233));
-		panel_1.setBounds(0, 572, 496, 62);
+		panel_1.setBounds(0, 545, 480, 62);
 		getContentPane().add(panel_1);
 		
-		btnCreate = new JButton("Create");
+		btnCreate = new JButton("NEXT");
+		btnCreate.addMouseListener(new MouseAdapter() {
+			
+		});
+		btnCreate.setBorder(null);
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnCreateActionPerformed(e);
@@ -320,6 +318,11 @@ public class Addemployee extends JInternalFrame {
 		cbxPositionId = new JComboBox();
 		cbxPositionId.setBounds(151, 383, 278, 22);
 		getContentPane().add(cbxPositionId);
+		
+		txtSalary = new JTextField();
+		txtSalary.setBounds(151, 260, 278, 20);
+		getContentPane().add(txtSalary);
+		txtSalary.setColumns(10);
 		loadcbx();
 	}
 	
@@ -336,34 +339,52 @@ public class Addemployee extends JInternalFrame {
 		List<Education> listEducation =  educationDao.selectAllEducation();
 		List<Position> listPosition = positionDao.selectAllPosition();
 		
-		salaryModel.addAll(listSalary);
-		supervisorModel.addAll(listSupervisor);
-		departmentModel.addAll(listDepartment);
-		educationModel.addAll(listEducation);
-		positionModel.addAll(listPosition);
-
-		cbxSalary.setModel(salaryModel);
+		
+		listSalary.forEach(salary -> salaryModel.addElement(salary.getId()));
+		listSupervisor.forEach(emp -> supervisorModel.addElement(emp.getId()));
+		listDepartment.forEach(dep -> departmentModel.addElement(dep.getId()));
+		listEducation.forEach(edu -> educationModel.addElement(edu.getId()));
+		listPosition.forEach(pos -> positionModel.addElement(pos.getId()));
 		cbxSupervisorId.setModel(supervisorModel);
 		cbxDepartmentId.setModel(departmentModel);
 		cbxEducationId.setModel(educationModel);
 		cbxPositionId.setModel(positionModel);
 	}
 	protected void lblCloseMouseClicked(MouseEvent e) {
-		System.exit(0);
+		this.setVisible(false);
 	}
 	protected void btnCreateActionPerformed(ActionEvent e) {
 		Employee emp = new Employee();
-		emp.setId(Integer.parseInt(txtEmployeeId.getText()));
 		emp.setFull_name(txtFullName.getText());
 		emp.setEthnicity(txtEthnicity.getText());
 		emp.setDate_of_birth(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()));
 		emp.setGender(cbxGender.getSelectedItem().toString());
 		emp.setAddress(txtAddress.getText());
-		emp.setSalary_level(cbxSalary.getSelectedIndex()+1);
+		emp.setSalary_level(Integer.parseInt(txtSalary.getText()));
 		emp.setSupervisor_id(cbxSupervisorId.getSelectedIndex()+1);
 		emp.setDepartment_id(cbxSupervisorId.getSelectedIndex()+1);
 		emp.setEducation_id(cbxEducationId.getSelectedIndex()+1);
 		emp.setPosition_id(cbxPositionId.getSelectedIndex()+1);
+		
+		if(fileName != null) {
+			dirNew = System.getProperty("user.dir") + "\\images";
+			Path pathOld = Paths.get(dirOld);
+			Path pathNew = Paths.get(dirNew);
+	
+			try {
+				Files.copy(
+						pathOld, 
+						pathNew.resolve(fileName),
+						StandardCopyOption.REPLACE_EXISTING
+				);
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+			emp.setPicture("images/" + fileName);
+		}else {
+			emp.setPicture(fileOld);
+		}
+		
 		emp.setLevel(cbxLevel.getSelectedItem().toString());
 		
 		var employeeDao = new EmployeeDAO();
@@ -377,7 +398,18 @@ public class Addemployee extends JInternalFrame {
 		}else {
 			JOptionPane.showMessageDialog(null, "Add Fail!");
 		}
+		
+		Addaccount add = Addaccount.getInstance();
+
+        if (!add.isVisible()) {
+            add.setVisible(true);
+            app.desktopPane.add(add);
+            add.toFront();
+            this.hide();
+        }
+		
 	}
+
 	
 	protected void btnPictureActionPerformed(ActionEvent e) {
 		var chooser = new JFileChooser();
@@ -405,6 +437,5 @@ public class Addemployee extends JInternalFrame {
 		}
 	}
 
-
-	
+		
 }

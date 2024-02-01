@@ -1,7 +1,7 @@
 package entity;
 
 public class Account {
-	private int account_id;
+	private int id;
 	private String username;
 	private String password;
 	
@@ -9,19 +9,19 @@ public class Account {
 		
 	}
 
-	public Account(int account_id, String username, String password) {
+	public Account(int id, String username, String password) {
 		super();
-		this.account_id = account_id;
+		this.id = id;
 		this.username = username;
 		this.password = password;
 	}
 
-	public int getAccount_id() {
-		return account_id;
+	public int getId() {
+		return id;
 	}
 
-	public void setAccount_id(int account_id) {
-		this.account_id = account_id;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getUsername() {
@@ -42,8 +42,6 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account [account_id=" + account_id + ", username=" + username + ", password=" + password + "]";
+		return "Account [id=" + id + ", username=" + username + ", password=" + password + "]";
 	}
-	
-	
 }
