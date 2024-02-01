@@ -5,11 +5,13 @@ import java.awt.EventQueue;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
@@ -19,9 +21,11 @@ import com.toedter.calendar.JDateChooser;
 
 import App.App_Admin;
 import crud.Addschedule;
+import dao.EmployeeDAO;
 import dao.RoomDAO;
 import dao.ShiftDAO;
 import dao.WorkscheduleDAO;
+import entity.Employee;
 import entity.Room;
 import entity.Shift;
 import entity.Workschedule;
@@ -30,6 +34,7 @@ import javax.swing.border.LineBorder;
 import java.awt.Font;
 import java.awt.SystemColor;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultRowSorter;
 import javax.swing.JComboBox;
@@ -75,7 +80,7 @@ public class Work_Schedules extends JInternalFrame {
 	
 	RoomDAO roomdao = new RoomDAO();
 	ShiftDAO shiftdao = new ShiftDAO();
-	
+	EmployeeDAO empdao = new EmployeeDAO();
 	WorkscheduleDAO workdao = new WorkscheduleDAO();
 	private JButton btnAdd;
 	private App_Admin app;
@@ -156,6 +161,7 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(scrollPane);
 		
 		table = new JTable();
+		table.setAutoCreateRowSorter(true);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -236,6 +242,17 @@ public class Work_Schedules extends JInternalFrame {
 		txtEmployee.setColumns(10);
 		
 		btnAdd = new JButton("ADD");
+		btnAdd.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnAddMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnAddMouseExited(e);
+			}
+		});
+		btnAdd.setForeground(Color.WHITE);
 		btnAdd.setBackground(new Color(0, 102, 255));
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -249,10 +266,15 @@ public class Work_Schedules extends JInternalFrame {
 		table.setRowHeight(32);
 		
 		lblnext = new JLabel("");
+		lblnext.setBackground(new Color(255, 255, 255));
 		lblnext.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				lblnextMouseClicked(e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblnextMouseEntered(e);
 			}
 		});
 		lblnext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
@@ -288,6 +310,14 @@ public class Work_Schedules extends JInternalFrame {
 			public void mouseClicked(MouseEvent e) {
 				lblDeleteMouseClicked(e);
 			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblDeleteMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblDeleteMouseExited(e);
+			}
 		});
 		lblDelete.setOpaque(true);
 		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
@@ -301,6 +331,14 @@ public class Work_Schedules extends JInternalFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				lblUpdateMouseClicked(e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblUpdateMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblUpdateMouseExited(e);
 			}
 		});
 		lblUpdate.setOpaque(true);
@@ -377,10 +415,16 @@ public class Work_Schedules extends JInternalFrame {
 				work.getWork_date()
 		}));
 		table.setModel(model);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        table.setDefaultRenderer(Object.class, centerRenderer);
+		
 	}
 	public void refresh() {
 		DefaultTableModel model = (DefaultTableModel)table.getModel();
-		model.setRowCount(0); 
+		model.setRowCount(0);  
+		totalCount = workdao.countSchedule();
+		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
 		workdao.getSchedule(pageNumber, rowOfPage).stream().forEach(work -> model.addRow(new Object[] {
 				work.getId(),
 				work.getEmployee_id(),
@@ -392,7 +436,9 @@ public class Work_Schedules extends JInternalFrame {
 	}
 	protected void textSearchActionPerformed(ActionEvent e) {
 		String find = textSearch.getText();
+		
 		DefaultRowSorter<?,?> sorter = (DefaultRowSorter<?,?>)table.getRowSorter();
+		
 		sorter.setRowFilter(RowFilter.regexFilter(find));
 		sorter.setSortKeys(null);
 	}
@@ -494,7 +540,15 @@ public class Work_Schedules extends JInternalFrame {
 		workdao.delete(a);
 		refresh();
 	}
-
+	
+	public boolean checkEmp_id(List<Employee> listemp, int a) {
+		for (Employee employee : listemp) {
+			if(employee.getId() == a) {
+				return true;
+			}
+		}
+		return false;
+	}
 	public int validateInp() {
 		int count=0;
 		int shift_id=0;
@@ -503,6 +557,7 @@ public class Work_Schedules extends JInternalFrame {
 		ShiftDAO shiftdao = new ShiftDAO();
 		WorkscheduleDAO workdao = new WorkscheduleDAO();
 		List<Workschedule> listwork = workdao.selectAllSchedule();
+		List<Employee> listemp = empdao.selectAllEmployee();
 		List<Room> listroom = roomdao.selectAllRoom();
 		List<Shift> listshift = shiftdao.getAllShift();
 		for (Shift shift : listshift) {
@@ -526,15 +581,24 @@ public class Work_Schedules extends JInternalFrame {
 		} else if(!Addschedule.isNumeric(txtEmployee.getText())) {
 			JOptionPane.showMessageDialog(null, "Employee_id must be a number!");
 			count++;
+		}else if(!checkEmp_id(listemp, Integer.parseInt(txtEmployee.getText())) ) {
+			JOptionPane.showMessageDialog(null, "Employee_id is invalid");
+			count++;
 		}
 		else {
 			for (Workschedule workschedule : listwork) {
 				if(workschedule.getEmployee_id() == Integer.parseInt(txtEmployee.getText()) && workschedule.getWork_date().equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) 
-						&& workschedule.getShift_id() == (cbbShift.getSelectedIndex()+1) && workschedule.getRoom_id() != (cbbRoom.getSelectedIndex()+1)) {
-					JOptionPane.showMessageDialog(null, "Employee cannot work the same shift on the same date in a different room.");
-					count++;
-					return count;
-				}
+						&& workschedule.getShift_id() == (cbbShift.getSelectedIndex()+1) && workschedule.getRoom_id() == (cbbRoom.getSelectedIndex()+1)) {
+						JOptionPane.showMessageDialog(null, "This data is aldready exists");
+						count++;
+						return count;
+					}
+//				if(workschedule.getEmployee_id() == Integer.parseInt(txtEmployee.getText()) && workschedule.getWork_date().equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) 
+//						&& workschedule.getShift_id() == (cbbShift.getSelectedIndex()+1) && workschedule.getRoom_id() != (cbbRoom.getSelectedIndex()+1)) {
+//					JOptionPane.showMessageDialog(null, "Employee cannot work the same shift on the same date in a different room.");
+//					count++;
+//					return count;
+//				}
 			}
 			
 			for (Workschedule workschedule : listwork) {
@@ -571,5 +635,36 @@ public class Work_Schedules extends JInternalFrame {
 		workdao.update(worknew);
 		refresh();
 		}
+	}
+	protected void lblnextMouseEntered(MouseEvent e) {
+		lblnext.setBackground(new Color(230,134,4));
+		lblnext.setForeground(Color.white);
+	}
+	protected void btnAddMouseEntered(MouseEvent e) {
+		btnAdd.setBackground(Color.white);
+		btnAdd.setBorder(new LineBorder(new Color(0, 102, 255)));
+		btnAdd.setForeground(new Color(0, 102, 255));
+	}
+	protected void btnAddMouseExited(MouseEvent e) {
+		btnAdd.setForeground(Color.WHITE);
+		btnAdd.setBackground(new Color(0, 102, 255));
+	}
+	protected void lblDeleteMouseEntered(MouseEvent e) {
+		lblDelete.setForeground(Color.RED);
+		lblDelete.setBorder(new LineBorder(Color.RED));
+		lblDelete.setBackground(Color.white);
+	}
+	protected void lblDeleteMouseExited(MouseEvent e) {
+		lblDelete.setForeground(Color.white);
+		lblDelete.setBackground(Color.RED);
+	}
+	protected void lblUpdateMouseEntered(MouseEvent e) {
+		lblUpdate.setForeground(new Color(0, 255, 64));
+		lblUpdate.setBorder(new LineBorder(new Color(0, 255, 64)));
+		lblUpdate.setBackground(Color.white);
+	}
+	protected void lblUpdateMouseExited(MouseEvent e) {
+		lblUpdate.setForeground(Color.WHITE);
+		lblUpdate.setBackground(new Color(0, 255, 64));
 	}
 }
