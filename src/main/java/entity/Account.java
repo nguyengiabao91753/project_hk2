@@ -4,17 +4,23 @@ public class Account {
 	private int id;
 	private String username;
 	private String password;
+	private int status;
 	
 	public Account(){
 		
 	}
 
-	public Account(int id, String username, String password) {
+	
+
+	public Account(int id, String username, String password, int status) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
+		this.status = status;
 	}
+
+
 
 	public int getId() {
 		return id;
@@ -39,9 +45,26 @@ public class Account {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	
+
+	public int getStatus() {
+		return status;
+	}
+
+
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+
 
 	@Override
 	public String toString() {
-		return "Account [id=" + id + ", username=" + username + ", password=" + password + "]";
+		return "Account [id=" + id + ", username=" + username + ", password=" + password + ", status=" + status + "]";
 	}
+
+
+	
 }

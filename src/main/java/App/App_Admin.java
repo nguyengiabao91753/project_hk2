@@ -688,7 +688,7 @@ public class App_Admin extends JFrame {
 	        femp = new EmployeeForm();
 	        femp.setBounds(0, 0, 957, 627);
 	        desktopPane.add(femp);
-	        femp.setApp(this);
+	        femp.setApp(this);	
 	        femp.show();
 	    }
 		
@@ -708,7 +708,7 @@ public class App_Admin extends JFrame {
 	        desktopPane.add(acc);
 	        acc.setApp(this);
 	        acc.show();
-	    }
+	    }	
 	}
 
 	

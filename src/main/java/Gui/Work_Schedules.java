@@ -553,6 +553,7 @@ public class Work_Schedules extends JInternalFrame {
 		}
 		return false;
 	}
+	
 	public int validateInp() {
 		int count=0;
 		int shift_id=0;
@@ -621,10 +622,10 @@ public class Work_Schedules extends JInternalFrame {
 				}
 			}
 		}
-		
-		
+	
 		return count;
 	}
+	
 	protected void lblUpdateMouseClicked(MouseEvent e) {
 		if(validateInp() != 0) {
 			return;
