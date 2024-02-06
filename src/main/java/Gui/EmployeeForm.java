@@ -975,10 +975,7 @@ public class EmployeeForm extends JInternalFrame {
 		            JOptionPane.YES_NO_OPTION);
 		 
 		if (dialogResult == JOptionPane.YES_OPTION) {
-		        // Delete employee
-
-		        // Delete account
-			 Accounts accounts = new Accounts();
+			 	Accounts accounts = new Accounts();
 		        Employee emp = new Employee();
 		        Account acc = new Account();
 
@@ -1011,6 +1008,13 @@ public class EmployeeForm extends JInternalFrame {
 	}
 	
 	private void deleteRow(ActionEvent e) {
+		String employeeName = txtFullName.getText(); 
+		int dialogResult = JOptionPane.showConfirmDialog(
+	            null,
+	            "Are you sure you want to delete employee '" + employeeName + "'?\nTheir account will also be deleted.",
+	            "Confirm Deletion",
+	            JOptionPane.YES_NO_OPTION);
+		
 		Employee emp = new Employee();
 		int rowindex = table.getSelectedRow();
 		emp.setId(
@@ -1018,10 +1022,20 @@ public class EmployeeForm extends JInternalFrame {
 						table.getValueAt( rowindex,0).toString()
 				)
 		);
-		EmployeeDAO dao = new EmployeeDAO();
-		dao.delete(emp);
-		
-		refresh();
+		if (dialogResult == JOptionPane.YES_OPTION) {
+			Accounts accounts = new Accounts();
+	        Account acc = new Account();
+
+	        acc.setId(accounts.getAccountId()); 
+
+	        AccountDAO accDao = new AccountDAO();
+	        EmployeeDAO empDao = new EmployeeDAO();
+
+	        accDao.deleteAccountAndEmployee(acc, emp);
+	        empDao.deleteEmployeeAndAccount(emp, acc);
+
+	        refresh();
+		}
 	}
 	
 	protected void btnFirstActionPerformed(ActionEvent e) {
