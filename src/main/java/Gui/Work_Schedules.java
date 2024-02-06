@@ -266,7 +266,6 @@ public class Work_Schedules extends JInternalFrame {
 		table.setRowHeight(32);
 		
 		lblnext = new JLabel("");
-		lblnext.setOpaque(true);
 		lblnext.setBackground(Color.LIGHT_GRAY);
 		lblnext.addMouseListener(new MouseAdapter() {
 			@Override
@@ -295,7 +294,6 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(textPage);
 		
 		lbllast = new JLabel("");
-		lbllast.setOpaque(true);
 		lbllast.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -351,7 +349,6 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(lblUpdate);
 		
 		lblprevious = new JLabel("");
-		lblprevious.setOpaque(true);
 		lblprevious.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -363,7 +360,6 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(lblprevious);
 		
 		lblfirst = new JLabel("");
-		lblfirst.setOpaque(true);
 		lblfirst.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -513,7 +509,7 @@ public class Work_Schedules extends JInternalFrame {
 
 	}
 	protected void lblpreviousMouseClicked(MouseEvent e) {
-		if(pageNumber >0) {
+		if(pageNumber >1) {
 			pageNumber--;
 			textPage.setText(pageNumber.toString());
 			refresh();

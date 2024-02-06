@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 
 import Gui.EmployeeForm;
+import Gui.Statistical;
 import Gui.Accounts;
 import Gui.Atiendances;
 
@@ -80,6 +81,7 @@ public class App_Admin extends JFrame {
 	EmployeeForm femp;
 	Accounts acc;
 	Addemployee aemp;
+	Statistical sta;
 	
 
 	/**
@@ -470,6 +472,20 @@ public class App_Admin extends JFrame {
 		}
 	}
 	
+	public void openStatistical() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+        for (JInternalFrame frame : frames) {
+            frame.doDefaultCloseAction();
+        }
+        if(sta == null || sta.isClosed()) {
+        	sta = new Statistical();
+        	sta.setBounds(0,0,957,626);
+        	
+        	desktopPane.add(sta);
+        	sta.show();
+        }
+	}
+	
 	protected void lblClose(MouseEvent e) {
 		System.exit(0);
 	}
@@ -496,6 +512,7 @@ public class App_Admin extends JFrame {
 				panelWork.setVisible(false);
 			}
 			opensidebar();
+			openStatistical();
 			
 		} catch (Exception e2) {
 			// TODO: handle exception
