@@ -217,7 +217,7 @@ public class App_User extends JFrame {
 		
 		if(schedule == null || schedule.isClosed()) {
 			schedule = new Schedule();
-			schedule.setAppus(this);
+			
 			schedule.setBounds(0, 0, 1180, 664);
 			schedule.show();
 			Component[] frames = desktopPane.getComponents();
@@ -232,7 +232,7 @@ public class App_User extends JFrame {
 		
 		if(schedule == null || schedule.isClosed()) {
 			schedule = new Schedule();
-			schedule.setAppus(this);
+			
 			schedule.setBounds(0, 0, 1180, 664);
 			schedule.show();
 			Component[] frames = desktopPane.getComponents();

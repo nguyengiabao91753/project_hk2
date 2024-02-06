@@ -33,15 +33,9 @@ public class Schedule extends JInternalFrame {
 	private JPanel panel_1;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
-	App_User appus;
+	
 
-	public App_User getAppus() {
-		return appus;
-	}
-
-	public void setAppus(App_User appus) {
-		this.appus = appus;
-	}
+	
 
 	/**
 	 * Launch the application.
@@ -134,11 +128,10 @@ public class Schedule extends JInternalFrame {
 		System.exit(0);
 	}
 	protected void lblNewLabel_3MouseClicked(MouseEvent e) {
-		App_User frame = new App_User();
-		frame.setLocationRelativeTo(null);
-		frame.setUndecorated(true);
-		frame.setVisible(true);
-		
+		App_User appus = new App_User();
+		appus.setLocationRelativeTo(null);
+		appus.setUndecorated(true);
+		appus.setVisible(true);
 	    this.setVisible(false);
 	}
 }

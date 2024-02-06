@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import database.DBCon;
+import entity.Account;
 import entity.Employee;
 
 public class EmployeeDAO {
@@ -123,7 +124,7 @@ public class EmployeeDAO {
 	public boolean insert(Employee emp) {
 		try(
 				var con = DBCon.getConnection();
-				var cs = con.prepareCall("{call insertEmployee(?,?,?,?,?,?,?,?,?,?,?,?)}")
+				var cs = con.prepareCall("{call insertEmployee(?,?,?,?,?,?,?,?,?,?,?,?)}" )
 			) {
 			cs.setString(1, emp.getFull_name());
 			cs.setString(2, emp.getEthnicity());
@@ -163,6 +164,21 @@ public class EmployeeDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	public void deleteEmployeeAndAccount(Employee emp, Account acc) {
+	    try (
+	        var con = DBCon.getConnection();
+	        var cs = con.prepareCall("{call deleteEmployeeAndAccount(?, ?)}")
+	    ) {
+	        cs.setInt(1, emp.getId());
+	        cs.setInt(2, acc.getId());
+	        cs.executeUpdate();
+	        JOptionPane.showMessageDialog(null, "Delete Success");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
 }
 
 
