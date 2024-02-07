@@ -11,9 +11,11 @@ import com.toedter.calendar.JDateChooser;
 
 import App.App_Admin;
 import Gui.Work_Schedules;
+import dao.EmployeeDAO;
 import dao.RoomDAO;
 import dao.ShiftDAO;
 import dao.WorkscheduleDAO;
+import entity.Employee;
 import entity.Room;
 import entity.Shift;
 import entity.Workschedule;
@@ -269,15 +271,24 @@ public class Addschedule extends JInternalFrame {
 	        return false;
 	    }
 	}
-	
+	public boolean checkEmp_id(List<Employee> listemp, int a) {
+		for (Employee employee : listemp) {
+			if(employee.getId() == a) {
+				return true;
+			}
+		}
+		return false;
+	}
 	public int validateSchedule() {
 		int count =0;
 		int shift_id=0;
 		int room_id=0;
+		EmployeeDAO empdao = new EmployeeDAO();
 		RoomDAO roomdao = new RoomDAO();
 		ShiftDAO shiftdao = new ShiftDAO();
 		WorkscheduleDAO workdao = new WorkscheduleDAO();
 		List<Workschedule> listwork = workdao.selectAllSchedule();
+		List<Employee> listemp = empdao.selectAllEmployee();
 		List<Room> listroom = roomdao.selectAllRoom();
 		List<Shift> listshift = shiftdao.getAllShift();
 		for (Shift shift : listshift) {
@@ -301,15 +312,24 @@ public class Addschedule extends JInternalFrame {
 		} else if(!isNumeric(txtEmp.getText())) {
 			JOptionPane.showMessageDialog(null, "Employee_id must be a number!");
 			count++;
+		}else if(!checkEmp_id(listemp, Integer.parseInt(txtEmp.getText())) ) {
+			JOptionPane.showMessageDialog(null, "Employee_id is invalid");
+			count++;
 		}
 		else {
 			for (Workschedule workschedule : listwork) {
 				if(workschedule.getEmployee_id() == Integer.parseInt(txtEmp.getText()) && workschedule.getWork_date().equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) 
-						&& workschedule.getShift_id() == (cbbShift.getSelectedIndex()+1) && workschedule.getRoom_id() != (cbbRoom.getSelectedIndex()+1)) {
-					JOptionPane.showMessageDialog(null, "Employee cannot work the same shift on the same date in a different room.");
+					&& workschedule.getShift_id() == (cbbShift.getSelectedIndex()+1) && workschedule.getRoom_id() == (cbbRoom.getSelectedIndex()+1)) {
+					JOptionPane.showMessageDialog(null, "This data is aldready exists");
 					count++;
 					return count;
 				}
+//				if(workschedule.getEmployee_id() == Integer.parseInt(txtEmp.getText()) && workschedule.getWork_date().equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) 
+//						&& workschedule.getShift_id() == (cbbShift.getSelectedIndex()+1) && workschedule.getRoom_id() != (cbbRoom.getSelectedIndex()+1)) {
+//					JOptionPane.showMessageDialog(null, "Employee cannot work the same shift on the same date in a different room.");
+//					count++;
+//					return count;
+//				}
 			}
 			
 			for (Workschedule workschedule : listwork) {

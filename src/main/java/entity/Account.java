@@ -4,11 +4,13 @@ public class Account {
 	private int Account_id ;
 	private String Username;
 	private String Password;
+	private int id;
+	private String username;
+	private String password;
 	
 	public Account() {
 		
 	}
-
 	/**
 	 * @param account_id
 	 * @param usserName
@@ -27,6 +29,14 @@ public class Account {
 
 	public void setAccount_id(int account_id) {
 		Account_id = account_id;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getUsername() {
@@ -52,8 +62,4 @@ public class Account {
 
 
 
-
-	
-	
-	
 }

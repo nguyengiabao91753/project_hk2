@@ -26,11 +26,12 @@ import javax.swing.table.DefaultTableModel;
 
 
 import dao.Manage_DepartmentsDAO;
+import dao.AccountDAO;
 import dao.EducationDAO;
 import dao.EmployeeDAO;
 import dao.PositionDAO;
 import dao.SalaryDAO;
-
+import entity.Account;
 import entity.Department;
 import entity.Education;
 import entity.Employee;
@@ -68,6 +69,7 @@ import crud.Addschedule;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.border.MatteBorder;
+import java.awt.Font;
 
 public class EmployeeForm extends JInternalFrame {
 
@@ -111,9 +113,6 @@ public class EmployeeForm extends JInternalFrame {
 	private String fileOld = null;
 	private String dirNew = null;
 	private String dirOld = null;
-
-	private JLabel lblTotal;
-	private JLabel lblStatus;
 	private JComboBox cbxSupervisorId;
 	private JComboBox cbxDepartmentId;
 	private JComboBox cbxEducationId;
@@ -125,6 +124,7 @@ public class EmployeeForm extends JInternalFrame {
 	Manage_DepartmentsDAO departmentDao = new Manage_DepartmentsDAO();
 	EducationDAO educationDao = new EducationDAO();
 	PositionDAO positionDao = new PositionDAO();
+	AccountDAO accountDao = new AccountDAO();
 	private JTextField txtSearch;
 	private JButton btnInsert;
 	private JButton btnFirst;
@@ -144,6 +144,11 @@ public class EmployeeForm extends JInternalFrame {
 	}
 	
 	
+	public App_Admin getApp() {
+		return app;
+	}
+
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -212,54 +217,66 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(lblPicture);
 		
 		lblEmployeeId = new JLabel("Employee ID :");
+		lblEmployeeId.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblEmployeeId.setBounds(22, 52, 86, 14);
 		getContentPane().add(lblEmployeeId);
 		
 		lblName = new JLabel("Full name :");
+		lblName.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblName.setBounds(22, 83, 86, 14);
 		getContentPane().add(lblName);
 		
 		lblEthnicity = new JLabel("Ethnicity :");
+		lblEthnicity.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblEthnicity.setBounds(22, 114, 86, 14);
 		getContentPane().add(lblEthnicity);
 		
 		lblDateOfBirth = new JLabel("Date of birth :");
+		lblDateOfBirth.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblDateOfBirth.setBounds(22, 145, 86, 14);
 		getContentPane().add(lblDateOfBirth);
 		
 		lblGender = new JLabel("Gender :");
+		lblGender.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblGender.setBounds(22, 177, 86, 14);
 		getContentPane().add(lblGender);
 		
 		lblAddress = new JLabel("Address :");
+		lblAddress.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblAddress.setBounds(22, 207, 86, 14);
 		getContentPane().add(lblAddress);
 		
 		lblSalary = new JLabel("Salary level :");
+		lblSalary.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblSalary.setBounds(22, 238, 86, 14);
 		getContentPane().add(lblSalary);
 		
 		lblSupervisorId = new JLabel("Supervisor ID :");
+		lblSupervisorId.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblSupervisorId.setBounds(22, 269, 86, 14);
 		getContentPane().add(lblSupervisorId);
 		
 		lblDepartmentId = new JLabel("Department ID :");
+		lblDepartmentId.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblDepartmentId.setBounds(22, 300, 99, 14);
 		getContentPane().add(lblDepartmentId);
 		
 		lblEducationId = new JLabel("Education ID :");
+		lblEducationId.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblEducationId.setBounds(22, 331, 86, 14);
 		getContentPane().add(lblEducationId);
 		
 		lblPositionId = new JLabel("Position ID :");
+		lblPositionId.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblPositionId.setBounds(22, 362, 86, 14);
 		getContentPane().add(lblPositionId);
 		
 		lblImage = new JLabel("Image :");
+		lblImage.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblImage.setBounds(22, 414, 86, 14);
 		getContentPane().add(lblImage);
 		
-		btnUpdate = new JButton("Update");
+		btnUpdate = new JButton("UPDATE");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnUpdateActionPerformed(e);
@@ -269,7 +286,7 @@ public class EmployeeForm extends JInternalFrame {
 		btnUpdate.setBounds(22, 528, 86, 23);
 		getContentPane().add(btnUpdate);
 		
-		btnDelete = new JButton("Delete");
+		btnDelete = new JButton("DELETE");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnDeleteActionPerformed(e);
@@ -289,10 +306,13 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(btnPicture);
 		
 		scrollPane = new JScrollPane();
+		scrollPane.setBackground(new Color(240, 240, 240));
 		scrollPane.setBounds(227, 49, 730, 435);
 		getContentPane().add(scrollPane);
 		
 		table = new JTable();
+		table.setBackground(new Color(255, 255, 255));
+		table.setAutoCreateRowSorter(true);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -303,11 +323,12 @@ public class EmployeeForm extends JInternalFrame {
 				tableMousePressed(e);
 			}
 		});
-		table.setFillsViewportHeight(true);
+//		table.setFillsViewportHeight(true);
 		scrollPane.setViewportView(table);
-		table.setBorder(new LineBorder(new Color(227, 227, 227), 2));
+//		table.setBorder(new LineBorder(new Color(227, 227, 227), 2));
 		
 		lblLevel = new JLabel("Level :");
+		lblLevel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblLevel.setBounds(22, 495, 86, 14);
 		getContentPane().add(lblLevel);
 		
@@ -315,15 +336,6 @@ public class EmployeeForm extends JInternalFrame {
 		cbxLevel.setModel(new DefaultComboBoxModel(new String[] {"Admin", "User"}));
 		cbxLevel.setBounds(131, 495, 86, 22);
 		getContentPane().add(cbxLevel);
-		
-		lblTotal = new JLabel("Total Employee : 0");
-		lblTotal.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTotal.setBounds(771, 562, 152, 23);
-		getContentPane().add(lblTotal);
-		
-		lblStatus = new JLabel("page 1 of 6");
-		lblStatus.setBounds(302, 562, 77, 23);
-		getContentPane().add(lblStatus);
 		
 		cbxSupervisorId = new JComboBox();
 		cbxSupervisorId.setBounds(131, 265, 86, 22);
@@ -356,11 +368,11 @@ public class EmployeeForm extends JInternalFrame {
 			}
 		});
 		txtSearch.setBorder(new TitledBorder(null, "Search :", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 255)));
-		txtSearch.setBounds(239, 2, 140, 36);
+		txtSearch.setBounds(239, 0, 140, 36);
 		getContentPane().add(txtSearch);
 		txtSearch.setColumns(10);
 		
-		btnInsert = new JButton("Add");
+		btnInsert = new JButton("ADD");
 		btnInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnInsertActionPerformed(e);
@@ -370,44 +382,45 @@ public class EmployeeForm extends JInternalFrame {
 		btnInsert.setBounds(77, 562, 86, 23);
 		getContentPane().add(btnInsert);
 		
-		btnFirst = new JButton("First");
+		btnFirst = new JButton("");
+		btnFirst.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-last-24 (1).png"));
 		btnFirst.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnFirstActionPerformed(e);
 			}
 		});
 		btnFirst.setMnemonic('F');
-		btnFirst.setBounds(227, 528, 102, 23);
+		btnFirst.setBounds(742, 495, 21, 23);
 		getContentPane().add(btnFirst);
 		
-		btnPrevious = new JButton("Previous");
+		btnPrevious = new JButton("");
+		btnPrevious.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-next-24 (2).png"));
 		btnPrevious.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnPreviousActionPerformed(e);
 			}
 		});
-		btnPrevious.setMnemonic('P');
-		btnPrevious.setBounds(339, 528, 102, 23);
+		btnPrevious.setBounds(762, 495, 21, 23);
 		getContentPane().add(btnPrevious);
 		
-		btnNext = new JButton("Next");
+		btnNext = new JButton("");
+		btnNext.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-next-24 (1).png"));
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnNextActionPerformed(e);
 			}
 		});
-		btnNext.setMnemonic('P');
-		btnNext.setBounds(743, 528, 102, 23);
+		btnNext.setBounds(914, 495, 21, 23);
 		getContentPane().add(btnNext);
 		
-		btnLast = new JButton("Last");
+		btnLast = new JButton("");
+		btnLast.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-last-24.png"));
 		btnLast.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnLastActionPerformed(e);
 			}
 		});
-		btnLast.setMnemonic('L');
-		btnLast.setBounds(855, 528, 102, 23);
+		btnLast.setBounds(936, 495, 21, 23);
 		getContentPane().add(btnLast);
 		
 		txtPage = new JTextField();
@@ -420,7 +433,7 @@ public class EmployeeForm extends JInternalFrame {
 		txtPage.setHorizontalAlignment(SwingConstants.CENTER);
 		txtPage.setColumns(10);
 		txtPage.setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 0, 255)));
-		txtPage.setBounds(536, 563, 111, 20);
+		txtPage.setBounds(793, 497, 111, 20);
 		getContentPane().add(txtPage);
 		
 		comboBox = new JComboBox();
@@ -430,7 +443,7 @@ public class EmployeeForm extends JInternalFrame {
 			}
 		});
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"10", "20", "25", "50"}));
-		comboBox.setBounds(536, 528, 111, 22);
+		comboBox.setBounds(793, 528, 111, 22);
 		getContentPane().add(comboBox);
 		loadEmployee();
 	}
@@ -452,14 +465,14 @@ public class EmployeeForm extends JInternalFrame {
 					case 9: return Integer.class;
 					case 10: return Integer.class;
 					case 11: return ImageIcon.class;
-					case 12: return String.class;// đường dẫn hình
+					case 12: return String.class;// Image dir
 					default: return String.class;
 				}
 			}
 			@Override 
 			public boolean isCellEditable(int row , int col) {
 				switch(col){
-					case 3: return false;
+					case 11: return false;
 					default: return true;
 				}
 			}
@@ -484,9 +497,6 @@ public class EmployeeForm extends JInternalFrame {
 		
 		totalCount = dao.countEmployee();
 		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
-		
-		lblStatus.setText("page "+pageNumber+" of "+totalPage.intValue());
-		lblTotal.setText("total employee: 60");
 		dao.selectEmployee(pageNumber, rowOfPage)
 			.stream()
 			.forEach(emp -> model.addRow(new Object[] {
@@ -522,12 +532,12 @@ public class EmployeeForm extends JInternalFrame {
 		EmployeeDAO dao = new EmployeeDAO();
 		
 		
-		totalCount = dao.countEmployee();
+//		totalCount = dao.countEmployee();
+//		
+//		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
 		
-		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
-		
-		lblStatus.setText("page "+pageNumber+" of "+totalPage.intValue());
-		lblTotal.setText("total customer: "+totalCount);
+//		lblStatus.setText("page "+pageNumber+" of "+totalPage.intValue());
+//		lblTotal.setText("total customer: "+totalCount);
 
 		
 		dao.selectEmployee(pageNumber, rowOfPage).stream().forEach(
@@ -584,6 +594,7 @@ public class EmployeeForm extends JInternalFrame {
 		listSalary.forEach(salary -> salaryModel.addElement(salary.getId()));
 		listSupervisor.forEach(emp -> supervisorModel.addElement(emp.getId()));
 		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_id()));
+		listSupervisor.forEach(sup -> supervisorModel.addElement(sup.getId()));
 		listEducation.forEach(edu -> educationModel.addElement(edu.getId()));
 		listPosition.forEach(pos -> positionModel.addElement(pos.getPosition_id()));
 
@@ -711,6 +722,7 @@ public class EmployeeForm extends JInternalFrame {
 
 	        if (!add.isVisible()) {
 	            add.setVisible(true);
+	            add.setApp(app);
 	            app.desktopPane.add(add);
 	            add.toFront();
 	            this.hide();
@@ -723,7 +735,6 @@ public class EmployeeForm extends JInternalFrame {
 		EmployeeDAO dao = new EmployeeDAO();
 		dao.delete(emp);
 		
-		//Load lại dữ liệu
 		refresh();
 	}
 	
@@ -753,7 +764,6 @@ public class EmployeeForm extends JInternalFrame {
 		EmployeeDAO dao = new EmployeeDAO();
 		dao.delete(emp);
 		
-		//Load lại dữ liệu
 		refresh();
 	}
 	

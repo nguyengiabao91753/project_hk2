@@ -17,6 +17,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import App.App_Admin;
+import crud.AddDepartment;
+import crud.Addschedule;
 import entity.Department;
 import dao.Manage_DepartmentsDAO;
 import dao.RoomDAO;
@@ -28,6 +30,7 @@ import entity.Shift;
 import entity.Workschedule;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.SystemColor;
 import javax.swing.JScrollPane;
@@ -79,10 +82,15 @@ public class Manage_Departments extends JInternalFrame {
 	private JLabel lblNewLabel;
 	private JButton btnReset;
 	private JTextField txtRoom;
+	private App_Admin app;
+
 
 	/**
 	 * Launch the application.
 	 */
+	public void setApp(App_Admin app) {
+		this.app = app;
+	}
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -151,7 +159,7 @@ public class Manage_Departments extends JInternalFrame {
 		lblRoom.setBounds(10, 185, 100, 30);
 		getContentPane().add(lblRoom);
 		
-		btnInsert = new JButton("INSERT");
+		btnInsert = new JButton("ADD");
 		btnInsert.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		btnInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -402,18 +410,28 @@ public class Manage_Departments extends JInternalFrame {
 		return count;
 	}
 	protected void btnInsertActionPerformed(ActionEvent e) {
-		if(validateDepartment() !=0) {
-			return;
-		}else {
-		var Dep = new Department();
-		Dep.setDepartment_name(txtName.getText()+1);
-		Dep.setHead_of_department(txtDeparment.getText()+1);
-		Dep.setRoom(txtRoom.getText()+1);
-		DepDAO.insert(Dep);
-		// load lai du lieu
-		loadDepartment();
-		refresh();
+
+		AddDepartment add =  AddDepartment.getInstance();
+		if(!add.isVisible()) {
+			add.setVisible(true);
+			
+			app.desktopPane.add(add);
+			add.toFront();
+			this.hide();
+			//app.pack();
 		}
+//		if(validateDepartment() !=0) {
+//			return;
+//		}else {
+//		var Dep = new Department();
+//		Dep.setDepartment_name(txtName.getText()+1);
+//		Dep.setHead_of_department(txtDeparment.getText()+1);
+//		Dep.setRoom(txtRoom.getText()+1);
+//		DepDAO.insert(Dep);
+//		// load lai du lieu
+//		loadDepartment();
+//		refresh();
+//		}
 	}
 	
 	protected void btnUpdateActionPerformed(ActionEvent e) {
@@ -464,6 +482,16 @@ public class Manage_Departments extends JInternalFrame {
 	    txtID.setText(tbemp.getValueAt(rowIndex, 0).toString());
 	    txtName.setText(tbemp.getValueAt(rowIndex, 1).toString());
 	    txtDeparment.setText(tbemp.getValueAt(rowIndex, 2).toString());
+		var roommodel = new DefaultComboBoxModel();
+		List<Room> listRoom = RoomDAO.selectAllRoom();
+//		comboBox.setModel(roommodel);
+//		for (Room room : listRoom) {
+//			var room_select = tbemp.getValueAt(rowIndex, 3).toString();
+//			if(room_select.equals(room.getName())) {
+//				comboBox.setSelectedIndex(room.getId()-1);
+//			}
+//		}
+		
 	    txtRoom.setText(tbemp.getValueAt(rowIndex, 3).toString());
 	    }
 	protected void btnPreviousActionPerformed(ActionEvent e) {

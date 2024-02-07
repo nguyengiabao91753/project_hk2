@@ -19,9 +19,12 @@ import Gui.Manage_Departments;
 
 import Gui.EmployeeForm;
 import Gui.Job_Position;
+import Gui.Accounts;
 import Gui.Atiendances;
 
 import Gui.Work_Schedules;
+import crud.AddDepartment;
+import crud.Addaccount;
 import crud.Addemployee;
 
 import java.awt.Color;
@@ -49,10 +52,10 @@ import java.awt.FlowLayout;
 
 
 public class App_Admin extends JFrame {
-	
 	EmployeeForm femp ;
 	Manage_Departments dep;
 	Job_Position Pos ;
+
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panelLateral;
@@ -83,6 +86,8 @@ public class App_Admin extends JFrame {
 	Atiendances attendance;
 	private JButton btnPosition;
 	private JPanel panelPos;
+	Accounts acc;
+	Addemployee aemp;
 	/**
 	 * Launch the application.
 	 */
@@ -104,14 +109,8 @@ public class App_Admin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public void openDepart() {
-		if(dep == null || dep.isClosed()) {
-			dep = new Manage_Departments() ;
-			dep.setBounds(0,0,957,627);
-			desktopPane.add(dep);
-			dep.show();
-		}
-	}
+
+
 	public void openPos() {
 		if(Pos == null || Pos.isClosed()) {
 			Pos = new Job_Position() ;
@@ -513,6 +512,19 @@ public class App_Admin extends JFrame {
 			work.show();
 		}
 	}
+	public void openDepart() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+        for (JInternalFrame frame : frames) {
+            frame.doDefaultCloseAction();
+        }
+		if(dep == null || dep.isClosed()) {
+			dep = new Manage_Departments() ;
+			dep.setBounds(0,0,957,626);
+			desktopPane.add(dep);
+			dep.setApp(this);
+			dep.show();
+		}
+	}
 	public void openAttendance() {
 		JInternalFrame[] frames = desktopPane.getAllFrames();
         for (JInternalFrame frame : frames) {
@@ -683,6 +695,7 @@ public class App_Admin extends JFrame {
 				panelPos.setVisible(false);
 			}
 			opensidebar();
+			loadAccountForm();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -735,7 +748,6 @@ public class App_Admin extends JFrame {
 			EsconderBotones();
 		}else {
 			opensidebar();
-			
 		}
 	}
 	
@@ -774,6 +786,11 @@ public class App_Admin extends JFrame {
 	}
 	
 	void loadEmployeeForm() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+        for (JInternalFrame frame : frames) {
+            frame.doDefaultCloseAction();
+        }
+		
 		if (femp == null || femp.isClosed()) {
 	        femp = new EmployeeForm();
 	        femp.setBounds(0, 0, 957, 627);
@@ -781,7 +798,22 @@ public class App_Admin extends JFrame {
 	        femp.setApp(this);
 	        femp.show();
 	    }
+		
 	}
 	protected void btnPositionMouseClicked(MouseEvent e) {
+	}
+	void loadAccountForm() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+        for (JInternalFrame frame : frames) {
+            frame.doDefaultCloseAction();
+        }
+        
+        if (acc == null || acc.isClosed()) {
+	        acc = new Accounts();
+	        acc.setBounds(0, 0, 957, 627);
+	        desktopPane.add(acc);
+	        acc.setApp(this);
+	        acc.show();
+	    }
 	}
 }

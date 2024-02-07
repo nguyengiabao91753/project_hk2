@@ -1,13 +1,12 @@
-package Gui;
+package crud;
 
 import java.awt.EventQueue;
 
 import javax.swing.JInternalFrame;
 
-public class Acounts extends JInternalFrame {
+public class Addattendance extends JInternalFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static Acounts instance ;
 
 	/**
 	 * Launch the application.
@@ -16,7 +15,7 @@ public class Acounts extends JInternalFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Acounts frame = new Acounts();
+					Addattendance frame = new Addattendance();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -28,17 +27,7 @@ public class Acounts extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-    public static Acounts getInstance() {
-        if (instance == null) {
-            instance = new Acounts();
-        }
-        return instance;
-    }
-	public Acounts() {
-		setTitle("Acounts");
-		setMaximizable(true);
-		setIconifiable(true);
-		setClosable(true);
+	public Addattendance() {
 		setBounds(100, 100, 450, 300);
 
 	}

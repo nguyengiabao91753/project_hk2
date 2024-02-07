@@ -96,8 +96,7 @@ GO
 CREATE TABLE ATTENDANCES
 (
     ATTENDANCE_ID INT PRIMARY KEY IDENTITY,
-    EMPLOYEE_ID INT,
-    WORK_DATE DATE,
+    WORKSCHEDULE_ID INT,
     PRESENT VARCHAR(7), --PRESENT: TRUE OR FALSE
     ARRIVAL_TIME TIME NULL, --arrival time
     DEPARTURE_TIME TIME NULL, --departure time
@@ -166,9 +165,9 @@ GO
 --LIEN KẾT RÀNG BUỘC CHO BẢNG CHUYÊN CẦN
 
 ALTER TABLE ATTENDANCES  
-ADD CONSTRAINT FK_ATTENDANCE_EMPLOYEE
-FOREIGN KEY  (EMPLOYEE_ID)
-REFERENCES EMPLOYEES(EMPLOYEE_ID)
+ADD CONSTRAINT FK_ATTENDANCE_SCHEDULE
+FOREIGN KEY  (WORKSCHEDULE_ID)
+REFERENCES WORK_SCHEDULES(SCHEDULE_ID)
 GO
 
 ALTER TABLE EMPLOYEES
@@ -179,8 +178,6 @@ ALTER TABLE EMPLOYEES
 ADD LEVEL VARCHAR(50) NULL
 GO
 
-ALTER TABLE EMPLOYEES
-DROP COLUMN LEVEL;
 
 
 ALTER TABLE EMPLOYEES
@@ -344,7 +341,12 @@ VALUES
 	(1,1,1,'2024-01-07'),
 	(2,2,2,'2024-01-06');
 GO 10
-SELECT * FROM WORK_SCHEDULES
+
+INSERT INTO ATTENDANCES(WORKSCHEDULE_ID,PRESENT,ARRIVAL_TIME , DEPARTURE_TIME ,LEAVE_TYPE)
+VALUES
+(1,'True', '04:00', '12:00',NULL)
+GO
+
 CREATE PROC getAllAccount
 AS
 BEGIN
@@ -370,8 +372,6 @@ BEGIN
 END
 GO
 
-DROP PROC getAllEmployee
-GO
 
 
 
@@ -394,13 +394,15 @@ END
 GO
 
 CREATE PROC insertEmployee
-@employee_id INT,@fullname NVARCHAR(50), @ethnicity NVARCHAR(50), @date_of_birth DATE, @gender NVARCHAR(10),@address NVARCHAR(100),@salary_level INT,@supervisor_id INT,@department_id INT,@education_id INT,@position_id INT,@picture VARCHAR(255),@level VARCHAR(50)
+@fullname NVARCHAR(50), @ethnicity NVARCHAR(50), @date_of_birth DATE, @gender NVARCHAR(10),@address NVARCHAR(100),@salary_level INT,@supervisor_id INT,@department_id INT,@education_id INT,@position_id INT,@picture VARCHAR(255),@level VARCHAR(50)
 AS
 BEGIN
-	INSERT INTO EMPLOYEES(EMPLOYEE_ID,FULL_NAME,ETHNICITY,DATE_OF_BIRTH,GENDER,ADDRESS,SALARY_LEVEL,SUPERVISOR_ID,DEPARTMENT_ID,EDUCATION_ID,POSITION_ID,IMAGE,LEVEL)
-	VALUES(@employee_id,@fullname, @ethnicity, @date_of_birth, @gender,@address,@salary_level,@supervisor_id,@department_id,@education_id,@position_id,@picture,@level)
+	INSERT INTO EMPLOYEES(FULL_NAME,ETHNICITY,DATE_OF_BIRTH,GENDER,ADDRESS,SALARY_LEVEL,SUPERVISOR_ID,DEPARTMENT_ID,EDUCATION_ID,POSITION_ID,IMAGE,LEVEL)
+	VALUES(@fullname, @ethnicity, @date_of_birth, @gender,@address,@salary_level,@supervisor_id,@department_id,@education_id,@position_id,@picture,@level)
 END
 GO
+Drop proc insertEmployee
+go
 
 CREATE PROC deleteEmployee
 @id int
@@ -440,11 +442,9 @@ BEGIN
 END
 GO
 
-<<<<<<< HEAD
 //Manage_Departments
 
 CREATE PROC getAllDep
-=======
 
 CREATE PROC updateSchedule
     @SCHEDULE_ID INT,
@@ -452,7 +452,6 @@ CREATE PROC updateSchedule
     @SHIFT_ID INT,
 	@ROOM_ID INT,
     @WORK_DATE DATE
->>>>>>> 9e0e9d44d337c0923dfabccec616f535c5acc319
 AS
 BEGIN
 	Select * from DEPARTMENTS
@@ -510,7 +509,9 @@ BEGIN
 	UPDATE EMPLOYEES
 	SET FULL_NAME = @fullname, ETHNICITY = @ethnicity , DATE_OF_BIRTH = @dateofbirth , GENDER = @gender , ADDRESS = @address , SALARY_LEVEL = @salarylevel , SUPERVISOR_ID = @supervisorid , DEPARTMENT_ID = @departmentid , EDUCATION_ID = @educationid , POSITION_ID =@positionid , IMAGE = @image , LEVEL = @level
 	WHERE EMPLOYEE_ID = @id
-=======
+END
+GO
+
 CREATE PROC insertSchedule
 	@EMPLOYEE_ID INT,
     @SHIFT_ID INT,
@@ -576,3 +577,49 @@ GO
 
 SELECT * FROM POSITIONS
 GO
+CREATE PROC getAllAtt
+AS
+BEGIN
+	Select * from ATTENDANCES
+END
+GO
+
+CREATE PROC getAtt
+@pagenumber INT, @rowOfPage INT
+AS
+BEGIN
+	SELECT *
+	FROM ATTENDANCES
+	ORDER BY ATTENDANCE_ID DESC
+	OFFSET (@pagenumber -1)* @rowOfPage rows
+	FETCH NEXT @rowOfPage ROWS ONLY
+END
+GO
+
+CREATE PROC countAccount
+AS
+BEGIN
+	SELECT COUNT(ACCOUNT_ID) TOTAL FROM ACCOUNTS
+END
+GO
+
+CREATE PROC updateAccount
+@username VARCHAR(50),@password VARCHAR(50),@id INT
+AS
+BEGIN
+	UPDATE ACCOUNTS
+	SET USERNAME = @username , PASSWORD = @password
+	WHERE ACCOUNT_ID = @id
+END
+GO
+
+CREATE PROC insertAccount
+@id int , @username VARCHAR(50) , @password VARCHAR(50)
+AS
+BEGIN
+	INSERT INTO ACCOUNTS(ACCOUNT_ID,USERNAME,PASSWORD)
+	VALUES(@id,@username,@password)
+END
+GO
+	
+

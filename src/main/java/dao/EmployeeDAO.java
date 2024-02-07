@@ -51,7 +51,7 @@ public class EmployeeDAO {
 			cs.setInt(1, pageNumber);
 			cs.setInt(2, rowOfPage);
 			ResultSet rs = cs.executeQuery();
-			//nghĩ cách đóng sau khi làm xong 
+
 			while(rs.next()) {
 				Employee emp = new Employee();
 				emp.setId(rs.getInt("employee_id"));
@@ -123,21 +123,20 @@ public class EmployeeDAO {
 	public boolean insert(Employee emp) {
 		try(
 				var con = DBCon.getConnection();
-				var cs = con.prepareCall("{call insertEmployee(?,?,?,?,?,?,?,?,?,?,?,?,?)}")
+				var cs = con.prepareCall("{call insertEmployee(?,?,?,?,?,?,?,?,?,?,?,?)}")
 			) {
-			cs.setInt(1, emp.getId());
-			cs.setString(2, emp.getFull_name());
-			cs.setString(3, emp.getEthnicity());
-			cs.setDate(4, java.sql.Date.valueOf(emp.getDate_of_birth()));
-			cs.setString(5, emp.getGender());
-			cs.setString(6, emp.getAddress());
-			cs.setInt(7, emp.getSalary_level());
-			cs.setInt(8, emp.getSupervisor_id());
-			cs.setInt(9, emp.getDepartment_id());
-			cs.setInt(10, emp.getEducation_id());
-			cs.setInt(11, emp.getPosition_id());
-			cs.setString(12, emp.getPicture());
-			cs.setString(13, emp.getLevel());
+			cs.setString(1, emp.getFull_name());
+			cs.setString(2, emp.getEthnicity());
+			cs.setDate(3, java.sql.Date.valueOf(emp.getDate_of_birth()));
+			cs.setString(4, emp.getGender());
+			cs.setString(5, emp.getAddress());
+			cs.setInt(6, emp.getSalary_level());
+			cs.setInt(7, emp.getSupervisor_id());
+			cs.setInt(8, emp.getDepartment_id());
+			cs.setInt(9, emp.getEducation_id());
+			cs.setInt(10, emp.getPosition_id());
+			cs.setString(11, emp.getPicture());
+			cs.setString(12, emp.getLevel());
 			
 			if(cs.executeUpdate() >0) {
 				return true;
