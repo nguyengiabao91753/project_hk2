@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 import org.mindrot.jbcrypt.BCrypt;
 
 import App.App_Admin;
+import Gui.Accounts;
 import Gui.EmployeeForm;
 import Gui.Work_Schedules;
 import dao.AccountDAO;
@@ -184,21 +185,27 @@ public class Addaccount extends JInternalFrame {
 		this.setVisible(false);
 	}
 	
-//	public void loadAddEmployeeData() {
-//		Addaccount add = Addaccount.getInstance();
-//        add.setEmp(emp);
-//	}
+
 	protected void btnSubmitActionPerformed(ActionEvent e) {
+		String username = txtUsername.getText();
+		String password = new String(txtPassword.getPassword());
+
+		if (!Accounts.validateUsername(username) || !Accounts.valPassword(password)) {
+		        return;
+		    }
+		    
 		EmployeeDAO employeeDAO = new EmployeeDAO();
 		AccountDAO accountDAO = new AccountDAO();
-
+		
+		if (accountDAO.isUsernameExists(txtUsername.getText())) {
+	        JOptionPane.showMessageDialog(null, "Username already exists. Please choose another username.");
+	        return;
+	    }
+	    
 		if (employeeDAO.insert(emp)) {
 		    Account acc = new Account();
 		    acc.setUsername(txtUsername.getText());
-		    char[] passwordChars = txtPassword.getPassword();
-		    String plainPassword = new String(passwordChars);
-		    String hashedPassword = BCrypt.hashpw(plainPassword, BCrypt.gensalt());
-		    acc.setPassword(hashedPassword);
+		    acc.setPassword(password);
 
 		    int defaultStatus = 1;
 		    if (accountDAO.insert(acc,defaultStatus )) {

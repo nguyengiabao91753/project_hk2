@@ -5,6 +5,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,12 +124,9 @@ public class AccountDAO {
 	        var cs = con.prepareCall("{call blockAccount(?)}")
 	    ) {
 	        cs.setInt(1, acc.getId());
-	        int affectedRows = cs.executeUpdate();
 
-	        if (affectedRows > 0) {
-	            System.out.println("Account blocked successfully.");
-	        } else {
-	            System.out.println("Failed to block account.");
+	        if (cs.executeUpdate() > 0) {
+	            JOptionPane.showMessageDialog(null, "Account blocked successfully.");
 	        }
 	    } catch (Exception ex) {
 	        ex.printStackTrace();
@@ -151,6 +149,41 @@ public class AccountDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	//CHECK USERNAME
+	public boolean isUsernameExists(String username) {
+	    try (Connection con = DBCon.getConnection();
+	    	var cs = con.prepareCall("{call CheckUsernameExists(?)}")) {
+	    	cs.setString(1, username);
+	        try (ResultSet rs = cs.executeQuery()) {
+	            if (rs.next()) {
+	                return rs.getInt(1) > 0; 
+	            }
+	        }
+	    } catch (SQLException  e) {
+	        e.printStackTrace();
+	    }
+	    return false; 
+	}
+	
+	//Login
+	public String login(Account acc) {
+        try (Connection con = DBCon.getConnection();
+             CallableStatement cs = con.prepareCall("{call LoginUser(?, ?)}")) {
+            
+            cs.setString(1, acc.getUsername());
+            cs.setString(2, acc.getPassword());
+            
+            try (ResultSet rs = cs.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("message"); 
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Login failed"; 
+    }
 }
 
 

@@ -138,7 +138,6 @@ public class EmployeeForm extends JInternalFrame {
 	private JButton btnNext;
 	private JButton btnLast;
 	private JTextField txtPage;
-	private JComboBox comboBox;
  
 
 
@@ -470,6 +469,7 @@ public class EmployeeForm extends JInternalFrame {
 		txtPage = new JTextField();
 		txtPage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				txtPageActionPerformed(e);
 			}
 		});
 		txtPage.setBackground(Color.LIGHT_GRAY);
@@ -479,16 +479,6 @@ public class EmployeeForm extends JInternalFrame {
 		txtPage.setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 0, 255)));
 		txtPage.setBounds(793, 497, 111, 20);
 		getContentPane().add(txtPage);
-		
-		comboBox = new JComboBox();
-		comboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				comboBoxActionPerformed(e);
-			}
-		});
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"10", "20", "25", "50"}));
-		comboBox.setBounds(793, 528, 111, 22);
-		getContentPane().add(comboBox);
 		loadEmployee();
 	}
 	
@@ -1049,16 +1039,6 @@ public class EmployeeForm extends JInternalFrame {
 		pageNumber = totalPage.intValue();
 		txtPage.setText(pageNumber.toString());
 		refresh();
-	}
-	
-	
-	protected void comboBoxActionPerformed(ActionEvent e) {
-		if(table!=null) {
-			pageNumber =1 ;
-			txtPage.setText(pageNumber.toString());
-			rowOfPage = Integer.parseInt(comboBox.getSelectedItem().toString());
-			refresh();
-		}
 	}
 	
 	protected void txtPageActionPerformed(ActionEvent e) {
