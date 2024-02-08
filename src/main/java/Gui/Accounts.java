@@ -496,15 +496,15 @@ public class Accounts extends JInternalFrame {
 	        txtPassword.setText(""); 
 	    }
 	    
-	    int statusColumnIndex = table.getColumnModel().getColumnIndex("Status");
-	    int rowIndex = table.getSelectedRow();
-	    int currentStatus = (int) table.getValueAt(rowIndex, statusColumnIndex);
-
-	    if ((currentStatus == 0 && acc.getStatus() == 0) || (currentStatus == 1 && acc.getStatus() == 1)) {
-	        String message = (currentStatus == 0) ? "This account is already blocked." : "This account is already active.";
-	        JOptionPane.showMessageDialog(null, message);
-	        return;
-	    }
+//	    int statusColumnIndex = table.getColumnModel().getColumnIndex("Status");
+//	    int rowIndex = table.getSelectedRow();
+//	    int currentStatus = (int) table.getValueAt(rowIndex, statusColumnIndex);
+//
+//	    if ((currentStatus == 0 && acc.getStatus() == 0) || (currentStatus == 1 && acc.getStatus() == 1)) {
+//	        String message = (currentStatus == 0) ? "This account is already blocked." : "This account is already active.";
+//	        JOptionPane.showMessageDialog(null, message);
+//	        return;
+//	    }
 	    
 		accountDao.update(acc);
 		refresh();
