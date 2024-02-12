@@ -34,8 +34,6 @@ CREATE TABLE ACCOUNTS
 );
 GO
 
-DROP TABLE ACCOUNTS
-GO
 
 CREATE TABLE DEPARTMENTS
 (
@@ -183,11 +181,6 @@ ADD LEVEL VARCHAR(50) NULL
 GO
 
 
-
-ALTER TABLE ACCOUNTS
-ADD COLUMN  STATUS INT NOT NULL
-GO
-
 ALTER TABLE DEPARTMENTS
 ALTER COLUMN  HEAD_OF_DEPARTMENT VARCHAR(50)
 GO
@@ -334,11 +327,6 @@ VALUES
     ('Jane Smith', 'Caucasian', '1985-08-22', 'Female', '456 Oak Avenue, Townsville', 4, NULL, 5, 8, 5,'images/image1.png');
 GO
 
-INSERT INTO ACCOUNTS( USERNAME, PASSWORD)
-VALUES
-	('JohnDoe','1234567'),
-	('JaneSmith','1234567');
-GO
 
 INSERT INTO WORK_SCHEDULES(EMPLOYEE_ID, SHIFT_ID, ROOM_ID, WORK_DATE)
 VALUES
@@ -357,9 +345,6 @@ BEGIN
 	SELECT * FROM ACCOUNTS
 END
 GO
-
-Drop proc getAccount
-go
 
 CREATE PROC getAccount
 @pageNumber INT , @rowOfPage INT
@@ -684,6 +669,7 @@ BEGIN
     DELETE FROM EMPLOYEES WHERE EMPLOYEE_ID = @employeeId;
     COMMIT;
 END;
+GO
 
 
 
@@ -691,4 +677,96 @@ END;
 
 
 
+--SCHEDULE
 
+CREATE PROC getpersonschedule
+@EMPLOYEE_ID INT
+AS
+BEGIN
+	SELECT * FROM WORK_SCHEDULES
+	WHERE EMPLOYEE_ID = @EMPLOYEE_ID
+	ORDER BY WORK_DATE DESC
+END
+GO
+--ATTEN-PERSONAL
+CREATE PROC getAttpersonal
+@a INT
+AS
+BEGIN
+	SELECT * FROM ATTENDANCES
+	WHERE WORKSCHEDULE_ID IN (
+			SELECT SCHEDULE_ID
+			FROM WORK_SCHEDULES
+			WHERE EMPLOYEE_ID = @a
+		)
+	ORDER BY ATTENDANCE_ID DESC
+END
+GO
+
+
+--TRIGGER
+-- Tạo stored procedure
+ALTER PROCEDURE DailyInsertAtt
+AS
+BEGIN
+    DECLARE @target_date DATE;
+    DECLARE @work_id_to_insert INT;
+
+    -- Lấy ngày hiện tại
+    SET @target_date = CAST(GETDATE() AS DATE);
+
+    -- Tìm id của dòng dữ liệu trong bảng work trùng với ngày hiện tại
+    SELECT TOP 1 @work_id_to_insert = SCHEDULE_ID
+    FROM WORK_SCHEDULES
+    WHERE CONVERT(DATE, WORK_DATE) = @target_date
+    ORDER BY WORK_DATE;
+
+    -- Kiểm tra nếu có dữ liệu
+    IF @work_id_to_insert IS NOT NULL
+    BEGIN
+        -- Thực hiện lệnh insert vào bảng emp với work_id tương ứng
+        INSERT INTO ATTENDANCES ( WORKSCHEDULE_ID,PRESENT, ARRIVAL_TIME, DEPARTURE_TIME, LEAVE_TYPE)
+        VALUES (@work_id_to_insert, 'False', NULL, NULL, 'WP');
+    END
+END;
+GO
+
+EXEC DailyInsertAtt;
+
+SELECT* FROM ATTENDANCES
+
+
+
+--checkin
+CREATE PROC checkin
+@a INT,
+@Time Time
+AS
+BEGIN
+	UPDATE ATTENDANCES
+	SET ARRIVAL_TIME = @Time,
+	PRESENT = 'True', LEAVE_TYPE=NULL
+	WHERE ATTENDANCE_ID = @a
+END
+GO
+
+CREATE PROC checkout
+@a INT,
+@Time Time
+AS
+BEGIN
+	UPDATE ATTENDANCES
+	SET DEPARTURE_TIME = @Time
+	WHERE ATTENDANCE_ID = @a
+END
+GO
+
+CREATE PROC dayOff
+@a INT
+AS
+BEGIN
+	UPDATE ATTENDANCES
+	SET LEAVE_TYPE = 'P'
+	WHERE ATTENDANCE_ID = @a
+END
+GO

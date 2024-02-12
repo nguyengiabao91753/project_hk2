@@ -130,4 +130,73 @@ public class AttendanceDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	public List<Attendance> getAttpersonal(int a) {
+		List<Attendance> list = new ArrayList<>();
+		try(
+				Connection con = DBCon.getConnection();
+				CallableStatement cs =  con.prepareCall("{call getAttpersonal(?)}");
+				) {
+			cs.setInt(1, a);
+			ResultSet rs = cs.executeQuery();
+			while(rs.next()) {
+				list.add(new Attendance(rs.getInt("ATTENDANCE_ID"),
+						rs.getInt("WORKSCHEDULE_ID"), 
+						rs.getBoolean("PRESENT"), 
+						rs.getTime("ARRIVAL_TIME"), 
+						rs.getTime("DEPARTURE_TIME"), 
+						rs.getString("LEAVE_TYPE")));
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public void checkin(Attendance att) {
+		try(
+				var con = DBCon.getConnection();
+				var cs = con.prepareCall("{call checkin(?,?)}");
+				) {
+			cs.setInt(1, att.getAttendance_id());
+			cs.setTime(2, att.getArrival_time());
+			if(cs.executeUpdate() >0) {
+				JOptionPane.showMessageDialog(null, "Check-in Success");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	public void checkout(Attendance att) {
+		try(
+				var con = DBCon.getConnection();
+				var cs = con.prepareCall("{call checkout(?,?)}");
+				) {
+			cs.setInt(1, att.getAttendance_id());
+			cs.setTime(2, att.getDeparture_time());
+			if(cs.executeUpdate() >0) {
+				JOptionPane.showMessageDialog(null, "Check-out Success");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	public void dayOff(Attendance att) {
+		try(
+				var con = DBCon.getConnection();
+				var cs = con.prepareCall("{call dayOff(?)}");
+				) {
+			cs.setInt(1, att.getAttendance_id());
+			
+			if(cs.executeUpdate() >0) {
+				JOptionPane.showMessageDialog(null, "Send your request Success");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 }

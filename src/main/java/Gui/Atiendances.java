@@ -433,7 +433,13 @@ public class Atiendances extends JInternalFrame {
 		return date;
 	}
 	public void loadAtt() {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+	         public boolean isCellEditable(int row, int column) {
+	             // Không cho phép chỉnh sửa bất kỳ ô nào
+	             return false;
+	         }
+		};
 		model.addColumn("Id");
 		model.addColumn("Schedule_id");
 		model.addColumn("Emp_id");
@@ -521,7 +527,7 @@ public class Atiendances extends JInternalFrame {
 		if(table.getValueAt(rowIndex, 8) == null) {
 			cbbType.setSelectedIndex(0);
 		}else {
-			cbbType.setSelectedIndex((table.getValueAt(rowIndex, 8).toString().equals("permission") ? 1:2));
+			cbbType.setSelectedIndex((table.getValueAt(rowIndex, 8).toString().equals("P") ? 1:2));
 		}
 		
 		

@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import User_GUI.Attendance;
 import User_GUI.Schedule;
 
 import java.awt.SystemColor;
@@ -46,6 +47,7 @@ public class App_User extends JFrame {
 	private JLabel lblSalary;
 	private JLabel lblLocation;
 	Schedule schedule;
+	Attendance att;
 	public JDesktopPane desktopPane;
 	/**
 	 * Launch the application.
@@ -142,6 +144,13 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_6);
 		
 		lblNewLabel_7 = new JLabel("");
+		lblNewLabel_7.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblNewLabel_7.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblNewLabel_7MouseClicked(e);
+			}
+		});
 		lblNewLabel_7.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-attendance-96.png"));
 		lblNewLabel_7.setOpaque(true);
 		lblNewLabel_7.setBackground(new Color(255, 255, 255));
@@ -187,6 +196,13 @@ public class App_User extends JFrame {
 		desktopPane.add(lblSchedule);
 		
 		lblAttendance = new JLabel("Attendance");
+		lblAttendance.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblAttendance.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblAttendanceMouseClicked(e);
+			}
+		});
 		lblAttendance.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAttendance.setForeground(new Color(51, 102, 153));
 		lblAttendance.setFont(new Font("Tahoma", Font.BOLD, 17));
@@ -240,6 +256,36 @@ public class App_User extends JFrame {
 	            frame.setVisible(false);
 	        }
 			desktopPane.add(schedule);
+			
+			//this.setVisible(false);
+		}
+	}
+	protected void lblNewLabel_7MouseClicked(MouseEvent e) {
+		if(att == null || att.isClosed()) {
+			att = new Attendance();
+			
+			att.setBounds(0, 0, 1180, 664);
+			att.show();
+			Component[] frames = desktopPane.getComponents();
+	        for (Component frame : frames) {
+	            frame.setVisible(false);
+	        }
+			desktopPane.add(att);
+			
+			//this.setVisible(false);
+		}
+	}
+	protected void lblAttendanceMouseClicked(MouseEvent e) {
+		if(att == null || att.isClosed()) {
+			att = new Attendance();
+			
+			att.setBounds(0, 0, 1180, 664);
+			att.show();
+			Component[] frames = desktopPane.getComponents();
+	        for (Component frame : frames) {
+	            frame.setVisible(false);
+	        }
+			desktopPane.add(att);
 			
 			//this.setVisible(false);
 		}
