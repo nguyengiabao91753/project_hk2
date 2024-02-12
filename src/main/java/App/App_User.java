@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import User_GUI.Schedule;
+import User_GUI.UserLogin;
 
 import java.awt.SystemColor;
 
@@ -46,6 +47,8 @@ public class App_User extends JFrame {
 	private JLabel lblSalary;
 	private JLabel lblLocation;
 	Schedule schedule;
+	UserLogin userLogin;
+	private int xx, xy;
 	public JDesktopPane desktopPane;
 	/**
 	 * Launch the application.
@@ -69,6 +72,18 @@ public class App_User extends JFrame {
 	 * Create the frame.
 	 */
 	public App_User() {
+		getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				thisContentPaneMouseDragged(e);
+			}
+		});
+		getContentPane().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				thisContentPaneMousePressed(e);
+			}
+		});
 		getContentPane().setBackground(new Color(255, 255, 255));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1180, 664);
@@ -98,7 +113,7 @@ public class App_User extends JFrame {
 		panel.add(lblNewLabel);
 		
 		lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-employee-16.png"));
+		lblNewLabel_1.setIcon(new ImageIcon("images\\icons8-employee-16.png"));
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setBounds(41, 11, 147, 142);
 		panel.add(lblNewLabel_1);
@@ -120,7 +135,8 @@ public class App_User extends JFrame {
 		desktopPane.add(panel);
 		
 		lblNewLabel_5 = new JLabel("");
-		lblNewLabel_5.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-test-account-96.png"));
+		lblNewLabel_5.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblNewLabel_5.setIcon(new ImageIcon("images\\icons8-test-account-96.png"));
 		lblNewLabel_5.setBackground(new Color(255, 255, 255));
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_5.setBounds(357, 270, 132, 132);
@@ -134,7 +150,7 @@ public class App_User extends JFrame {
 				lblNewLabel_6MouseClicked(e);
 			}
 		});
-		lblNewLabel_6.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-schedule-96.png"));
+		lblNewLabel_6.setIcon(new ImageIcon("images\\icons8-schedule-96.png"));
 		lblNewLabel_6.setOpaque(true);
 		lblNewLabel_6.setBackground(new Color(255, 255, 255));
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
@@ -142,7 +158,7 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_6);
 		
 		lblNewLabel_7 = new JLabel("");
-		lblNewLabel_7.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-attendance-96.png"));
+		lblNewLabel_7.setIcon(new ImageIcon("images\\icons8-attendance-96.png"));
 		lblNewLabel_7.setOpaque(true);
 		lblNewLabel_7.setBackground(new Color(255, 255, 255));
 		lblNewLabel_7.setHorizontalAlignment(SwingConstants.CENTER);
@@ -150,7 +166,7 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_7);
 		
 		lblNewLabel_9 = new JLabel("");
-		lblNewLabel_9.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-salary-96.png"));
+		lblNewLabel_9.setIcon(new ImageIcon("images\\icons8-salary-96.png"));
 		lblNewLabel_9.setOpaque(true);
 		lblNewLabel_9.setBackground(new Color(255, 255, 255));
 		lblNewLabel_9.setHorizontalAlignment(SwingConstants.CENTER);
@@ -158,7 +174,7 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_9);
 		
 		lblNewLabel_8 = new JLabel("");
-		lblNewLabel_8.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-address-96.png"));
+		lblNewLabel_8.setIcon(new ImageIcon("images\\icons8-address-96.png"));
 		lblNewLabel_8.setOpaque(true);
 		lblNewLabel_8.setBackground(new Color(255, 255, 255));
 		lblNewLabel_8.setHorizontalAlignment(SwingConstants.CENTER);
@@ -243,6 +259,15 @@ public class App_User extends JFrame {
 			
 			//this.setVisible(false);
 		}
+	}
+	protected void thisContentPaneMousePressed(MouseEvent e) {
+		xx = e.getX();
+        xy = e.getY();
+	}
+	protected void thisContentPaneMouseDragged(MouseEvent e) {
+		int x = e.getXOnScreen();
+        int y = e.getYOnScreen();
+        App_User.this.setLocation(x - xx, y - xy);
 	}
 }
 

@@ -166,10 +166,10 @@ public class AccountDAO {
 	    return false; 
 	}
 	
-	//Login
+	//Login Admin
 	public String login(Account acc) {
         try (Connection con = DBCon.getConnection();
-             CallableStatement cs = con.prepareCall("{call LoginUser(?, ?)}")) {
+             CallableStatement cs = con.prepareCall("{call LoginAdmin(?, ?)}")) {
             
             cs.setString(1, acc.getUsername());
             cs.setString(2, acc.getPassword());
@@ -179,10 +179,49 @@ public class AccountDAO {
                     return rs.getString("message"); 
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return "Login failed"; 
+    }
+	
+	//Login User
+	public String loginUser(Account acc) {
+		try (Connection con = DBCon.getConnection();
+	             CallableStatement cs = con.prepareCall("{call loginUser(?, ?)}")) {
+	            
+	            cs.setString(1, acc.getUsername());
+	            cs.setString(2, acc.getPassword());
+	            
+	            try (ResultSet rs = cs.executeQuery()) {
+	                if (rs.next()) {
+	                    return rs.getString("message"); 
+	                }
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return "Login failed";
+	}
+	
+	public int getUserId(String username) {
+        int userId = -1; 
+        
+        try (Connection con = DBCon.getConnection();
+             CallableStatement cs = con.prepareCall("{call GetUserById(?)}")) {
+            
+            cs.setString(1, username);
+            
+            try (ResultSet rs = cs.executeQuery()) {
+                if (rs.next()) {
+                    userId = rs.getInt("employee_id"); 
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return userId;
     }
 }
 

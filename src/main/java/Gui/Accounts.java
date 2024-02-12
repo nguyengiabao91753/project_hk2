@@ -341,7 +341,7 @@ public class Accounts extends JInternalFrame {
 		}
 	}
 	
-	class PasswordRenderer extends DefaultTableCellRenderer {
+	public class PasswordRenderer extends DefaultTableCellRenderer {
 	    private static final char BULLET = '\u2022';
 
 	    @Override

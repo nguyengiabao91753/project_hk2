@@ -37,6 +37,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.awt.Cursor;
 
 
 
@@ -146,7 +147,8 @@ public class AdminLogin extends JFrame {
 	    setScaledImage(scaledImage, lblLogo);
 		
 		lblClose = new JLabel("X");
-		lblClose.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblClose.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblClose.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblClose.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -154,7 +156,7 @@ public class AdminLogin extends JFrame {
 			}
 		});
 		lblClose.setForeground(new Color(0, 128, 128));
-		lblClose.setBounds(1159, 0, 46, 30);
+		lblClose.setBounds(1158, 0, 46, 30);
 		contentPane.add(lblClose);
 		
 		txtPassword = new JPasswordField();
@@ -183,6 +185,7 @@ public class AdminLogin extends JFrame {
 		btnReset.setBounds(931, 523, 111, 39);
 		contentPane.add(btnReset);
 	}
+	
 	protected void lblCloseMouseClicked(MouseEvent e) {
 		System.exit(0);
 	}

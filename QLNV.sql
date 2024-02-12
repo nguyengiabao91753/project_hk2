@@ -20,7 +20,9 @@ CREATE TABLE EMPLOYEES
     SUPERVISOR_ID INT,
     DEPARTMENT_ID INT,
     EDUCATION_ID INT,
-    POSITION_ID INT
+    POSITION_ID INT,
+	IMAGE VARCHAR(255) NULL,
+	LEVEL VARCHAR(50) NOT NULL
 );
 GO
 
@@ -34,8 +36,7 @@ CREATE TABLE ACCOUNTS
 );
 GO
 
-DROP TABLE ATTENDANCES
-GO
+
 
 CREATE TABLE DEPARTMENTS
 (
@@ -702,7 +703,7 @@ drop proc LoginUser
 go
 
 --Login 
-CREATE PROCEDURE LoginUser
+CREATE PROCEDURE LoginAdmin
     @username VARCHAR(50),
     @password VARCHAR(50)
 AS
@@ -718,8 +719,9 @@ BEGIN
     IF @status = 1
     BEGIN
         SELECT @level = LEVEL
-        FROM EMPLOYEES
-        WHERE EMPLOYEE_ID IN (SELECT EMPLOYEE_ID FROM ACCOUNTS WHERE USERNAME = @username);
+        FROM EMPLOYEES E
+        JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
+        WHERE A.USERNAME = @username;
 
         IF @level = 'Admin'
             SELECT 'Login successful.' AS message;
@@ -731,6 +733,61 @@ BEGIN
     ELSE
         SELECT 'Invalid username or password.' AS message;
 END
+GO
+
+drop proc loginUser
+go
+
+--Login User
+CREATE PROCEDURE loginUser
+	@username VARCHAR(50),
+	@password VARCHAR(50)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	DECLARE @status INT , @level VARCHAR(50);
+	SELECT @status = STATUS
+	FROM ACCOUNTS
+	WHERE @username = USERNAME AND @password = PASSWORD;
+
+	IF @status = 1
+	BEGIN
+		SELECT @level = LEVEL
+		FROM EMPLOYEES E
+		JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
+		WHERE A.USERNAME = @username
+	
+		IF @level = 'Admin' OR @level = 'User'
+			SELECT 'Login successful.' AS message
+	END
+	ELSE IF @status = 0
+		SELECT 'Your account has been locked, please choose another account.' AS message;
+    ELSE
+        SELECT 'Invalid username or password.' AS message
+END
+GO
+
+--Get User ID
+CREATE PROCEDURE GetUserById
+    @username VARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DECLARE @employeeId INT;
+
+    SELECT @employeeId = E.EMPLOYEE_ID
+    FROM EMPLOYEES E
+    JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
+    WHERE A.USERNAME = @username;
+
+    SELECT @employeeId AS EMPLOYEE_ID;
+END
+go
+
+
+
 
 
 
