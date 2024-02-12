@@ -20,7 +20,9 @@ CREATE TABLE EMPLOYEES
     SUPERVISOR_ID INT,
     DEPARTMENT_ID INT,
     EDUCATION_ID INT,
-    POSITION_ID INT
+    POSITION_ID INT,
+	IMAGE VARCHAR(255) NULL,
+	LEVEL VARCHAR(50) NOT NULL
 );
 GO
 
@@ -34,6 +36,10 @@ CREATE TABLE ACCOUNTS
 );
 GO
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8a79a2e366668604ace3327f4d9c1345ea9e0933
 
 CREATE TABLE DEPARTMENTS
 (
@@ -670,6 +676,164 @@ BEGIN
     COMMIT;
 END;
 GO
+<<<<<<< HEAD
+=======
+
+CREATE PROC CheckUsernameExists
+    @username VARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS (SELECT 1 FROM ACCOUNTS WHERE USERNAME = @username)
+        SELECT 1 AS UsernameExists;
+    ELSE
+        SELECT 0 AS UsernameExists;
+END;
+
+drop proc LoginUser
+go
+
+--Login 
+CREATE PROCEDURE LoginAdmin
+    @username VARCHAR(50),
+    @password VARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @status INT, @level VARCHAR(50);
+    
+    SELECT @status = STATUS
+    FROM ACCOUNTS
+    WHERE USERNAME = @username AND PASSWORD = @password;
+
+    IF @status = 1
+    BEGIN
+        SELECT @level = LEVEL
+        FROM EMPLOYEES E
+        JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
+        WHERE A.USERNAME = @username;
+
+        IF @level = 'Admin'
+            SELECT 'Login successful.' AS message;
+        ELSE
+            SELECT 'Your account is not authorized as an Admin. Please choose another account.' AS message;
+    END
+    ELSE IF @status = 0
+		SELECT 'Your account has been locked, please choose another account.' AS message;
+    ELSE
+        SELECT 'Invalid username or password.' AS message;
+END
+GO
+
+drop proc loginUser
+go
+
+--Login User
+CREATE PROCEDURE loginUser
+	@username VARCHAR(50),
+	@password VARCHAR(50)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	DECLARE @status INT , @level VARCHAR(50);
+	SELECT @status = STATUS
+	FROM ACCOUNTS
+	WHERE @username = USERNAME AND @password = PASSWORD;
+
+	IF @status = 1
+	BEGIN
+		SELECT @level = LEVEL
+		FROM EMPLOYEES E
+		JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
+		WHERE A.USERNAME = @username
+	
+		IF @level = 'Admin' OR @level = 'User'
+			SELECT 'Login successful.' AS message
+	END
+	ELSE IF @status = 0
+		SELECT 'Your account has been locked, please choose another account.' AS message;
+    ELSE
+        SELECT 'Invalid username or password.' AS message
+END
+GO
+
+--Get ID User
+CREATE PROCEDURE GetId
+    @username VARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DECLARE @employeeId INT;
+
+    -- Lấy employee_id từ bảng ACCOUNTS dựa trên username
+    SELECT @employeeId = E.EMPLOYEE_ID
+    FROM EMPLOYEES E
+    JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
+    WHERE A.USERNAME = @username;
+
+    -- Trả về employee_id
+    SELECT @employeeId AS EMPLOYEE_ID;
+END
+GO
+
+--Get User by ID
+CREATE PROCEDURE GetUserById
+    @userId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DECLARE @employeeId INT , @fullname NVARCHAR(50), @ethnicity NVARCHAR(50), @date_of_birth DATE, @gender NVARCHAR(10),@address NVARCHAR(100),@salary_level INT,@supervisor_id INT,@department_id INT,@education_id INT,@position_id INT,@picture VARCHAR(255),@level VARCHAR(50);
+
+    SELECT @employeeId = E.EMPLOYEE_ID,
+           @fullname = E.FULL_NAME,
+           @ethnicity = E.ETHNICITY,
+           @date_of_birth = E.DATE_OF_BIRTH,
+           @gender = E.GENDER,
+           @address = E.ADDRESS,
+           @salary_level = E.SALARY_LEVEL,
+           @supervisor_id = E.SUPERVISOR_ID,
+           @department_id = E.DEPARTMENT_ID,
+           @education_id = E.EDUCATION_ID,
+           @position_id = E.POSITION_ID,
+           @picture = E.IMAGE,
+           @level = E.LEVEL
+    FROM EMPLOYEES E
+    JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
+    WHERE E.EMPLOYEE_ID = @userId;
+
+    SELECT @employeeId AS EMPLOYEE_ID,
+           @fullname AS FULL_NAME,
+           @ethnicity AS ETHNICITY,
+           @date_of_birth AS DATE_OF_BIRTH,
+           @gender AS GENDER,
+           @address AS ADDRESS,
+           @salary_level AS SALARY_LEVEL,
+           @supervisor_id AS SUPERVISOR_ID,
+           @department_id AS DEPARTMENT_ID,
+           @education_id AS EDUCATION_ID,
+           @position_id AS POSITION_ID,
+           @picture AS PICTURE,
+           @level AS LEVEL;
+END
+GO
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 8a79a2e366668604ace3327f4d9c1345ea9e0933
 
 
 

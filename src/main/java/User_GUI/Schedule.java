@@ -79,7 +79,6 @@ public class Schedule extends JInternalFrame {
 			public void run() {
 				try {
 					Schedule frame = new Schedule();
-					
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

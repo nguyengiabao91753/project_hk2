@@ -138,7 +138,6 @@ public class EmployeeForm extends JInternalFrame {
 	private JButton btnNext;
 	private JButton btnLast;
 	private JTextField txtPage;
-	private JComboBox comboBox;
  
 
 
@@ -470,6 +469,7 @@ public class EmployeeForm extends JInternalFrame {
 		txtPage = new JTextField();
 		txtPage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				txtPageActionPerformed(e);
 			}
 		});
 		txtPage.setBackground(Color.LIGHT_GRAY);
@@ -479,16 +479,6 @@ public class EmployeeForm extends JInternalFrame {
 		txtPage.setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 0, 255)));
 		txtPage.setBounds(793, 497, 111, 20);
 		getContentPane().add(txtPage);
-		
-		comboBox = new JComboBox();
-		comboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				comboBoxActionPerformed(e);
-			}
-		});
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"10", "20", "25", "50"}));
-		comboBox.setBounds(793, 528, 111, 22);
-		getContentPane().add(comboBox);
 		loadEmployee();
 	}
 	
@@ -975,10 +965,7 @@ public class EmployeeForm extends JInternalFrame {
 		            JOptionPane.YES_NO_OPTION);
 		 
 		if (dialogResult == JOptionPane.YES_OPTION) {
-		        // Delete employee
-
-		        // Delete account
-			 Accounts accounts = new Accounts();
+			 	Accounts accounts = new Accounts();
 		        Employee emp = new Employee();
 		        Account acc = new Account();
 
@@ -1011,6 +998,13 @@ public class EmployeeForm extends JInternalFrame {
 	}
 	
 	private void deleteRow(ActionEvent e) {
+		String employeeName = txtFullName.getText(); 
+		int dialogResult = JOptionPane.showConfirmDialog(
+	            null,
+	            "Are you sure you want to delete employee '" + employeeName + "'?\nTheir account will also be deleted.",
+	            "Confirm Deletion",
+	            JOptionPane.YES_NO_OPTION);
+		
 		Employee emp = new Employee();
 		int rowindex = table.getSelectedRow();
 		emp.setId(
@@ -1018,10 +1012,20 @@ public class EmployeeForm extends JInternalFrame {
 						table.getValueAt( rowindex,0).toString()
 				)
 		);
-		EmployeeDAO dao = new EmployeeDAO();
-		dao.delete(emp);
-		
-		refresh();
+		if (dialogResult == JOptionPane.YES_OPTION) {
+			Accounts accounts = new Accounts();
+	        Account acc = new Account();
+
+	        acc.setId(accounts.getAccountId()); 
+
+	        AccountDAO accDao = new AccountDAO();
+	        EmployeeDAO empDao = new EmployeeDAO();
+
+	        accDao.deleteAccountAndEmployee(acc, emp);
+	        empDao.deleteEmployeeAndAccount(emp, acc);
+
+	        refresh();
+		}
 	}
 	
 	protected void btnFirstActionPerformed(ActionEvent e) {
@@ -1035,16 +1039,6 @@ public class EmployeeForm extends JInternalFrame {
 		pageNumber = totalPage.intValue();
 		txtPage.setText(pageNumber.toString());
 		refresh();
-	}
-	
-	
-	protected void comboBoxActionPerformed(ActionEvent e) {
-		if(table!=null) {
-			pageNumber =1 ;
-			txtPage.setText(pageNumber.toString());
-			rowOfPage = Integer.parseInt(comboBox.getSelectedItem().toString());
-			refresh();
-		}
 	}
 	
 	protected void txtPageActionPerformed(ActionEvent e) {

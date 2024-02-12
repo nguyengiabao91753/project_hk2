@@ -17,12 +17,17 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import User_GUI.Attendance;
 import User_GUI.Schedule;
+import User_GUI.UserLogin;
+import dao.AccountDAO;
+import dao.EmployeeDAO;
+import entity.Employee;
 
 import java.awt.SystemColor;
 
@@ -32,10 +37,9 @@ public class App_User extends JFrame {
 	private JPanel contentPane;
 	private JPanel panel;
 	private JLabel lblNewLabel;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_2;
-	private JLabel lblNewLabel_3;
-	private JLabel lblNewLabel_4;
+	private JLabel lblPicture;
+	private JLabel lblFullName;
+	private JLabel lblGender;
 	private JLabel lblNewLabel_5;
 	private JLabel lblNewLabel_6;
 	private JLabel lblNewLabel_7;
@@ -47,8 +51,27 @@ public class App_User extends JFrame {
 	private JLabel lblSalary;
 	private JLabel lblLocation;
 	Schedule schedule;
+
 	Attendance att;
+
+	UserLogin userLogin;
+	Employee emp;
+	private int xx, xy;
+
 	public JDesktopPane desktopPane;
+	private int userId;
+	
+
+
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
 	/**
 	 * Launch the application.
 	 */
@@ -69,8 +92,21 @@ public class App_User extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param userId2 
 	 */
 	public App_User() {
+		getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				thisContentPaneMouseDragged(e);
+			}
+		});
+		getContentPane().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				thisContentPaneMousePressed(e);
+			}
+		});
 		getContentPane().setBackground(new Color(255, 255, 255));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1180, 664);
@@ -85,7 +121,7 @@ public class App_User extends JFrame {
 		panel = new JPanel();
 		panel.setBackground(SystemColor.activeCaption);
 		panel.setBounds(0, 0, 1180, 239);
-		//getContentPane().add(panel);
+//		getContentPane().add(panel);
 		panel.setLayout(null);
 		
 		lblNewLabel = new JLabel("<html>\r\n\t<p style=\"font-size: 24px;color:white\">&#10006;</p>\r\n</html>");
@@ -99,30 +135,26 @@ public class App_User extends JFrame {
 		lblNewLabel.setBounds(1127, 11, 46, 27);
 		panel.add(lblNewLabel);
 		
-		lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-employee-16.png"));
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(41, 11, 147, 142);
-		panel.add(lblNewLabel_1);
+		lblPicture = new JLabel("");
+		lblPicture.setIcon(new ImageIcon("images\\icons8-employee-16.png"));
+		lblPicture.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPicture.setBounds(41, 47, 147, 142);
+		panel.add(lblPicture);
 		
-		lblNewLabel_2 = new JLabel("FULL NAME");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel_2.setBounds(198, 42, 242, 39);
-		panel.add(lblNewLabel_2);
+		lblFullName = new JLabel("Full Name");
+		lblFullName.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblFullName.setBounds(198, 66, 242, 39);
+		panel.add(lblFullName);
 		
-		lblNewLabel_3 = new JLabel("Gender");
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNewLabel_3.setBounds(198, 80, 93, 19);
-		panel.add(lblNewLabel_3);
-		
-		lblNewLabel_4 = new JLabel("Phone number");
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_4.setBounds(198, 110, 187, 26);
-		panel.add(lblNewLabel_4);
+		lblGender = new JLabel("Gender");
+		lblGender.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblGender.setBounds(198, 127, 93, 19);
+		panel.add(lblGender);
 		desktopPane.add(panel);
 		
 		lblNewLabel_5 = new JLabel("");
-		lblNewLabel_5.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-test-account-96.png"));
+		lblNewLabel_5.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblNewLabel_5.setIcon(new ImageIcon("images\\icons8-test-account-96.png"));
 		lblNewLabel_5.setBackground(new Color(255, 255, 255));
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_5.setBounds(357, 270, 132, 132);
@@ -136,7 +168,7 @@ public class App_User extends JFrame {
 				lblNewLabel_6MouseClicked(e);
 			}
 		});
-		lblNewLabel_6.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-schedule-96.png"));
+		lblNewLabel_6.setIcon(new ImageIcon("images\\icons8-schedule-96.png"));
 		lblNewLabel_6.setOpaque(true);
 		lblNewLabel_6.setBackground(new Color(255, 255, 255));
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
@@ -144,6 +176,7 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_6);
 		
 		lblNewLabel_7 = new JLabel("");
+
 		lblNewLabel_7.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblNewLabel_7.addMouseListener(new MouseAdapter() {
 			@Override
@@ -152,6 +185,9 @@ public class App_User extends JFrame {
 			}
 		});
 		lblNewLabel_7.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-attendance-96.png"));
+
+		lblNewLabel_7.setIcon(new ImageIcon("images\\icons8-attendance-96.png"));
+
 		lblNewLabel_7.setOpaque(true);
 		lblNewLabel_7.setBackground(new Color(255, 255, 255));
 		lblNewLabel_7.setHorizontalAlignment(SwingConstants.CENTER);
@@ -159,7 +195,7 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_7);
 		
 		lblNewLabel_9 = new JLabel("");
-		lblNewLabel_9.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-salary-96.png"));
+		lblNewLabel_9.setIcon(new ImageIcon("images\\icons8-salary-96.png"));
 		lblNewLabel_9.setOpaque(true);
 		lblNewLabel_9.setBackground(new Color(255, 255, 255));
 		lblNewLabel_9.setHorizontalAlignment(SwingConstants.CENTER);
@@ -167,7 +203,7 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_9);
 		
 		lblNewLabel_8 = new JLabel("");
-		lblNewLabel_8.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-address-96.png"));
+		lblNewLabel_8.setIcon(new ImageIcon("images\\icons8-address-96.png"));
 		lblNewLabel_8.setOpaque(true);
 		lblNewLabel_8.setBackground(new Color(255, 255, 255));
 		lblNewLabel_8.setHorizontalAlignment(SwingConstants.CENTER);
@@ -222,9 +258,7 @@ public class App_User extends JFrame {
 		lblLocation.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblLocation.setBounds(618, 576, 98, 31);
 		desktopPane.add(lblLocation);
-		
-		
-		
+		displayUserInfo(userId);
 	}
 	protected void lblNewLabelMouseClicked(MouseEvent e) {
 		System.exit(0);
@@ -260,6 +294,7 @@ public class App_User extends JFrame {
 			//this.setVisible(false);
 		}
 	}
+
 	protected void lblNewLabel_7MouseClicked(MouseEvent e) {
 		if(att == null || att.isClosed()) {
 			att = new Attendance();
@@ -289,6 +324,29 @@ public class App_User extends JFrame {
 			
 			//this.setVisible(false);
 		}
+	}
+
+	protected void thisContentPaneMousePressed(MouseEvent e) {
+		xx = e.getX();
+        xy = e.getY();
+	}
+	protected void thisContentPaneMouseDragged(MouseEvent e) {
+		int x = e.getXOnScreen();
+        int y = e.getYOnScreen();
+        App_User.this.setLocation(x - xx, y - xy);
+	}
+	private void displayUserInfo(int userId) {
+	    EmployeeDAO dao = new EmployeeDAO();
+	    Employee emp = dao.getUserById(userId);
+
+	    if (emp != null) {
+
+	        lblFullName.setText(emp.getFull_name());
+	        lblGender.setText(emp.getGender());
+	    } else {
+	    	
+	    }
+
 	}
 }
 
