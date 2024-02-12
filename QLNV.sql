@@ -353,8 +353,7 @@ BEGIN
 END
 GO
 
-Drop proc getAccount
-go
+
 
 CREATE PROC getAccount
 @pageNumber INT , @rowOfPage INT
@@ -403,8 +402,7 @@ BEGIN
 	VALUES(@fullname, @ethnicity, @date_of_birth, @gender,@address,@salary_level,@supervisor_id,@department_id,@education_id,@position_id,@picture,@level)
 END
 GO
-Drop proc insertEmployee
-go
+
 
 CREATE PROC deleteEmployee
 @id int
@@ -649,8 +647,7 @@ BEGIN
     WHERE ACCOUNT_ID = @id;
 END;
 
-drop proc deleteEmployeeAndAccount
-go
+
 
 DBCC CHECKIDENT ('EMPLOYEES', RESEED, 4);
 DBCC CHECKIDENT ('ACCOUNTS', RESEED, 5);
