@@ -258,7 +258,7 @@ public class App_User extends JFrame {
 		lblLocation.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblLocation.setBounds(618, 576, 98, 31);
 		desktopPane.add(lblLocation);
-		displayUserInfo(userId);
+		displayUserInfo();
 	}
 	protected void lblNewLabelMouseClicked(MouseEvent e) {
 		System.exit(0);
@@ -335,9 +335,9 @@ public class App_User extends JFrame {
         int y = e.getYOnScreen();
         App_User.this.setLocation(x - xx, y - xy);
 	}
-	private void displayUserInfo(int userId) {
+	private void displayUserInfo() {
 	    EmployeeDAO dao = new EmployeeDAO();
-	    Employee emp = dao.getUserById(userId);
+	    Employee emp = dao.getUserById(UserLogin.getUserId());
 
 	    if (emp != null) {
 

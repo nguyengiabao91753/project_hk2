@@ -36,10 +36,6 @@ CREATE TABLE ACCOUNTS
 );
 GO
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 8a79a2e366668604ace3327f4d9c1345ea9e0933
 
 CREATE TABLE DEPARTMENTS
 (
@@ -222,7 +218,7 @@ GO
 
 INSERT INTO POSITIONS (POSITION_NAME)
 VALUES 
-   ('Doctor'),
+	('Doctor'),
     ('Nurse'),
     ('Surgeon'),
     ('Radiologist'), --BS X QUANG
@@ -321,23 +317,26 @@ VALUES
     ('Afternoon Shift', '16:00', '00:00');
 GO
 
- INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE)
-VALUES 
-    ('John Doe', 'Asian', '1990-05-15', 'Male', '123 Main Street, Cityville', 3, NULL, 5, 7, 4,'images/image1.png'),
-    ('Jane Smith', 'Caucasian', '1985-08-22', 'Female', '456 Oak Avenue, Townsville', 4, NULL, 5, 8, 5,'images/image1.png');
+ 
+ INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE, LEVEL)
+VALUES ('Boss', 'Asian', '1990-05-15', 'Male', '123 Main Street', 1, NuLL, 1, 1, 1, null, 'Admin');
+GO
+
+INSERT INTO ACCOUNTS (USERNAME, PASSWORD, STATUS)
+VALUES ('Admin', 'Admin12345', 1);
 GO
 
 
-INSERT INTO WORK_SCHEDULES(EMPLOYEE_ID, SHIFT_ID, ROOM_ID, WORK_DATE)
-VALUES
-	(1,1,1,'2024-01-07'),
-	(2,2,2,'2024-01-06');
-GO 10
+--INSERT INTO WORK_SCHEDULES(EMPLOYEE_ID, SHIFT_ID, ROOM_ID, WORK_DATE)
+--VALUES
+--	(1,1,1,'2024-01-07'),
+--	(2,2,2,'2024-01-06');
+--GO 
 
-INSERT INTO ATTENDANCES(WORKSCHEDULE_ID,PRESENT,ARRIVAL_TIME , DEPARTURE_TIME ,LEAVE_TYPE)
-VALUES
-(1,'True', '04:00', '12:00',NULL)
-GO
+--INSERT INTO ATTENDANCES(WORKSCHEDULE_ID,PRESENT,ARRIVAL_TIME , DEPARTURE_TIME ,LEAVE_TYPE)
+--VALUES
+--(1,'True', '04:00', '12:00',NULL)
+--GO
 
 CREATE PROC getAllAccount
 AS
@@ -393,8 +392,7 @@ BEGIN
 	VALUES(@fullname, @ethnicity, @date_of_birth, @gender,@address,@salary_level,@supervisor_id,@department_id,@education_id,@position_id,@picture,@level)
 END
 GO
-Drop proc insertEmployee
-go
+
 
 CREATE PROC deleteEmployee
 @id int
@@ -637,10 +635,10 @@ BEGIN
     UPDATE ACCOUNTS
     SET Status = 0
     WHERE ACCOUNT_ID = @id;
-END;
-
-drop proc deleteEmployeeAndAccount
+END
 go
+
+
 
 DBCC CHECKIDENT ('EMPLOYEES', RESEED, 4);
 DBCC CHECKIDENT ('ACCOUNTS', RESEED, 5);
@@ -670,8 +668,7 @@ BEGIN
     COMMIT;
 END;
 GO
-<<<<<<< HEAD
-=======
+
 
 CREATE PROC CheckUsernameExists
     @username VARCHAR(255)
@@ -683,11 +680,12 @@ BEGIN
         SELECT 1 AS UsernameExists;
     ELSE
         SELECT 0 AS UsernameExists;
-END;
+END
+GO
 
 
 --Login 
-CREATE PROCEDURE LoginAdmin
+CREATE PROC LoginAdmin
     @username VARCHAR(50),
     @password VARCHAR(50)
 AS
@@ -824,9 +822,6 @@ GO
 
 
 
->>>>>>> 8a79a2e366668604ace3327f4d9c1345ea9e0933
-
-
 
 
 
@@ -861,7 +856,7 @@ GO
 
 --TRIGGER
 -- Tạo stored procedure
-ALTER PROCEDURE DailyInsertAtt
+CREATE PROCEDURE DailyInsertAtt
 AS
 BEGIN
     DECLARE @target_date DATE;
@@ -883,12 +878,12 @@ BEGIN
         INSERT INTO ATTENDANCES ( WORKSCHEDULE_ID,PRESENT, ARRIVAL_TIME, DEPARTURE_TIME, LEAVE_TYPE)
         VALUES (@work_id_to_insert, 'False', NULL, NULL, 'WP');
     END
-END;
+END
 GO
 
-EXEC DailyInsertAtt;
+--EXEC DailyInsertAtt;
 
-SELECT* FROM ATTENDANCES
+--SELECT* FROM ATTENDANCES
 
 
 

@@ -77,6 +77,7 @@ public class UserLogin extends JFrame {
 				try {
 					UserLogin frame = new UserLogin();
 					frame.setUndecorated(true);
+					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -309,6 +310,7 @@ public class UserLogin extends JFrame {
 	        App_User app = new App_User();
 	        app.setUndecorated(true);
 	        app.setVisible(true);
+	        app.setLocationRelativeTo(null);
 	        app.setUserId(userId);
 	    } else {
 	        JOptionPane.showMessageDialog(null, loginMessage);

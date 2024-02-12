@@ -443,10 +443,10 @@ public class Addemployee extends JInternalFrame {
 	            break;
 	        }
 	    }
-
+	    //|| cbxSupervisorId.getSelectedItem() == null
 	    if (txtFullName.getText().isEmpty() || txtEthnicity.getText().isEmpty() || 
 	    	    dateChooser.getDate() == null || cbxGender.getSelectedItem() == null || 
-	    	    cbxLevel.getSelectedItem() == null || cbxSupervisorId.getSelectedItem() == null ||
+	    	    cbxLevel.getSelectedItem() == null  ||
 	    	    cbxDepartmentId.getSelectedItem() == null || cbxEducationId.getSelectedItem() == null || 
 	    	    cbxPositionId.getSelectedItem() == null || txtAddress.getText().isEmpty() || 
 	    	    lblPicture.getIcon() == null) {
@@ -485,7 +485,7 @@ public class Addemployee extends JInternalFrame {
 			emp.setAddress(txtAddress.getText());
 			emp.setSalary_level(cbxSalaryId.getSelectedIndex()+1);
 			emp.setSupervisor_id(cbxSupervisorId.getSelectedIndex()+1);
-			emp.setDepartment_id(cbxSupervisorId.getSelectedIndex()+1);
+			emp.setDepartment_id(cbxDepartmentId.getSelectedIndex()+1);
 			emp.setEducation_id(cbxEducationId.getSelectedIndex()+1);
 			emp.setPosition_id(cbxPositionId.getSelectedIndex()+1);
 			

@@ -67,6 +67,7 @@ public class AdminLogin extends JFrame {
 			public void run() {
 				try {
 					AdminLogin frame = new AdminLogin();
+					frame.setLocationRelativeTo(null);
 					frame.setUndecorated(true);
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -238,6 +239,7 @@ public class AdminLogin extends JFrame {
 	    if (loginMessage.equals("Login successful.")) {
 	        dispose(); 
 	        app.setUndecorated(true);
+	        app.setLocationRelativeTo(null);
 	        app.setVisible(true);
 	    } else {
 	        JOptionPane.showMessageDialog(null, loginMessage);
