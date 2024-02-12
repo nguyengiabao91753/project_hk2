@@ -768,8 +768,8 @@ BEGIN
 END
 GO
 
---Get User ID
-CREATE PROCEDURE GetUserById
+--Get ID User
+CREATE PROCEDURE GetId
     @username VARCHAR(50)
 AS
 BEGIN
@@ -777,14 +777,64 @@ BEGIN
     
     DECLARE @employeeId INT;
 
+    -- Lấy employee_id từ bảng ACCOUNTS dựa trên username
     SELECT @employeeId = E.EMPLOYEE_ID
     FROM EMPLOYEES E
     JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
     WHERE A.USERNAME = @username;
 
+    -- Trả về employee_id
     SELECT @employeeId AS EMPLOYEE_ID;
 END
-go
+GO
+
+--Get User by ID
+CREATE PROCEDURE GetUserById
+    @userId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DECLARE @employeeId INT , @fullname NVARCHAR(50), @ethnicity NVARCHAR(50), @date_of_birth DATE, @gender NVARCHAR(10),@address NVARCHAR(100),@salary_level INT,@supervisor_id INT,@department_id INT,@education_id INT,@position_id INT,@picture VARCHAR(255),@level VARCHAR(50);
+
+    SELECT @employeeId = E.EMPLOYEE_ID,
+           @fullname = E.FULL_NAME,
+           @ethnicity = E.ETHNICITY,
+           @date_of_birth = E.DATE_OF_BIRTH,
+           @gender = E.GENDER,
+           @address = E.ADDRESS,
+           @salary_level = E.SALARY_LEVEL,
+           @supervisor_id = E.SUPERVISOR_ID,
+           @department_id = E.DEPARTMENT_ID,
+           @education_id = E.EDUCATION_ID,
+           @position_id = E.POSITION_ID,
+           @picture = E.IMAGE,
+           @level = E.LEVEL
+    FROM EMPLOYEES E
+    JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
+    WHERE E.EMPLOYEE_ID = @userId;
+
+    SELECT @employeeId AS EMPLOYEE_ID,
+           @fullname AS FULL_NAME,
+           @ethnicity AS ETHNICITY,
+           @date_of_birth AS DATE_OF_BIRTH,
+           @gender AS GENDER,
+           @address AS ADDRESS,
+           @salary_level AS SALARY_LEVEL,
+           @supervisor_id AS SUPERVISOR_ID,
+           @department_id AS DEPARTMENT_ID,
+           @education_id AS EDUCATION_ID,
+           @position_id AS POSITION_ID,
+           @picture AS PICTURE,
+           @level AS LEVEL;
+END
+GO
+
+
+
+
+
+
 
 
 

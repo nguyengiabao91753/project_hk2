@@ -10,6 +10,7 @@ import App.App_Admin;
 import App.App_User;
 import dao.AccountDAO;
 import entity.Account;
+import entity.Employee;
 
 import java.awt.Color;
 import javax.swing.UIManager;
@@ -56,7 +57,10 @@ public class UserLogin extends JFrame {
 	private JTextField txtUsername;
 	private JPasswordField txtPassword;
 	private JLabel lblShow;
-	App_User app = new App_User();
+	private static int userId;
+	public static void setUserId(int id) {
+        userId = id;
+    }
 
 	/**
 	 * Launch the application.
@@ -296,13 +300,12 @@ public class UserLogin extends JFrame {
 	    String loginMessage = dao.login(acc);
 
 	    if (loginMessage.equals("Login successful.")) {
-	    	int userId = dao.getUserId(username);
-	    	//Debug for getting user ID
-	    	System.out.println("User ID: " + userId);
-	    	
+	    	int userId = dao.getUserId(username); 
 	        dispose();
+	        App_User app = new App_User();
 	        app.setUndecorated(true);
 	        app.setVisible(true);
+	        app.setUserId(userId);
 	    } else {
 	        JOptionPane.showMessageDialog(null, loginMessage);
 	    }

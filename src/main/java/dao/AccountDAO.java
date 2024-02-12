@@ -6,7 +6,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -204,25 +206,27 @@ public class AccountDAO {
 	        return "Login failed";
 	}
 	
-	public int getUserId(String username) {
-        int userId = -1; 
-        
-        try (Connection con = DBCon.getConnection();
-             CallableStatement cs = con.prepareCall("{call GetUserById(?)}")) {
-            
-            cs.setString(1, username);
-            
-            try (ResultSet rs = cs.executeQuery()) {
-                if (rs.next()) {
-                    userId = rs.getInt("employee_id"); 
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        
-        return userId;
-    }
+	//Get ID User
+	public int getUserId(String username) { 
+	    int userId = -1; 
+	    try (Connection con = DBCon.getConnection();
+	         CallableStatement cs = con.prepareCall("{call GetId(?)}")) {
+	        
+	        cs.setString(1, username);
+	        
+	        try (ResultSet rs = cs.executeQuery()) {
+	            if (rs.next()) {
+	                userId = rs.getInt("EMPLOYEE_ID"); 
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return userId;
+	}
+
+
 }
 
 
