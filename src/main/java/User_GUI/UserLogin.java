@@ -307,11 +307,13 @@ public class UserLogin extends JFrame {
 	    if (loginMessage.equals("Login successful.")) {
 	    	 userId = dao.getUserId(username); 
 	        dispose();
+//	    	this.setVisible(false);
 	        App_User app = new App_User();
 	        app.setUndecorated(true);
-	        app.setVisible(true);
 	        app.setLocationRelativeTo(null);
-	        app.setUserId(userId);
+	        app.setVisible(true);
+	        //App_User.main(null);
+	        
 	    } else {
 	        JOptionPane.showMessageDialog(null, loginMessage);
 	    }

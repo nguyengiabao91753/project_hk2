@@ -92,7 +92,7 @@ public class App_User extends JFrame {
 
 	/**
 	 * Create the frame.
-	 * @param userId2 
+	 *  
 	 */
 	public App_User() {
 		getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
