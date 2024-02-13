@@ -305,7 +305,7 @@ public class UserLogin extends JFrame {
 	    String loginMessage = dao.login(acc);
 
 	    if (loginMessage.equals("Login successful.")) {
-	    	 userId = dao.getUserId(username); 
+	    	userId = dao.getUserId(username); 
 	        dispose();
 	        App_User app = new App_User();
 	        app.setUndecorated(true);

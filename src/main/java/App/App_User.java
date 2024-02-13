@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -60,6 +61,8 @@ public class App_User extends JFrame {
 
 	public JDesktopPane desktopPane;
 	private int userId;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_2;
 	
 
 
@@ -138,19 +141,31 @@ public class App_User extends JFrame {
 		lblPicture = new JLabel("");
 		lblPicture.setIcon(new ImageIcon("images\\icons8-employee-16.png"));
 		lblPicture.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPicture.setBounds(41, 47, 147, 142);
+		lblPicture.setBounds(41, 25, 147, 164);
 		panel.add(lblPicture);
 		
 		lblFullName = new JLabel("Full Name");
+		lblFullName.setForeground(new Color(255, 255, 255));
 		lblFullName.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblFullName.setBounds(198, 66, 242, 39);
+		lblFullName.setBounds(198, 69, 242, 19);
 		panel.add(lblFullName);
 		
 		lblGender = new JLabel("Gender");
-		lblGender.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblGender.setBounds(198, 127, 93, 19);
+		lblGender.setForeground(new Color(255, 255, 255));
+		lblGender.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblGender.setBounds(198, 170, 93, 19);
 		panel.add(lblGender);
 		desktopPane.add(panel);
+		
+		lblNewLabel_1 = new JLabel("FULL NAME");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
+		lblNewLabel_1.setBounds(198, 25, 154, 38);
+		panel.add(lblNewLabel_1);
+		
+		lblNewLabel_2 = new JLabel("GENDER");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
+		lblNewLabel_2.setBounds(198, 132, 125, 27);
+		panel.add(lblNewLabel_2);
 		
 		lblNewLabel_5 = new JLabel("");
 		lblNewLabel_5.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -340,11 +355,15 @@ public class App_User extends JFrame {
 	    Employee emp = dao.getUserById(UserLogin.getUserId());
 
 	    if (emp != null) {
-
 	        lblFullName.setText(emp.getFull_name());
 	        lblGender.setText(emp.getGender());
+	        ImageIcon icon = new ImageIcon(emp.getPicture());
+	        Image image = icon.getImage();
+            Image scaledImage = image.getScaledInstance(lblPicture.getWidth(), lblPicture.getHeight(), Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+            lblPicture.setIcon(scaledIcon);
 	    } else {
-	    	
+	    	JOptionPane.showMessageDialog(this, "User information not found!");
 	    }
 
 	}
