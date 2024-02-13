@@ -19,6 +19,7 @@ import Gui.Manage_Departments;
 
 import Gui.EmployeeForm;
 import Gui.Job_Position;
+import Gui.Statistical;
 import Gui.Accounts;
 import Gui.Atiendances;
 
@@ -32,7 +33,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+import javax.swing.ImageIcon;	
 
 import javax.swing.ImageIcon;
 import java.awt.Cursor;
@@ -88,6 +89,8 @@ public class App_Admin extends JFrame {
 	private JPanel panelPos;
 	Accounts acc;
 	Addemployee aemp;
+	Statistical sta;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -524,6 +527,18 @@ public class App_Admin extends JFrame {
 			dep.setApp(this);
 			dep.show();
 		}
+	}	public void openPosition() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+        for (JInternalFrame frame : frames) {
+            frame.doDefaultCloseAction();
+        }
+		if(Pos == null || Pos.isClosed()) {
+			Pos = new Job_Position() ;
+			Pos.setBounds(0,0,957,626);
+			desktopPane.add(Pos);
+			Pos.setApp(this);
+			Pos.show();
+		}
 	}
 	public void openAttendance() {
 		JInternalFrame[] frames = desktopPane.getAllFrames();
@@ -537,6 +552,20 @@ public class App_Admin extends JFrame {
 			desktopPane.add(attendance);
 			attendance.show();
 		}
+	}
+	
+	public void openStatistical() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+        for (JInternalFrame frame : frames) {
+            frame.doDefaultCloseAction();
+        }
+        if(sta == null || sta.isClosed()) {
+        	sta = new Statistical();
+        	sta.setBounds(0,0,957,626);
+        	
+        	desktopPane.add(sta);
+        	sta.show();
+        }
 	}
 	
 	protected void lblClose(MouseEvent e) {
@@ -566,6 +595,7 @@ public class App_Admin extends JFrame {
 				panelPos.setVisible(false);
 			}
 			opensidebar();
+			openStatistical();
 			
 		} catch (Exception e2) {
 			// TODO: handle exception
@@ -771,6 +801,7 @@ public class App_Admin extends JFrame {
 			}
 			opensidebar();
 			openPos();
+			openPosition();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -795,7 +826,7 @@ public class App_Admin extends JFrame {
 	        femp = new EmployeeForm();
 	        femp.setBounds(0, 0, 957, 627);
 	        desktopPane.add(femp);
-	        femp.setApp(this);
+	        femp.setApp(this);	
 	        femp.show();
 	    }
 		
@@ -814,6 +845,6 @@ public class App_Admin extends JFrame {
 	        desktopPane.add(acc);
 	        acc.setApp(this);
 	        acc.show();
-	    }
+	    }	
 	}
 }

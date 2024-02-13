@@ -24,12 +24,18 @@ import dao.Manage_DepartmentsDAO;
 import dao.EducationDAO;
 import dao.EmployeeDAO;
 import dao.PositionDAO;
+import dao.RoomDAO;
 import dao.SalaryDAO;
+import dao.ShiftDAO;
+import dao.WorkscheduleDAO;
 import entity.Department;
 import entity.Education;
 import entity.Employee;
 import entity.Position;
+import entity.Room;
 import entity.Salary;
+import entity.Shift;
+import entity.Workschedule;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -40,6 +46,7 @@ import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -87,6 +94,7 @@ public class Addemployee extends JInternalFrame {
 	private JComboBox cbxPositionId;
 	private static Addemployee instance;
 	private App_Admin app;
+	private Employee emp;
 	
 	SalaryDAO salaryDao = new SalaryDAO();
 	EmployeeDAO employeeDao = new EmployeeDAO();
@@ -98,7 +106,8 @@ public class Addemployee extends JInternalFrame {
 	private String fileOld = null;
 	private String dirNew = null;
 	private String dirOld = null;
-	private JTextField txtSalary;
+	private JButton btnNewButton;
+	private JComboBox cbxSalaryId;
 	/**
 	 * Launch the application.
 	 */
@@ -106,6 +115,7 @@ public class Addemployee extends JInternalFrame {
 	public void setApp(App_Admin app) {
 		this.app = app;
 	}
+	
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -168,14 +178,18 @@ public class Addemployee extends JInternalFrame {
 		lblEmployee = new JLabel("Employee");
 		lblEmployee.setForeground(Color.WHITE);
 		lblEmployee.setFont(new Font("Tahoma", Font.PLAIN, 23));
-		lblEmployee.setBounds(10, 18, 171, 25);
+		lblEmployee.setBounds(114, 18, 171, 25);
 		panel.add(lblEmployee);
 		
 		lblNewLabel_2 = new JLabel("-Create");
 		lblNewLabel_2.setForeground(Color.WHITE);
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblNewLabel_2.setBounds(126, 18, 63, 14);
+		lblNewLabel_2.setBounds(222, 18, 63, 14);
 		panel.add(lblNewLabel_2);
+		
+		btnNewButton = new JButton("New button");
+		btnNewButton.setBounds(0, 20, 89, 23);
+		panel.add(btnNewButton);
 		
 		lblName = new JLabel("Full name :");
 		lblName.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -319,10 +333,9 @@ public class Addemployee extends JInternalFrame {
 		cbxPositionId.setBounds(151, 383, 278, 22);
 		getContentPane().add(cbxPositionId);
 		
-		txtSalary = new JTextField();
-		txtSalary.setBounds(151, 260, 278, 20);
-		getContentPane().add(txtSalary);
-		txtSalary.setColumns(10);
+		cbxSalaryId = new JComboBox();
+		cbxSalaryId.setBounds(151, 259, 278, 22);
+		getContentPane().add(cbxSalaryId);
 		loadcbx();
 	}
 	
@@ -340,73 +353,181 @@ public class Addemployee extends JInternalFrame {
 		List<Position> listPosition = positionDao.selectAllPosition();
 		
 		
-		listSalary.forEach(salary -> salaryModel.addElement(salary.getId()));
+		listSalary.forEach(salary -> salaryModel.addElement(salary.getBase_salary()));
 		listSupervisor.forEach(emp -> supervisorModel.addElement(emp.getId()));
 		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_id()));
 		listEducation.forEach(edu -> educationModel.addElement(edu.getId()));
 		listPosition.forEach(pos -> positionModel.addElement(pos.getPosition_id()));
+		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_name()));
+		listEducation.forEach(edu -> educationModel.addElement(edu.getDegree_name()));
+		listPosition.forEach(pos -> positionModel.addElement(pos.getPosition_name()));
+		
+		cbxSalaryId.setModel(salaryModel);
 		cbxSupervisorId.setModel(supervisorModel);
 		cbxDepartmentId.setModel(departmentModel);
 		cbxEducationId.setModel(educationModel);
 		cbxPositionId.setModel(positionModel);
 	}
+	
 	protected void lblCloseMouseClicked(MouseEvent e) {
 		this.setVisible(false);
 	}
-	protected void btnCreateActionPerformed(ActionEvent e) {
-		Employee emp = new Employee();
-		emp.setFull_name(txtFullName.getText());
-		emp.setEthnicity(txtEthnicity.getText());
-		emp.setDate_of_birth(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()));
-		emp.setGender(cbxGender.getSelectedItem().toString());
-		emp.setAddress(txtAddress.getText());
-		emp.setSalary_level(Integer.parseInt(txtSalary.getText()));
-		emp.setSupervisor_id(cbxSupervisorId.getSelectedIndex()+1);
-		emp.setDepartment_id(cbxSupervisorId.getSelectedIndex()+1);
-		emp.setEducation_id(cbxEducationId.getSelectedIndex()+1);
-		emp.setPosition_id(cbxPositionId.getSelectedIndex()+1);
-		
-		if(fileName != null) {
-			dirNew = System.getProperty("user.dir") + "\\images";
-			Path pathOld = Paths.get(dirOld);
-			Path pathNew = Paths.get(dirNew);
 	
-			try {
-				Files.copy(
-						pathOld, 
-						pathNew.resolve(fileName),
-						StandardCopyOption.REPLACE_EXISTING
-				);
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-			emp.setPicture("images/" + fileName);
-		}else {
-			emp.setPicture(fileOld);
-		}
-		
-		emp.setLevel(cbxLevel.getSelectedItem().toString());
-		
-		var employeeDao = new EmployeeDAO();
-//		if(employeeDao.insert(emp)) {
-//			JOptionPane.showMessageDialog(null, "Add successfully!");
-//			var employeeInform = new EmployeeForm();
-//			employeeInform.setVisible(true);
-//			var app = new App_Admin();
-//			app.desktopPane.add(employeeInform);
-//			this.hide();
-//		}else {
-//			JOptionPane.showMessageDialog(null, "Add Fail!");
-//		}
-		
-		Addaccount add = Addaccount.getInstance();
+	private boolean areImagePathsEqual(String path1, String path2) {
+	    if (path1 == null || path2 == null) {
+	        return false;
+	    }
 
-        if (!add.isVisible()) {
-            add.setVisible(true);
-            app.desktopPane.add(add);
-            add.toFront();
-            this.hide();
-        }
+	    File file1 = new File(path1);
+	    File file2 = new File(path2);
+
+	    try {
+	        String canonicalPath1 = file1.getCanonicalPath().toLowerCase();
+	        String canonicalPath2 = file2.getCanonicalPath().toLowerCase();
+
+	        return canonicalPath1.equals(canonicalPath2);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+	
+	public int validateAddEmployee() {
+	    int count = 0;
+	    int salary_level = 0;
+	    int supervisor_id = 0;
+	    int department_id = 0;
+	    int education_id = 0;
+	    int position_id = 0;
+
+	    SalaryDAO salaryDao = new SalaryDAO();
+	    EmployeeDAO employeeDao = new EmployeeDAO();
+	    Manage_DepartmentsDAO departmentDao = new Manage_DepartmentsDAO();
+	    EducationDAO educationDao = new EducationDAO();
+	    PositionDAO positionDao = new PositionDAO();
+
+	    List<Salary> listSalary = salaryDao.selectAllSalary();
+	    List<Employee> listSupervisor = employeeDao.selectAllEmployee();
+	    List<Department> listDepartment = departmentDao.selectAllDepartment();
+	    List<Education> listEducation = educationDao.selectAllEducation();
+	    List<Position> listPosition = positionDao.selectAllPosition();
+
+	    for (Salary sal : listSalary) {
+	        if (sal.toString().equals(cbxSalaryId.getSelectedItem())) {
+	            salary_level = sal.getId();
+	            break;
+	        }
+	    }
+
+	    for (Employee emp : listSupervisor) {
+	        if (emp.toString().equals(cbxSupervisorId.getSelectedItem())) {
+	            supervisor_id = emp.getId();
+	            break;
+	        }
+	    }
+	    
+	    for (Department dep : listDepartment) {
+	        if (dep.toString().equals(cbxDepartmentId.getSelectedItem())) {
+	            department_id = dep.getDepartment_id();
+	            break;
+	        }
+	    }
+
+	    for (Education edu : listEducation) {
+	        if (edu.toString().equals(cbxEducationId.getSelectedItem())) {
+	            education_id = edu.getId();
+	            break;
+	        }
+	    }
+
+	    for (Position pos : listPosition) {
+	        if (pos.toString().equals(cbxPositionId.getSelectedItem())) {
+	            position_id = pos.getPosition_id();
+	            break;
+	        }
+	    }
+
+	    if (txtFullName.getText().isEmpty() || txtEthnicity.getText().isEmpty() || 
+	    	    dateChooser.getDate() == null || cbxGender.getSelectedItem() == null || 
+	    	    cbxLevel.getSelectedItem() == null || cbxSupervisorId.getSelectedItem() == null ||
+	    	    cbxDepartmentId.getSelectedItem() == null || cbxEducationId.getSelectedItem() == null || 
+	    	    cbxPositionId.getSelectedItem() == null || txtAddress.getText().isEmpty() || 
+	    	    lblPicture.getIcon() == null) {
+	    	    JOptionPane.showMessageDialog(null, "Please fill in all information");
+	    	    count++;
+	    	}
+	    return count;
+	}
+	
+	private boolean validatePicture(String newImagePath) {
+		 int columnToCompare = 12; 
+		    int rowCount = EmployeeForm.getTable().getRowCount();
+
+		    for (int row = 0; row < rowCount; row++) {
+		        String lblPicturePath = (String) EmployeeForm.getTable().getValueAt(row, columnToCompare);
+		        System.out.println("lblPicturePath at row " + row + ": " + lblPicturePath);
+
+		        if (areImagePathsEqual(lblPicturePath, newImagePath)) {
+		            JOptionPane.showMessageDialog(null, "This picture is already exists");
+		            return false; 
+		        }
+		    }
+
+		    return true; 
+	}
+	
+	protected void btnCreateActionPerformed(ActionEvent e) {
+		if(validateAddEmployee() !=0) {
+			return;
+		}else {
+			Employee emp = new Employee();
+			emp.setFull_name(txtFullName.getText());
+			emp.setEthnicity(txtEthnicity.getText());
+			emp.setDate_of_birth(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()));
+			emp.setGender(cbxGender.getSelectedItem().toString());
+			emp.setAddress(txtAddress.getText());
+			emp.setSalary_level(cbxSalaryId.getSelectedIndex()+1);
+			emp.setSupervisor_id(cbxSupervisorId.getSelectedIndex()+1);
+			emp.setDepartment_id(cbxSupervisorId.getSelectedIndex()+1);
+			emp.setEducation_id(cbxEducationId.getSelectedIndex()+1);
+			emp.setPosition_id(cbxPositionId.getSelectedIndex()+1);
+			
+			if(fileName != null) {
+				dirNew = System.getProperty("user.dir") + "\\images";
+				Path pathOld = Paths.get(dirOld);
+				Path pathNew = Paths.get(dirNew);
+		
+				try {
+					Files.copy(
+							pathOld, 
+							pathNew.resolve(fileName),
+							StandardCopyOption.REPLACE_EXISTING
+					);
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+				emp.setPicture("images/" + fileName);
+				if (!validatePicture("images/" + fileName)) {
+		               return;
+		           }
+				
+			}else {
+				emp.setPicture(fileOld);
+			}
+			
+			emp.setLevel(cbxLevel.getSelectedItem().toString());
+			
+			var employeeDao = new EmployeeDAO();
+			
+			Addaccount add = Addaccount.getInstance();
+			add.setEmp(emp);
+	        if (!add.isVisible()) {
+	            add.setVisible(true);
+	            app.desktopPane.add(add);
+	            add.toFront();
+	            this.hide();
+	        }
+		}
 		
 	}
 
@@ -436,6 +557,4 @@ public class Addemployee extends JInternalFrame {
 			);
 		}
 	}
-
-		
 }

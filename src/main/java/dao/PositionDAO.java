@@ -15,13 +15,13 @@ import entity.Position;
 import entity.Salary;
 
 public class PositionDAO {
-	public List<Position> getPosition(Integer pageNumber, Integer rowOfPage) {
+	public List<Position> getPosition(Integer pageNumber, Integer rowsOfPage) {
 		List<Position> list = new ArrayList<>();
 		try(Connection con = DBCon.getConnection();
 				CallableStatement cs =  con.prepareCall("{call getPosition(?,?)}");
 				) {
 				cs.setInt(1, pageNumber);
-				cs.setInt(2, rowOfPage);
+				cs.setInt(2, rowsOfPage);
 				ResultSet rs = cs.executeQuery();
 				while(rs.next()) {
 					//lấy dữ liệu 
@@ -72,7 +72,7 @@ public class PositionDAO {
 		}
 		return count;
 	}
-	public void insert(Position Pos) {
+	public boolean insert(Position Pos) {
 		try(
 				var con = DBCon.getConnection();
 				var cs = con.prepareCall("{call insertPos(?)}");
@@ -83,6 +83,7 @@ public class PositionDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return false;
 		
 	}
 	

@@ -20,7 +20,10 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import App.App_Admin;
 import dao.AccountDAO;
+import dao.EmployeeDAO;
 import entity.Account;
+import entity.Employee;
+
 import java.awt.Color;
 import java.awt.Component;
 
@@ -34,6 +37,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.JPasswordField;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.Cursor;
 
 public class Accounts extends JInternalFrame {
 
@@ -44,7 +50,7 @@ public class Accounts extends JInternalFrame {
 	private JLabel lblAccountId;
 	private JLabel lblUsername;
 	private JLabel lblPassword;
-	private JTextField txtAccountId;
+	private static JTextField txtAccountId;
 	private JTextField txtUsername;
 	private JScrollPane scrollPane;
 	private JTable table;
@@ -59,9 +65,29 @@ public class Accounts extends JInternalFrame {
 	private JTextField txtSearch;
 	AccountDAO accountDao = new AccountDAO();
 	private JPasswordField txtPassword;
+	private JLabel lblStatus;
+	private JComboBox cbxStatus;
 	/**
 	 * Launch the application.
 	 */
+	
+	public int getAccountId() {
+		String accountIdText = txtAccountId.getText().trim();
+
+	    if (accountIdText.isEmpty()) {
+	        return -1; 
+	    }
+
+	    try {
+	        return Integer.parseInt(accountIdText);
+	    } catch (NumberFormatException e) {
+
+	        e.printStackTrace(); 
+	        return -1; 
+	    }
+    }
+	
+    
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -74,6 +100,7 @@ public class Accounts extends JInternalFrame {
 			}
 		});
 	}
+	
 	
 	public void setApp(App_Admin app) {
 		this.app = app;
@@ -111,28 +138,29 @@ public class Accounts extends JInternalFrame {
 		lblAccountId = new JLabel("Account ID :");
 		lblAccountId.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblAccountId.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAccountId.setBounds(36, 131, 174, 14);
+		lblAccountId.setBounds(28, 55, 174, 14);
 		getContentPane().add(lblAccountId);
 		
 		lblUsername = new JLabel("Username :");
 		lblUsername.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblUsername.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUsername.setBounds(36, 241, 174, 14);
+		lblUsername.setBounds(28, 165, 174, 14);
 		getContentPane().add(lblUsername);
 		
 		lblPassword = new JLabel("Password : ");
 		lblPassword.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblPassword.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPassword.setBounds(36, 363, 174, 14);
+		lblPassword.setBounds(28, 287, 174, 14);
 		getContentPane().add(lblPassword);
 		
 		txtAccountId = new JTextField();
-		txtAccountId.setBounds(36, 156, 174, 20);
+		txtAccountId.setEditable(false);
+		txtAccountId.setBounds(28, 80, 174, 20);
 		getContentPane().add(txtAccountId);
 		txtAccountId.setColumns(10);
 		
 		txtUsername = new JTextField();
-		txtUsername.setBounds(36, 266, 174, 20);
+		txtUsername.setBounds(28, 190, 174, 20);
 		getContentPane().add(txtUsername);
 		txtUsername.setColumns(10);
 		
@@ -163,6 +191,11 @@ public class Accounts extends JInternalFrame {
 		getContentPane().add(btnUpdate);
 		
 		btnBlock = new JButton("BLOCK");
+		btnBlock.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnBlockActionPerformed(e);
+			}
+		});
 		btnBlock.setBorder(null);
 		btnBlock.setBackground(Color.RED);
 		btnBlock.setBounds(80, 507, 89, 23);
@@ -180,8 +213,20 @@ public class Accounts extends JInternalFrame {
 		getContentPane().add(txtSearch);
 		
 		txtPassword = new JPasswordField();
-		txtPassword.setBounds(36, 388, 174, 20);
+		txtPassword.setBounds(28, 312, 174, 20);
 		getContentPane().add(txtPassword);
+		
+		lblStatus = new JLabel("Status :");
+		lblStatus.setHorizontalAlignment(SwingConstants.CENTER);
+		lblStatus.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblStatus.setBounds(28, 407, 174, 14);
+		getContentPane().add(lblStatus);
+		
+		cbxStatus = new JComboBox();
+		cbxStatus.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		cbxStatus.setModel(new DefaultComboBoxModel(new String[] {"Block", "Active"}));
+		cbxStatus.setBounds(28, 426, 174, 22);
+		getContentPane().add(cbxStatus);
 		loadAccount();
 	}
 	
@@ -195,6 +240,7 @@ public class Accounts extends JInternalFrame {
 					case 0: return Integer.class;
 					case 1: return String.class;
 					case 2: return String.class;
+					case 3: return Integer.class;
 					default: return String.class;
 				}
 			}
@@ -203,6 +249,7 @@ public class Accounts extends JInternalFrame {
 		model.addColumn("ID");
 		model.addColumn("Username");
 		model.addColumn("Password");
+		model.addColumn("Status");
 		
 		AccountDAO dao = new AccountDAO();
 		
@@ -214,13 +261,21 @@ public class Accounts extends JInternalFrame {
 			.forEach(acc -> model.addRow(new Object[] {
 					acc.getId(),
 					acc.getUsername(),
-					acc.getPassword()				
+					acc.getPassword(),
+					acc.getStatus()
 				}
 			)
 		);
 		
 		table.setModel(model);
 		table.getColumnModel().getColumn(2).setCellRenderer(new PasswordRenderer());
+		for (int i = 0; i < model.getColumnCount(); i++) {
+		    if (i != 2) {
+		        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		        table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		    }
+		}
 	}
 	
 	class PasswordRenderer extends DefaultTableCellRenderer {
@@ -249,7 +304,8 @@ public class Accounts extends JInternalFrame {
 			.forEach(acc -> model.addRow(new Object[] {
 					acc.getId(),
 					acc.getUsername(),
-					acc.getPassword()
+					acc.getPassword(),
+					acc.getStatus(),
 				}
 			)
 		);
@@ -260,14 +316,12 @@ public class Accounts extends JInternalFrame {
 	
 	protected void tableMouseClicked(MouseEvent e) {
 		int rowIndex = table.getSelectedRow();
-		if (rowIndex >= 0 && rowIndex < table.getRowCount()) {
-		       txtAccountId.setText(table.getValueAt(rowIndex, 0).toString()); 
-		       txtUsername.setText(table.getValueAt(rowIndex, 1).toString());
-		       txtPassword.setText(table.getValueAt(rowIndex, 2).toString());
-		   } else {
-		    JOptionPane.showMessageDialog(this, "Please select a row from the table.");
-		   }
-}
+		txtAccountId.setText(table.getValueAt(rowIndex, 0).toString()); 
+		txtUsername.setText(table.getValueAt(rowIndex, 1).toString());
+		txtPassword.setText(table.getValueAt(rowIndex, 2).toString());
+		var status = Integer.parseInt(table.getValueAt(rowIndex, 3).toString());
+		cbxStatus.setSelectedItem(status == 0 ? "Block" : "Active");
+	}
 	
 	protected void txtSearchActionPerformed(ActionEvent e) {
 		String find = txtSearch.getText();
@@ -284,7 +338,29 @@ public class Accounts extends JInternalFrame {
 		String plainPassword = new String(passwordChars);
 		String hashedPassword = BCrypt.hashpw(plainPassword, BCrypt.gensalt());
 	    acc.setPassword(hashedPassword);
+	    String selectedStatus = cbxStatus.getSelectedItem().toString();
+	    if (selectedStatus.equals("Active")) {
+	        acc.setStatus(1);
+	        txtUsername.setEnabled(true);
+			txtPassword.setEnabled(true);
+	    } else if (selectedStatus.equals("Block")) {
+	        acc.setStatus(0);
+			txtUsername.setEnabled(false);
+			txtPassword.setEnabled(false);
+	    }
 		accountDao.update(acc);
 		refresh();
 	}
+	
+	protected void btnBlockActionPerformed(ActionEvent e) {
+		Account acc  = new Account();
+		acc.setId(Integer.parseInt(txtAccountId.getText()));
+		AccountDAO dao = new AccountDAO();
+		dao.block(acc);
+		txtUsername.setEnabled(false);
+		txtPassword.setEnabled(false);
+		refresh();   
+	}
+	
+	
 }

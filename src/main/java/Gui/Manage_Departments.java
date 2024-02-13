@@ -3,6 +3,7 @@ import java.awt.EventQueue;
 import javax.swing.JInternalFrame;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.RowSorter;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -15,6 +16,8 @@ import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import App.App_Admin;
 import crud.AddDepartment;
@@ -78,11 +81,12 @@ public class Manage_Departments extends JInternalFrame {
 	private JButton btnPrevious;
 	private JButton btnNext;
 	private JTextField txtPage;
-	private JTextField textField;
+	private JTextField textTotal;
 	private JLabel lblNewLabel;
 	private JButton btnReset;
 	private JTextField txtRoom;
 	private App_Admin app;
+	private RowFilter<?, ?> someRowFilter;
 
 
 	/**
@@ -317,10 +321,15 @@ public class Manage_Departments extends JInternalFrame {
 		getContentPane().add(txtPage);
 		txtPage.setColumns(10);
 		
-		textField = new JTextField();
-		textField.setBounds(861, 426, 86, 25);
-		getContentPane().add(textField);
-		textField.setColumns(10);
+		textTotal = new JTextField();
+		textTotal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textTotalActionPerformed(e);
+			}
+		});
+		textTotal.setBounds(861, 426, 86, 25);
+		getContentPane().add(textTotal);
+		textTotal.setColumns(10);
 		
 		lblNewLabel = new JLabel("Total :");
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 13));
@@ -328,7 +337,7 @@ public class Manage_Departments extends JInternalFrame {
 		getContentPane().add(lblNewLabel);
 		
 		loadDepartment();
-		tbemp.setRowHeight(32);
+		tbemp.setRowHeight(35);
 		
 		btnReset = new JButton("RESET");
 		btnReset.addMouseListener(new MouseAdapter() {
@@ -360,8 +369,24 @@ public class Manage_Departments extends JInternalFrame {
 	}
 	
 	//load
+	public String nameRoom(String a) {
+		List<Room> listRoom = RoomDAO.selectAllRoom();
+		for (Room room : listRoom) {
+			if(a == room.getName()) {
+				return room.getName();
+			}
+		}
+		return null;
+	}
 	public void loadDepartment() {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+	         public boolean isCellEditable(int row, int column) {
+	             
+	             return false;
+	         }
+		};
+		
 		model.addColumn("Department_Id");
 		model.addColumn("Department_Name");
 		model.addColumn("Dead_Of_Department");
@@ -374,7 +399,7 @@ public class Manage_Departments extends JInternalFrame {
 			Dep.getDepartment_id(),
 			Dep.getDepartment_name(),
 			Dep.getHead_of_department(),
-			Dep.getRoom()
+			Dep.getRoom(),
 		}));
 		
 		tbemp.setModel(model);
@@ -400,14 +425,26 @@ public class Manage_Departments extends JInternalFrame {
 	}
 	public int validateDepartment() {
 		int count = 0 ;
+		String room_name;
 		Manage_DepartmentsDAO DepDAO = new Manage_DepartmentsDAO();
 		List<Department> listDep = DepDAO.selectAllDepartment();
-		if( txtName.getText() == null || txtDeparment.getText() == null ||  txtName.getText() == null) {
+		RoomDAO RoomDAO = new RoomDAO();
+		List<Room> listRoom = RoomDAO.selectAllRoom();
+		if( txtName.getText() == null || txtDeparment.getText() == null ||  txtRoom.getText() == null) {
 			JOptionPane.showMessageDialog(null, "Please fill in all information");
 			count++;
+		}else if(txtName.getText().trim().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Please fill in your name");
+			count++;
+		}else if(txtDeparment.getText().trim().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Please fill in your Department");
+			count++;
+		}else if(txtRoom.getText().trim().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Please fill in your Room");
+			count++;
 		}
-		
 		return count;
+
 	}
 	protected void btnInsertActionPerformed(ActionEvent e) {
 
@@ -418,7 +455,7 @@ public class Manage_Departments extends JInternalFrame {
 			app.desktopPane.add(add);
 			add.toFront();
 			this.hide();
-			//app.pack();
+//			app.pack();
 		}
 //		if(validateDepartment() !=0) {
 //			return;
@@ -435,7 +472,9 @@ public class Manage_Departments extends JInternalFrame {
 	}
 	
 	protected void btnUpdateActionPerformed(ActionEvent e) {
-		
+		if(validateDepartment()!=0) {
+			return;
+		}else {
 		Department DepNew = new Department();
 		DepNew.setDepartment_id(Integer.parseInt(txtID.getText()));
 		DepNew.setDepartment_name(txtName.getText());
@@ -444,6 +483,7 @@ public class Manage_Departments extends JInternalFrame {
 		DepDAO.update(DepNew);
 		loadDepartment();
 		refresh();
+	}
 	}
 
 
@@ -470,12 +510,21 @@ public class Manage_Departments extends JInternalFrame {
 		btnDelete.setForeground(Color.black);
 	}
 	protected void textSearchActionPerformed(ActionEvent e) {
-		String find = textSearch.getText();
-		DefaultRowSorter<?,?> sorter = (DefaultRowSorter<?,?>)tbemp.getRowSorter();
-		sorter.setRowFilter(RowFilter.regexFilter(find));
-		sorter.setSortKeys(null);
+	    String find = textSearch.getText();
+
+	    // Kiểm tra xem tbemp đã có RowSorter hay chưa
+	    if (tbemp.getRowSorter() == null) {
+	        // Nếu chưa có, tạo một DefaultRowSorter và thiết lập cho tbemp
+	        DefaultRowSorter<?, ?> sorter = new TableRowSorter<>(tbemp.getModel());
+	        tbemp.setRowSorter((RowSorter<? extends TableModel>) sorter);
+	    }
+
+	    // Lấy RowSorter từ tbemp và sử dụng setRowFilter
+	    DefaultRowSorter<?, ?> sorter = (DefaultRowSorter<?, ?>) tbemp.getRowSorter();
+	    sorter.setRowFilter(RowFilter.regexFilter(find));
+	    sorter.setSortKeys(null);
 	}
-	
+
 	protected void tbempMouseClicked(MouseEvent e) {
 		
 	    int rowIndex = tbemp.getSelectedRow();
@@ -552,4 +601,8 @@ public class Manage_Departments extends JInternalFrame {
 		btnNext.setBackground(SystemColor.inactiveCaption);
 		btnNext.setForeground(Color.black);
 	}
+	protected void textTotalActionPerformed(ActionEvent e) {
+	    int columnCount = tbemp.getColumnCount();
+	    textTotal.setText(Integer.toString(columnCount));
+		}
 }

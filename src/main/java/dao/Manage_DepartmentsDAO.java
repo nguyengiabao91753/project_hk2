@@ -99,7 +99,7 @@ public class Manage_DepartmentsDAO {
 		}
 	}
 
-	public void insert(Department Dep) {
+	public boolean insert(Department Dep) {
 		try(
 				var con = DBCon.getConnection();
 				var cs = con.prepareCall("{call insertDep(?,?,?)}")
@@ -111,6 +111,7 @@ public class Manage_DepartmentsDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 	
 	public void delete(int a) {

@@ -36,6 +36,7 @@ public class AccountDAO {
 				acc.setId(rs.getInt("account_id"));
 				acc.setUsername(rs.getString("username"));
 				acc.setPassword(rs.getString("password"));
+				acc.setStatus(rs.getInt("status"));;
 				list.add(acc);
 			}
 		}catch (Exception e) {
@@ -59,6 +60,7 @@ public class AccountDAO {
 				acc.setId(rs.getInt("account_id"));
 				acc.setUsername(rs.getString("username"));
 				acc.setPassword(rs.getString("password"));
+				acc.setStatus(rs.getInt("status"));
 				list.add(acc);
 			}
 		} 
@@ -88,11 +90,12 @@ public class AccountDAO {
 	public void update(Account acc) {
 		try(
 				var con = DBCon.getConnection();
-				var cs = con.prepareCall("{call updateAccount(?,?,?)}")
+				var cs = con.prepareCall("{call updateAccount(?,?,?,?)}")
 			) {
 			cs.setString(1, acc.getUsername());
 			cs.setString(2, acc.getPassword());
-			cs.setInt(3, acc.getId());
+			cs.setInt(3,acc.getStatus());
+			cs.setInt(4, acc.getId());
 			
 			JOptionPane.showMessageDialog(null, cs.executeUpdate() >0 ? "update success" : "nothing to update" );
 			
@@ -102,7 +105,59 @@ public class AccountDAO {
 	}
 	
 	//Insert
+	public boolean insert(Account acc , int defaultStatus) {
+		try(
+				var con = DBCon.getConnection();
+				var cs = con.prepareCall("{call insertAccount(?,?,?)}")
+			) {
+			cs.setString(1, acc.getUsername());
+			cs.setString(2, acc.getPassword());
+			cs.setInt(3, defaultStatus);
+			if(cs.executeUpdate() >0) {
+				return true;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return false;
+	}
 	
+	//Block
+	public void block(Account acc) {
+	    try (
+	        var con = DBCon.getConnection();
+	        var cs = con.prepareCall("{call blockAccount(?)}")
+	    ) {
+	        cs.setInt(1, acc.getId());
+	        int affectedRows = cs.executeUpdate();
+
+	        if (affectedRows > 0) {
+	            System.out.println("Account blocked successfully.");
+	        } else {
+	            System.out.println("Failed to block account.");
+	        }
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	    }
+	}
+	
+	//Delete
+	public void deleteAccountAndEmployee(Account acc ,Employee emp) {
+		try(
+				var con = DBCon.getConnection();
+				var cs = con.prepareCall("{call deleteEmployeeAndAccount(?,?)}")
+				) {
+			cs.setInt(1, acc.getId());
+			cs.setInt(2, emp.getId());
+			if(cs.executeUpdate() >0) {
+				JOptionPane.showMessageDialog(null, "Delete Success");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 }
 
 

@@ -4,18 +4,26 @@ import java.awt.EventQueue;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
+import javax.swing.RowSorter;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.DefaultRowSorter;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
+import App.App_Admin;
+import crud.AddDepartment;
+import crud.AddPosition;
 import dao.PositionDAO;
 import entity.Department;
 import entity.Position;
@@ -47,24 +55,27 @@ public class Job_Position extends JInternalFrame {
 	private JTable tbemp;
 	private JScrollPane scrollPane;
 	private JButton btnDelete;
-	private JButton btnReset;
 	private JLabel lblTextsearch;
-	private JTextField textField;
+	private JTextField textSearch;
 	private JButton btnPrevious;
 	private JTextField txtPage;
 	private JButton btnNext;
 	private JLabel lblNewLabel;
 	private JTextField textField_2;
 	PositionDAO PosDAO = new PositionDAO();
+	private App_Admin app;
 	
-	Integer pagenumber =1;
-	Integer rowOfPage =10;
+	Integer pageNumber =1;
+	Integer rowsOfPage =10;
 	Double totalPage =0.0;
 	Integer totalCount =0;
 
 	/**
 	 * Launch the application.
 	 */
+	public void setApp(App_Admin app) {
+		this.app = app;
+	}
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -118,7 +129,7 @@ public class Job_Position extends JInternalFrame {
 		lblName.setBounds(15, 140, 50, 30);
 		getContentPane().add(lblName);
 		
-		btnInsert = new JButton("ISNERT");
+		btnInsert = new JButton("ADD");
 		btnInsert.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -197,35 +208,20 @@ public class Job_Position extends JInternalFrame {
 		btnDelete.setBounds(127, 370, 122, 35);
 		getContentPane().add(btnDelete);
 		
-		btnReset = new JButton("RESET");
-		btnReset.setBackground(SystemColor.inactiveCaption);
-		btnReset.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				btnResetMouseClicked(e);
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnResetMouseEntered(e);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnResetMouseExited(e);
-			}
-		});
-		btnReset.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		btnReset.setBounds(127, 220, 122, 35);
-		getContentPane().add(btnReset);
-		
 		lblTextsearch = new JLabel(" Search :");
 		lblTextsearch.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		lblTextsearch.setBounds(266, 12, 67, 25);
 		getContentPane().add(lblTextsearch);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(326, 11, 62, 25);
-		getContentPane().add(textField);
+		textSearch = new JTextField();
+		textSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textFieldActionPerformed(e);
+			}
+		});
+		textSearch.setColumns(10);
+		textSearch.setBounds(326, 11, 62, 25);
+		getContentPane().add(textSearch);
 		
 		btnPrevious = new JButton("Previous");
 		btnPrevious.addMouseListener(new MouseAdapter() {
@@ -295,12 +291,20 @@ public class Job_Position extends JInternalFrame {
 	}
 	//load
 	public void loadPosition() {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+	         public boolean isCellEditable(int row, int column) {
+	             
+	             return false;
+	         }
+		};
 		model.addColumn("Position_Id");
 		model.addColumn("Position_Name");
+		//tìm trong bảng tổng số dòng
+		 totalCount = PosDAO.countPosition();
 		//tìm số trang của bảng 
-		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
-		PosDAO.getPosition(pagenumber, rowOfPage).stream().forEach(Pos -> model.addRow(new Object[] {
+		totalPage = Math.ceil(totalCount.doubleValue() / rowsOfPage.doubleValue());
+		PosDAO.getPosition(pageNumber, rowsOfPage).stream().forEach(Pos -> model.addRow(new Object[] {
 				Pos.getPosition_id(),
 				Pos.getPosition_name(),
 		}));
@@ -312,33 +316,25 @@ public class Job_Position extends JInternalFrame {
 	    txtID.setText(tbemp.getValueAt(rowIndex, 0).toString());
 	    txtName.setText(tbemp.getValueAt(rowIndex, 1).toString());
 	}
-	protected void btnResetMouseClicked(MouseEvent e) {
-	    int rowIndex = tbemp.getSelectedRow();
-	    if (rowIndex != -1) { // Kiểm tra xem đã chọn hàng nào hay chưa
-		    txtID.setText(tbemp.getValueAt(rowIndex, 0).toString());
-	        txtName.setText(""); // Thiết lập ô Name thành rỗng
-	    }
-
-	}
 	public void refresh() {
 		DefaultTableModel model = (DefaultTableModel)tbemp.getModel();
 		model.setRowCount(0); 
-		PosDAO.getPosition(pagenumber, rowOfPage).stream().forEach(Pos -> model.addRow(new Object[] {
+		PosDAO.getPosition(pageNumber, rowsOfPage).stream().forEach(Pos -> model.addRow(new Object[] {
 				Pos.getPosition_id(),
 				Pos.getPosition_name(),
 		}));
 	}
 	protected void btnPreviousActionPerformed(ActionEvent e) {
-		if(pagenumber>1) {
-			pagenumber--;
-			txtPage.setText(pagenumber.toString());
+		if(pageNumber>1) {
+			pageNumber--;
+			txtPage.setText(pageNumber.toString());
 			refresh();
 		}
 	}
 	protected void btnNextActionPerformed(ActionEvent e) {
-		if(pagenumber<totalPage.intValue()) {
-			pagenumber++;
-			txtPage.setText(pagenumber.toString());
+		if(pageNumber<totalPage.intValue()) {
+			pageNumber++;
+			txtPage.setText(pageNumber.toString());
 			// load lại dữ liệu
 			refresh();
 		}
@@ -346,42 +342,47 @@ public class Job_Position extends JInternalFrame {
 	protected void txtPageActionPerformed(ActionEvent e) {
 		int num = Integer.parseInt(txtPage.getText()) ;
 		if(num>0 && num<totalPage.intValue()) {
-			pagenumber = num;
+			pageNumber = num;
 			refresh();
 		}else {
 			JOptionPane.showMessageDialog(null, "Page Number is invalid");
 		}
 	}
 	protected void btnInsertActionPerformed(ActionEvent e) {
-		 var Pos = new Position();
-		
-		Pos.setPosition_name(txtName.getText());
-		PosDAO.insert(Pos);
-		// load lai du lieu
-		loadPosition();
-		refresh();
+		AddPosition add =  AddPosition.getInstance();
+		if(!add.isVisible()) {
+			add.setVisible(true);
+			app.desktopPane.add(add);
+			add.toFront();
+			this.hide();
+//			app.pack();
+		}
+	}
+	public int validatePosition() {
+		int count = 0 ;
+		if( txtName.getText().trim().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Please fill in your name");
+			count++;
+		}
+		return count;
 	}
 	protected void btnUpdateActionPerformed(ActionEvent e) {
+		if(validatePosition()!=0) {
+			return;
+		}else {
 		var Pos = new Position();
 		Pos.setPosition_id(Integer.parseInt(txtID.getText()));
 		Pos.setPosition_name(txtName.getText());
 		PosDAO.update(Pos);
 		loadPosition();
 		refresh();
+		}
 	}
 	protected void btnDeleteActionPerformed(ActionEvent e) {
 		JOptionPane.showConfirmDialog(null,"Are you sure want to delete?","Delete",JOptionPane.YES_NO_OPTION);
 		int a = Integer.parseInt(txtID.getText());
 		PosDAO.delete(a);
 		refresh();
-	}
-	protected void btnResetMouseEntered(MouseEvent e) {
-		btnReset.setBackground(new Color(106,90,205));
-		btnReset.setForeground(Color.black);
-	}
-	protected void btnResetMouseExited(MouseEvent e) {
-		btnReset.setBackground(SystemColor.inactiveCaption);
-		btnReset.setForeground(Color.black);
 	}
 	protected void btnInsertMouseEntered(MouseEvent e) {
 		btnInsert.setBackground(new Color(106,90,205));
@@ -422,5 +423,20 @@ public class Job_Position extends JInternalFrame {
 	protected void btnNextMouseExited(MouseEvent e) {
 		btnNext.setBackground(SystemColor.inactiveCaption);
 		btnNext.setForeground(Color.black);
+	}
+	protected void textFieldActionPerformed(ActionEvent e) {
+	    String find = textSearch.getText();
+
+	    // Kiểm tra xem tbemp đã có RowSorter hay chưa
+	    if (tbemp.getRowSorter() == null) {
+	        // Nếu chưa có, tạo một DefaultRowSorter và thiết lập cho tbemp
+	        DefaultRowSorter<?, ?> sorter = new TableRowSorter<>(tbemp.getModel());
+	        tbemp.setRowSorter((RowSorter<? extends TableModel>) sorter);
+	    }
+
+	    // Lấy RowSorter từ tbemp và sử dụng setRowFilter
+	    DefaultRowSorter<?, ?> sorter = (DefaultRowSorter<?, ?>) tbemp.getRowSorter();
+	    sorter.setRowFilter(RowFilter.regexFilter(find));
+	    sorter.setSortKeys(null);
 	}
 }

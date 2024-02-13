@@ -17,11 +17,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -38,9 +40,12 @@ import entity.Employee;
 import entity.Position;
 import entity.Room;
 import entity.Salary;
+import ru.yandex.qatools.ashot.comparison.ImageDiff;
+import ru.yandex.qatools.ashot.comparison.ImageDiffer;
 
 import java.awt.SystemColor;
 import javax.swing.JScrollPane;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultRowSorter;
 import javax.swing.ImageIcon;
@@ -49,7 +54,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -97,7 +104,7 @@ public class EmployeeForm extends JInternalFrame {
 	private JButton btnUpdate;
 	private JButton btnDelete;
 	private JButton btnPicture;
-	private JTable table;
+	private static JTable table;
 	private JScrollPane scrollPane;
 	private JLabel lblLevel;
 	private JComboBox cbxLevel;
@@ -133,8 +140,14 @@ public class EmployeeForm extends JInternalFrame {
 	private JButton btnLast;
 	private JTextField txtPage;
 	private JComboBox comboBox;
+ 
 
 
+   
+	
+	public static JTable getTable() {
+        return table;
+    }
 	/**
 	 * Launch the application.
 	 */
@@ -147,7 +160,7 @@ public class EmployeeForm extends JInternalFrame {
 	public App_Admin getApp() {
 		return app;
 	}
-
+	
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -186,6 +199,8 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().setLayout(null);
 		
 		txtEmployeeId = new JTextField();
+		txtEmployeeId.setBackground(new Color(255, 255, 255));
+		txtEmployeeId.setEditable(false);
 		txtEmployeeId.setBounds(131, 49, 86, 20);
 		getContentPane().add(txtEmployeeId);
 		txtEmployeeId.setColumns(10);
@@ -251,22 +266,22 @@ public class EmployeeForm extends JInternalFrame {
 		lblSalary.setBounds(22, 238, 86, 14);
 		getContentPane().add(lblSalary);
 		
-		lblSupervisorId = new JLabel("Supervisor ID :");
+		lblSupervisorId = new JLabel("Supervisor  :");
 		lblSupervisorId.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblSupervisorId.setBounds(22, 269, 86, 14);
 		getContentPane().add(lblSupervisorId);
 		
-		lblDepartmentId = new JLabel("Department ID :");
+		lblDepartmentId = new JLabel("Department  :");
 		lblDepartmentId.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblDepartmentId.setBounds(22, 300, 99, 14);
 		getContentPane().add(lblDepartmentId);
 		
-		lblEducationId = new JLabel("Education ID :");
+		lblEducationId = new JLabel("Education  :");
 		lblEducationId.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblEducationId.setBounds(22, 331, 86, 14);
 		getContentPane().add(lblEducationId);
 		
-		lblPositionId = new JLabel("Position ID :");
+		lblPositionId = new JLabel("Position  :");
 		lblPositionId.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblPositionId.setBounds(22, 362, 86, 14);
 		getContentPane().add(lblPositionId);
@@ -277,6 +292,16 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(lblImage);
 		
 		btnUpdate = new JButton("UPDATE");
+		btnUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUpdateMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnUpdateMouseExited(e);
+			}
+		});
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnUpdateActionPerformed(e);
@@ -287,6 +312,16 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(btnUpdate);
 		
 		btnDelete = new JButton("DELETE");
+		btnDelete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnDeleteMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnDeleteMouseExited(e);
+			}
+		});
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnDeleteActionPerformed(e);
@@ -373,6 +408,16 @@ public class EmployeeForm extends JInternalFrame {
 		txtSearch.setColumns(10);
 		
 		btnInsert = new JButton("ADD");
+		btnInsert.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnInsertMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnInsertMouseExited(e);
+			}
+		});
 		btnInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnInsertActionPerformed(e);
@@ -448,6 +493,46 @@ public class EmployeeForm extends JInternalFrame {
 		loadEmployee();
 	}
 	
+	public String baseSalary(int a) {
+		List<Salary> listSalary = salaryDao.selectAllSalary();
+		for(Salary salary : listSalary) {
+			if(a == salary.getId()) {
+				return String.valueOf(salary.getBase_salary());
+			}
+		}
+		return null ;
+	}
+	
+	public String departmentName(int a) {
+		List<Department> listDepartment = departmentDao.selectAllDepartment();
+		for(Department dep : listDepartment) {
+			if(a == dep.getDepartment_id()) {
+				return dep.getDepartment_name();
+			}
+		}
+		return null;
+	}
+	
+	public String degreeName(int a) {
+		List<Education> listEducation = educationDao.selectAllEducation();
+		for(Education edu : listEducation) {
+			if(a == edu.getId()) {
+				return edu.getDegree_name();
+			}
+		}
+		return null;
+	}
+	
+	public String positionName(int a) {
+		List<Position> listPosition = positionDao.selectAllPosition();
+		for(Position pos : listPosition) {
+			if(a == pos.getPosition_id()) {
+				return pos.getPosition_name();
+			}
+		}
+		return null;
+	}
+	
 	public void loadEmployee() {
 		DefaultTableModel model = new DefaultTableModel() {
 			@Override
@@ -485,10 +570,10 @@ public class EmployeeForm extends JInternalFrame {
 		model.addColumn("Gender");
 		model.addColumn("Address");
 		model.addColumn("Salary level");
-		model.addColumn("Supervisor ID");
-		model.addColumn("Department ID");
-		model.addColumn("Education ID");
-		model.addColumn("Position ID");
+		model.addColumn("Supervisor");
+		model.addColumn("Department");
+		model.addColumn("Education");
+		model.addColumn("Position");
 		model.addColumn("Picture");
 		model.addColumn("pathpicture");
 		model.addColumn("Level");
@@ -506,11 +591,11 @@ public class EmployeeForm extends JInternalFrame {
 				emp.getDate_of_birth(),
 				emp.getGender(),
 				emp.getAddress(),
-				emp.getSalary_level(),
+				baseSalary(emp.getSalary_level()),
 				emp.getSupervisor_id(),
-				emp.getDepartment_id(),
-				emp.getEducation_id(),
-				emp.getPosition_id(),
+				departmentName(emp.getDepartment_id()),
+				degreeName(emp.getEducation_id()),
+				positionName(emp.getPosition_id()),
 				new ImageIcon(
 					new ImageIcon(emp.getPicture()).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)	
 				),
@@ -524,7 +609,26 @@ public class EmployeeForm extends JInternalFrame {
 		table.getColumn("pathpicture").setMinWidth(0);
 		table.getColumn("pathpicture").setMaxWidth(0);
 		table.getColumn("pathpicture").setWidth(0);
+		for (int i = 0; i < model.getColumnCount(); i++) {
+		    if (i != 11) {
+		        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		        table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		    }
+		}
 	}
+	
+//	public ImageIcon getSelectedImageIcon() {
+//	    int selectedRow = table.getSelectedRow();
+//	    int imageColumn = 11; // Index of the column containing the ImageIcon
+//
+//	    if (selectedRow != -1) {
+//	        return (ImageIcon) table.getModel().getValueAt(selectedRow, imageColumn);
+//	    }
+//
+//	    return null;
+//	}
+
 	
 	private void refresh() {
 		DefaultTableModel model =  (DefaultTableModel)table.getModel();
@@ -548,11 +652,11 @@ public class EmployeeForm extends JInternalFrame {
 						emp.getDate_of_birth(),
 						emp.getGender(),
 						emp.getAddress(),
-						emp.getSalary_level(),
+						baseSalary(emp.getSalary_level()),
 						emp.getSupervisor_id(),
-						emp.getDepartment_id(),
-						emp.getEducation_id(),
-						emp.getPosition_id(),
+						departmentName(emp.getDepartment_id()),
+						degreeName(emp.getEducation_id()),
+						positionName(emp.getPosition_id()),
 						new ImageIcon(
 							new ImageIcon(emp.getPicture()).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)	
 						),
@@ -597,6 +701,11 @@ public class EmployeeForm extends JInternalFrame {
 		listSupervisor.forEach(sup -> supervisorModel.addElement(sup.getId()));
 		listEducation.forEach(edu -> educationModel.addElement(edu.getId()));
 		listPosition.forEach(pos -> positionModel.addElement(pos.getPosition_id()));
+		listSalary.forEach(salary -> salaryModel.addElement(salary.getBase_salary()));
+		listSupervisor.forEach(sup -> supervisorModel.addElement(sup.getId()));
+		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_name()));
+		listEducation.forEach(edu -> educationModel.addElement(edu.getDegree_name()));
+		listPosition.forEach(pos -> positionModel.addElement(pos.getPosition_name()));
 
 		cbxSalary.setModel(salaryModel);
 		cbxSupervisorId.setModel(supervisorModel);
@@ -604,11 +713,11 @@ public class EmployeeForm extends JInternalFrame {
 		cbxEducationId.setModel(educationModel);
 		cbxPositionId.setModel(positionModel);
 		
-		var salaryId_select = Integer.parseInt(table.getValueAt(rowIndex, 6).toString());
+		var salaryId_select = String.valueOf(table.getValueAt(rowIndex, 6).toString());
 		var supervisorId_select = Integer.parseInt(table.getValueAt(rowIndex, 7).toString()); 
-		var departmentId_select = Integer.parseInt(table.getValueAt(rowIndex, 8).toString());
-		var educationId_select = Integer.parseInt(table.getValueAt(rowIndex, 9).toString());
-		var positionId_select = Integer.parseInt(table.getValueAt(rowIndex, 10).toString());
+		var departmentId_select = String.valueOf(table.getValueAt(rowIndex, 8).toString());
+		var educationId_select = String.valueOf(table.getValueAt(rowIndex, 9).toString());
+		var positionId_select = String.valueOf(table.getValueAt(rowIndex, 10).toString());
 
 		cbxSalary.setSelectedItem(salaryId_select);
 		cbxSupervisorId.setSelectedItem(supervisorId_select); 
@@ -633,6 +742,51 @@ public class EmployeeForm extends JInternalFrame {
 
 	}
 	
+//	public void compareImages() {
+//        String expectedImagePath = "D:\\AutomationTestImages\\Expected_Image.png";
+//        String actualImagePath = "D:\\AutomationTestImages\\Actual_Image.png";
+//
+//        try {
+//            File expectedImageFile = new File(expectedImagePath);
+//            File actualImageFile = new File(actualImagePath);
+//
+//            BufferedImage expectedImage = ImageIO.read(expectedImageFile);
+//            BufferedImage actualImage = ImageIO.read(actualImageFile);
+//
+//            ImageDiffer imgDiff = new ImageDiffer();
+//
+//            ImageDiff diff = imgDiff.makeDiff(expectedImage, actualImage);
+//
+//            if (diff.hasDiff()) {
+//                System.out.println("Images are NOT the same");
+//            } else {
+//                System.out.println("Images are the same");
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+	
+	private boolean areImagePathsEqual(String path1, String path2) {
+	    if (path1 == null || path2 == null) {
+	        return false;
+	    }
+
+	    File file1 = new File(path1);
+	    File file2 = new File(path2);
+
+	    try {
+	        String canonicalPath1 = file1.getCanonicalPath().toLowerCase();
+	        String canonicalPath2 = file2.getCanonicalPath().toLowerCase();
+
+	        return canonicalPath1.equals(canonicalPath2);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
+	
 	protected void txtSearchActionPerformed(ActionEvent e) {
 		String find = txtSearch.getText();
 		DefaultRowSorter<?, ?> sorter = (DefaultRowSorter<?, ?>)table.getRowSorter();
@@ -640,55 +794,6 @@ public class EmployeeForm extends JInternalFrame {
 		sorter.setSortKeys(null);
 	}
 	
-	
-
-	protected void btnUpdateActionPerformed(ActionEvent e) {
-		if(lblPicture.getIcon() == null) {
-			JOptionPane.showMessageDialog(null, "please choose image");
-			return;
-		}
-		
-		Employee emp = new Employee();
-		emp.setId(Integer.parseInt(txtEmployeeId.getText()));
-		emp.setFull_name(txtFullName.getText());
-		emp.setEthnicity(txtEthnicity.getText());
-		emp.setDate_of_birth(
-				LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())
-		);
-		emp.setAddress(txtAddress.getText());
-		emp.setGender(cbxGender.getSelectedItem().toString());
-		emp.setSalary_level(cbxSalary.getSelectedIndex()+1);
-		emp.setSupervisor_id(cbxSupervisorId.getSelectedIndex()+1);
-		emp.setDepartment_id(cbxDepartmentId.getSelectedIndex()+1);
-		emp.setEducation_id(cbxEducationId.getSelectedIndex()+1);
-		emp.setPosition_id(cbxPositionId.getSelectedIndex()+1);
-		
-		if(fileName != null) {
-			dirNew = System.getProperty("user.dir") + "\\images";
-			Path pathOld = Paths.get(dirOld);
-			Path pathNew = Paths.get(dirNew);
-	
-			try {
-				Files.copy(
-						pathOld, 
-						pathNew.resolve(fileName),
-						StandardCopyOption.REPLACE_EXISTING
-				);
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-			emp.setPicture("images/" + fileName);
-		}else {
-			emp.setPicture(fileOld);
-		}
-		
-		emp.setLevel(cbxLevel.getSelectedItem().toString());
-		
-		employeeDao.update(emp);
-		fileName =null;
-		lblPicture.setIcon(null);
-		refresh();
-	}
 	
 	protected void btnPictureActionPerformed(ActionEvent e) {
 		var chooser = new JFileChooser();
@@ -717,6 +822,144 @@ public class EmployeeForm extends JInternalFrame {
 	}
 	
 	
+	public int validateEmp() {
+	    int count = 0;
+	    int salary_level = 0;
+	    int supervisor_id = 0;
+	    int department_id = 0;
+	    int education_id = 0;
+	    int position_id = 0;
+
+	    SalaryDAO salaryDao = new SalaryDAO();
+	    EmployeeDAO employeeDao = new EmployeeDAO();
+	    Manage_DepartmentsDAO departmentDao = new Manage_DepartmentsDAO();
+	    EducationDAO educationDao = new EducationDAO();
+	    PositionDAO positionDao = new PositionDAO();
+
+	    List<Salary> listSalary = salaryDao.selectAllSalary();
+	    List<Employee> listSupervisor = employeeDao.selectAllEmployee();
+	    List<Department> listDepartment = departmentDao.selectAllDepartment();
+	    List<Education> listEducation = educationDao.selectAllEducation();
+	    List<Position> listPosition = positionDao.selectAllPosition();
+
+	    for (Salary sal : listSalary) {
+	        if (sal.toString().equals(cbxSalary.getSelectedItem())) {
+	            salary_level = sal.getId();
+	            break;
+	        }
+	    }
+
+	    for (Employee emp : listSupervisor) {
+	    	if (emp.toString().equals(cbxSupervisorId.getSelectedItem())) {
+		            supervisor_id = emp.getId();
+		            break;
+		    }
+	    }
+
+	    for (Department dep : listDepartment) {
+	        if (dep.toString().equals(cbxDepartmentId.getSelectedItem())) {
+	            department_id = dep.getDepartment_id();
+	            break;
+	        }
+	    }
+
+	    for (Education edu : listEducation) {
+	        if (edu.toString().equals(cbxEducationId.getSelectedItem())) {
+	            education_id = edu.getId();
+	            break;
+	        }
+	    }
+
+	    for (Position pos : listPosition) {
+	        if (pos.toString().equals(cbxPositionId.getSelectedItem())) {
+	            position_id = pos.getPosition_id();
+	            break;
+	        }
+	    }
+
+	    if (txtFullName.getText().isEmpty() || txtEthnicity.getText().isEmpty() || 
+	    	    dateChooser.getDate() == null || cbxGender.getSelectedItem() == null || 
+	    	    cbxLevel.getSelectedItem() == null || cbxSupervisorId.getSelectedItem() == null ||
+	    	    cbxDepartmentId.getSelectedItem() == null || cbxEducationId.getSelectedItem() == null || 
+	    	    cbxPositionId.getSelectedItem() == null || txtAddress.getText().isEmpty() || 
+	    	    lblPicture.getIcon() == null) {
+	    	    JOptionPane.showMessageDialog(null, "Please fill in all information");
+	    	    count++;
+	    	}
+	    return count;
+	}
+
+	private boolean validatePicture(String newImagePath) {
+		 int columnToCompare = 12; 
+		    int rowCount = table.getRowCount();
+
+		    for (int row = 0; row < rowCount; row++) {
+		        String lblPicturePath = (String) table.getValueAt(row, columnToCompare);
+		        System.out.println("lblPicturePath at row " + row + ": " + lblPicturePath);
+
+		        if (areImagePathsEqual(lblPicturePath, newImagePath)) {
+		            JOptionPane.showMessageDialog(null, "This picture is already exists");
+		            return false; 
+		        }
+		    }
+
+		    return true; 
+	}
+
+	protected void btnUpdateActionPerformed(ActionEvent e) {
+		if(validateEmp() != 0) {
+			return;
+		}else {
+			Employee emp = new Employee();
+			emp.setId(Integer.parseInt(txtEmployeeId.getText()));
+			emp.setFull_name(txtFullName.getText());
+			emp.setEthnicity(txtEthnicity.getText());
+			emp.setDate_of_birth(
+					LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())
+			);
+			emp.setAddress(txtAddress.getText());
+			emp.setGender(cbxGender.getSelectedItem().toString());
+			emp.setSalary_level(cbxSalary.getSelectedIndex()+1);
+			emp.setSupervisor_id(cbxSupervisorId.getSelectedIndex()+1);
+			emp.setDepartment_id(cbxDepartmentId.getSelectedIndex()+1);
+			emp.setEducation_id(cbxEducationId.getSelectedIndex()+1);
+			emp.setPosition_id(cbxPositionId.getSelectedIndex()+1);
+			
+			if(fileName != null) {
+				dirNew = System.getProperty("user.dir") + "\\images";
+				Path pathOld = Paths.get(dirOld);
+				Path pathNew = Paths.get(dirNew);
+		
+				try {
+					Files.copy(
+							pathOld, 
+							pathNew.resolve(fileName),
+							StandardCopyOption.REPLACE_EXISTING
+					);
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+				emp.setPicture("images/" + fileName);
+				
+				if (!validatePicture("images/" + fileName)) {
+		               return;
+		           }
+				
+			}else {
+				emp.setPicture(fileOld);
+			}
+			
+			emp.setLevel(cbxLevel.getSelectedItem().toString());
+			
+			employeeDao.update(emp);
+			fileName =null;
+			lblPicture.setIcon(null);
+			refresh();
+		}
+	}
+	
+	
+	
 	protected void btnInsertActionPerformed(ActionEvent e) {
 	        Addemployee add = Addemployee.getInstance();
 
@@ -730,12 +973,30 @@ public class EmployeeForm extends JInternalFrame {
 	}
 	
 	protected void btnDeleteActionPerformed(ActionEvent e) {
-		Employee emp = new Employee();
-		emp.setId(Integer.parseInt(txtEmployeeId.getText()));
-		EmployeeDAO dao = new EmployeeDAO();
-		dao.delete(emp);
-		
-		refresh();
+		String employeeName = txtFullName.getText(); 
+
+		int dialogResult = JOptionPane.showConfirmDialog(
+		            null,
+		            "Are you sure you want to delete employee '" + employeeName + "'?\nTheir account will also be deleted.",
+		            "Confirm Deletion",
+		            JOptionPane.YES_NO_OPTION);
+		 
+		if (dialogResult == JOptionPane.YES_OPTION) {
+			 	Accounts accounts = new Accounts();
+		        Employee emp = new Employee();
+		        Account acc = new Account();
+
+		        acc.setId(accounts.getAccountId()); 
+		        emp.setId(Integer.parseInt(txtEmployeeId.getText()));
+
+		        AccountDAO accDao = new AccountDAO();
+		        EmployeeDAO empDao = new EmployeeDAO();
+
+		        accDao.deleteAccountAndEmployee(acc, emp);
+		        empDao.deleteEmployeeAndAccount(emp, acc);
+
+		        refresh();
+		}
 	}
 	
 	protected void tableMousePressed(MouseEvent e) {
@@ -754,6 +1015,13 @@ public class EmployeeForm extends JInternalFrame {
 	}
 	
 	private void deleteRow(ActionEvent e) {
+		String employeeName = txtFullName.getText(); 
+		int dialogResult = JOptionPane.showConfirmDialog(
+	            null,
+	            "Are you sure you want to delete employee '" + employeeName + "'?\nTheir account will also be deleted.",
+	            "Confirm Deletion",
+	            JOptionPane.YES_NO_OPTION);
+		
 		Employee emp = new Employee();
 		int rowindex = table.getSelectedRow();
 		emp.setId(
@@ -761,10 +1029,20 @@ public class EmployeeForm extends JInternalFrame {
 						table.getValueAt( rowindex,0).toString()
 				)
 		);
-		EmployeeDAO dao = new EmployeeDAO();
-		dao.delete(emp);
-		
-		refresh();
+		if (dialogResult == JOptionPane.YES_OPTION) {
+			Accounts accounts = new Accounts();
+	        Account acc = new Account();
+
+	        acc.setId(accounts.getAccountId()); 
+
+	        AccountDAO accDao = new AccountDAO();
+	        EmployeeDAO empDao = new EmployeeDAO();
+
+	        accDao.deleteAccountAndEmployee(acc, emp);
+	        empDao.deleteEmployeeAndAccount(emp, acc);
+
+	        refresh();
+		}
 	}
 	
 	protected void btnFirstActionPerformed(ActionEvent e) {
@@ -816,5 +1094,38 @@ public class EmployeeForm extends JInternalFrame {
 			txtPage.setText(pageNumber.toString());
 			refresh();
 		}
+	}
+	
+	protected void btnUpdateMouseEntered(MouseEvent e) {
+		btnUpdate.setForeground(new Color(0, 255, 64));
+		btnUpdate.setBorder(new LineBorder(new Color(0, 255, 64)));
+		btnUpdate.setBackground(Color.white);
+	}
+	
+	protected void btnUpdateMouseExited(MouseEvent e) {
+		btnUpdate.setForeground(Color.WHITE);
+		btnUpdate.setBackground(new Color(0, 255, 64));
+	}
+	
+	protected void btnDeleteMouseEntered(MouseEvent e) {
+		btnDelete.setForeground(Color.RED);
+		btnDelete.setBorder(new LineBorder(Color.RED));
+		btnDelete.setBackground(Color.white);
+	}
+	
+	protected void btnDeleteMouseExited(MouseEvent e) {
+		btnDelete.setForeground(Color.white);
+		btnDelete.setBackground(Color.RED);
+	}
+	
+	protected void btnInsertMouseEntered(MouseEvent e) {
+		btnInsert.setBackground(Color.white);
+		btnInsert.setBorder(new LineBorder(new Color(0, 102, 255)));
+		btnInsert.setForeground(new Color(0, 102, 255));
+	}
+	
+	protected void btnInsertMouseExited(MouseEvent e) {
+		btnInsert.setForeground(Color.WHITE);
+		btnInsert.setBackground(new Color(0, 102, 255));
 	}
 }

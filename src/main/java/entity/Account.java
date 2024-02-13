@@ -7,6 +7,7 @@ public class Account {
 	private int id;
 	private String username;
 	private String password;
+	private int status;
 	
 	public Account() {
 		
@@ -29,7 +30,17 @@ public class Account {
 
 	public void setAccount_id(int account_id) {
 		Account_id = account_id;
+	
 	}
+	public Account(int id, String username, String password, int status) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.status = status;
+	}
+
+
 
 	public int getId() {
 		return id;
@@ -54,12 +65,27 @@ public class Account {
 	public void setPassword(String password) {
 		Password = password;
 	}
+	
+	
 
-	@Override
-	public String toString() {
-		return "Account [Account_id=" + Account_id + ", UsserName=" + Username + ", Password=" + Password + "]";
+	public int getStatus() {
+		return status;
 	}
 
 
 
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+
+
+	@Override
+	public String toString() {
+
+		return "Account [id=" + id + ", username=" + username + ", password=" + password + ", status=" + status + "]";
+	}
+
+
+	
 }

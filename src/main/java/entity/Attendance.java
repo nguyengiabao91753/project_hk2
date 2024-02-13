@@ -9,6 +9,7 @@ public class Attendance {
 	private Time arrival_time;
 	private Time departure_time;
 	private String leave_type;
+	public Attendance() {}
 	public Attendance(int attendance_id, int workschedule_id, boolean present, Time arrival_time, Time departure_time,
 			String leave_type) {
 		super();
