@@ -15,6 +15,7 @@ import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -29,6 +30,7 @@ import java.awt.Component;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultRowSorter;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -40,6 +42,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Cursor;
+import javax.swing.border.MatteBorder;
 
 public class Accounts extends JInternalFrame {
 
@@ -67,6 +70,11 @@ public class Accounts extends JInternalFrame {
 	private JPasswordField txtPassword;
 	private JLabel lblStatus;
 	private JComboBox cbxStatus;
+	private JButton btnLast;
+	private JButton btnNext;
+	private JTextField txtPage;
+	private JButton btnPrevious;
+	private JButton btnFirst;
 	/**
 	 * Launch the application.
 	 */
@@ -224,9 +232,64 @@ public class Accounts extends JInternalFrame {
 		
 		cbxStatus = new JComboBox();
 		cbxStatus.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		cbxStatus.setModel(new DefaultComboBoxModel(new String[] {"Block", "Active"}));
+		cbxStatus.setModel(new DefaultComboBoxModel(new String[] {"","Block", "Active"}));
 		cbxStatus.setBounds(28, 426, 174, 22);
 		getContentPane().add(cbxStatus);
+		
+		btnLast = new JButton("");
+		btnLast.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnLastActionPerformed(e);
+			}
+		});
+		btnLast.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-last-24.png"));
+		btnLast.setBounds(936, 485, 21, 23);
+		getContentPane().add(btnLast);
+		
+		btnNext = new JButton("");
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnNextActionPerformed(e);
+			}
+		});
+		btnNext.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-next-24 (1).png"));
+		btnNext.setBounds(915, 485, 21, 23);
+		getContentPane().add(btnNext);
+		
+		txtPage = new JTextField();
+		txtPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtPageActionPerformed(e);
+			}
+		});
+		txtPage.setText("1");
+		txtPage.setHorizontalAlignment(SwingConstants.CENTER);
+		txtPage.setColumns(10);
+		txtPage.setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 0, 255)));
+		txtPage.setBackground(Color.LIGHT_GRAY);
+		txtPage.setBounds(792, 485, 111, 23);
+		getContentPane().add(txtPage);
+		
+		btnPrevious = new JButton("");
+		btnPrevious.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnPreviousActionPerformed(e);
+			}
+		});
+		btnPrevious.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-next-24 (2).png"));
+		btnPrevious.setBounds(761, 485, 21, 23);
+		getContentPane().add(btnPrevious);
+		
+		btnFirst = new JButton("");
+		btnFirst.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-last-24 (1).png"));
+		btnFirst.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnFirstActionPerformed(e);
+			}
+		});
+		btnFirst.setMnemonic('F');
+		btnFirst.setBounds(741, 485, 21, 23);
+		getContentPane().add(btnFirst);
 		loadAccount();
 	}
 	
@@ -278,7 +341,7 @@ public class Accounts extends JInternalFrame {
 		}
 	}
 	
-	class PasswordRenderer extends DefaultTableCellRenderer {
+	public class PasswordRenderer extends DefaultTableCellRenderer {
 	    private static final char BULLET = '\u2022';
 
 	    @Override
@@ -321,6 +384,13 @@ public class Accounts extends JInternalFrame {
 		txtPassword.setText(table.getValueAt(rowIndex, 2).toString());
 		var status = Integer.parseInt(table.getValueAt(rowIndex, 3).toString());
 		cbxStatus.setSelectedItem(status == 0 ? "Block" : "Active");
+		if (status == 0) {
+	        txtUsername.setEnabled(false);
+	        txtPassword.setEnabled(false);
+	    } else {
+	        txtUsername.setEnabled(true);
+	        txtPassword.setEnabled(true);
+	    }
 	}
 	
 	protected void txtSearchActionPerformed(ActionEvent e) {
@@ -330,37 +400,187 @@ public class Accounts extends JInternalFrame {
 		sorter.setSortKeys(null);
 	}
 	
+	public static boolean valPassword(String password) {
+		if(password.length() > 7) {
+			if(checkPassword(password)) {
+				return true;
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Password must contain at least one digit, one uppercase letter, and one lowercase letter.");
+	            return false;
+			}
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Password must be at least 7 characters long.");
+			return false;
+		}
+	}
+	
+	public static boolean checkPassword(String password) {
+		boolean hasNum = false;
+		boolean hasCap = false;
+		boolean hasLow = false;
+		char c;
+		for(int i=0 ; i < password.length(); i++) {
+			c = password.charAt(i);
+			if(Character.isDigit(c)) {
+				hasNum = true;
+			}
+			else if(Character.isUpperCase(c)) {
+				hasCap = true;
+			}
+			else if(Character.isLowerCase(c)) {
+				hasLow = true;
+			}
+			if(hasNum && hasCap && hasLow) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean validateUsername(String username) {
+	    if (username.length() < 3) {
+	        JOptionPane.showMessageDialog(null, "Username must be at least 3 characters long.");
+	        return false;
+	    }
+	    
+	    String regex = "^[a-zA-Z0-9_]*$";
+	    if (!username.matches(regex)) {
+	        JOptionPane.showMessageDialog(null, "Username contains invalid characters. Only letters, numbers, and underscores are allowed.");
+	        return false;
+	    }
+
+	    return true;
+	}
+	
 	protected void btnUpdateActionPerformed(ActionEvent e) {
+		String username = txtUsername.getText();
+		if (!validateUsername(username)) {
+		    return; 
+		}
+		    
 		Account acc = new Account();
 		acc.setId(Integer.parseInt(txtAccountId.getText()));
 		acc.setUsername(txtUsername.getText());
-		char[] passwordChars = txtPassword.getPassword();
-		String plainPassword = new String(passwordChars);
-		String hashedPassword = BCrypt.hashpw(plainPassword, BCrypt.gensalt());
-	    acc.setPassword(hashedPassword);
+		
+		int selectedColumnIndex = table.getSelectedColumn(); 
+	    int usernameColumnIndex = table.getColumnModel().getColumnIndex("Username");
+		
+
+	    if (accountDao.isUsernameExists(username) && selectedColumnIndex == usernameColumnIndex) {
+	            JOptionPane.showMessageDialog(null, "Username already exists. Please choose another username.");
+	            return;
+	    }
+	    
+	    char[] passwordChars = txtPassword.getPassword();
+	    String plainPassword = new String(passwordChars);
+	    
+	    if (!valPassword(plainPassword)) {
+	        return; 
+	    }
+	    
+	    acc.setPassword(plainPassword);
+	    
 	    String selectedStatus = cbxStatus.getSelectedItem().toString();
+	    
 	    if (selectedStatus.equals("Active")) {
 	        acc.setStatus(1);
 	        txtUsername.setEnabled(true);
 			txtPassword.setEnabled(true);
 	    } else if (selectedStatus.equals("Block")) {
 	        acc.setStatus(0);
-			txtUsername.setEnabled(false);
-			txtPassword.setEnabled(false);
+	        txtUsername.setEnabled(false);
+	        txtUsername.setText(""); 
+	        txtPassword.setEnabled(false);
+	        txtPassword.setText(""); 
 	    }
+	    
+//	    int statusColumnIndex = table.getColumnModel().getColumnIndex("Status");
+//	    int rowIndex = table.getSelectedRow();
+//	    int currentStatus = (int) table.getValueAt(rowIndex, statusColumnIndex);
+//
+//	    if ((currentStatus == 0 && acc.getStatus() == 0) || (currentStatus == 1 && acc.getStatus() == 1)) {
+//	        String message = (currentStatus == 0) ? "This account is already blocked." : "This account is already active.";
+//	        JOptionPane.showMessageDialog(null, message);
+//	        return;
+//	    }
+	    
 		accountDao.update(acc);
 		refresh();
 	}
 	
+	
 	protected void btnBlockActionPerformed(ActionEvent e) {
-		Account acc  = new Account();
-		acc.setId(Integer.parseInt(txtAccountId.getText()));
-		AccountDAO dao = new AccountDAO();
-		dao.block(acc);
-		txtUsername.setEnabled(false);
-		txtPassword.setEnabled(false);
-		refresh();   
+		int statusColumnIndex = table.getColumnModel().getColumnIndex("Status");
+	    int usernameColumnIndex = table.getColumnModel().getColumnIndex("Username");
+	    int passwordColumnIndex = table.getColumnModel().getColumnIndex("Password");
+	    boolean isAlreadyBlocked = false;
+
+	    for (int row = 0; row < table.getRowCount(); row++) {
+	        int status = (int) table.getValueAt(row, statusColumnIndex);
+	        if (status == 0) { 
+	            table.setValueAt(false, row, usernameColumnIndex); 
+	            table.setValueAt(false, row, passwordColumnIndex);
+	            isAlreadyBlocked = true;
+	        }
+	    }
+	    
+	    if (isAlreadyBlocked) {
+	        JOptionPane.showMessageDialog(null, "This account has been already blocked.");
+	        return;
+	    }
+
+	    Account acc  = new Account();
+	    acc.setId(Integer.parseInt(txtAccountId.getText()));
+	    AccountDAO dao = new AccountDAO();
+	    dao.block(acc);
+	    refresh();   
 	}
 	
+	protected void btnFirstActionPerformed(ActionEvent e) {
+		int page = Integer.parseInt(txtPage.getText());
+		
+		if(page >= 1 && page <= totalPage.intValue()) {
+			pageNumber = page;
+			refresh();
+		}else {
+			JOptionPane.showMessageDialog(txtPage, "page must be 1 to" + totalPage.intValue());
+			txtPage.setText(pageNumber.toString());
+		}
+	}
 	
+	protected void btnPreviousActionPerformed(ActionEvent e) {
+		if(pageNumber > 1) {
+			pageNumber--;
+			txtPage.setText(pageNumber.toString());
+			refresh();
+		}
+	}
+	
+	protected void btnNextActionPerformed(ActionEvent e) {
+		if(pageNumber < totalPage.intValue()) {
+			pageNumber++;
+			txtPage.setText(pageNumber.toString());
+			refresh();
+		}
+	}
+	
+	protected void btnLastActionPerformed(ActionEvent e) {
+		pageNumber = totalPage.intValue();
+		txtPage.setText(pageNumber.toString());
+		refresh();
+	}
+	
+	protected void txtPageActionPerformed(ActionEvent e) {
+		int page = Integer.parseInt(txtPage.getText());
+		
+		if(page >= 1 && page <= totalPage.intValue()) {
+			pageNumber = page;
+			refresh();
+		}else {
+			JOptionPane.showMessageDialog(txtPage, "page must be 1 to" + totalPage.intValue());
+			txtPage.setText(pageNumber.toString());
+		}
+	}
 }

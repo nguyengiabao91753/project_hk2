@@ -20,7 +20,9 @@ CREATE TABLE EMPLOYEES
     SUPERVISOR_ID INT,
     DEPARTMENT_ID INT,
     EDUCATION_ID INT,
-    POSITION_ID INT
+    POSITION_ID INT,
+	IMAGE VARCHAR(255) NULL,
+	LEVEL VARCHAR(50) NOT NULL
 );
 GO
 
@@ -170,13 +172,6 @@ FOREIGN KEY  (WORKSCHEDULE_ID)
 REFERENCES WORK_SCHEDULES(SCHEDULE_ID)
 GO
 
-ALTER TABLE EMPLOYEES
-ADD IMAGE VARCHAR(255) NULL
-GO
-
-ALTER TABLE EMPLOYEES
-ADD LEVEL VARCHAR(50) NULL
-GO
 
 
 
@@ -225,7 +220,7 @@ GO
 
 INSERT INTO POSITIONS (POSITION_NAME)
 VALUES 
-   ('Doctor'),
+	('Doctor'),
     ('Nurse'),
     ('Surgeon'),
     ('Radiologist'), --BS X QUANG
@@ -324,23 +319,37 @@ VALUES
     ('Afternoon Shift', '16:00', '00:00');
 GO
 
- INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE)
-VALUES 
-    ('John Doe', 'Asian', '1990-05-15', 'Male', '123 Main Street, Cityville', 3, NULL, 5, 7, 4,'images/image1.png'),
-    ('Jane Smith', 'Caucasian', '1985-08-22', 'Female', '456 Oak Avenue, Townsville', 4, NULL, 5, 8, 5,'images/image1.png');
+
+DBCC CHECKIDENT ('EMPLOYEES', RESEED, 4);
+
+ INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE, LEVEL)
+VALUES ('Boss', 'Asian', '1990-05-15', 'Male', '123 Main Street', 1, NuLL, 1, 1, 1, null, 'Admin');
 GO
 
-INSERT INTO ACCOUNTS( USERNAME, PASSWORD)
-VALUES
-	('JohnDoe','1234567'),
-	('JaneSmith','1234567');
+INSERT INTO ACCOUNTS (USERNAME, PASSWORD, STATUS)
+VALUES ('Admin', 'Admin12345', 1);
 GO
+
+
+DBCC CHECKIDENT ('ACCOUNTS', RESEED, 6);
+INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE, LEVEL)
+VALUES ('John Doe', 'Asian', '1990-05-15', 'Male', '123 Main Street', 3, 4, 2, 2, 2, 'john_doe.jpg', 'Admin');
+
+INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE, LEVEL)
+VALUES ('Jane Smith', 'Caucasian', '1985-08-22', 'Female', '456 Oak Avenue', 2, 4, 3, 3, 1, 'jane_smith.jpg', 'Admin');
+
+INSERT INTO ACCOUNTS (USERNAME, PASSWORD, STATUS)
+VALUES ('john_doe_username', 'password123', 1);
+
+INSERT INTO ACCOUNTS (USERNAME, PASSWORD, STATUS)
+VALUES ('jane_smith_username', 'securepass', 1);
+
 
 INSERT INTO WORK_SCHEDULES(EMPLOYEE_ID, SHIFT_ID, ROOM_ID, WORK_DATE)
 VALUES
-	(1,1,1,'2024-01-07'),
-	(2,2,2,'2024-01-06');
-GO 10
+	(7,1,1,'2024-01-07'),
+	(7,2,2,'2024-01-06');
+GO 
 
 INSERT INTO ATTENDANCES(WORKSCHEDULE_ID,PRESENT,ARRIVAL_TIME , DEPARTURE_TIME ,LEAVE_TYPE)
 VALUES
@@ -401,8 +410,7 @@ BEGIN
 	VALUES(@fullname, @ethnicity, @date_of_birth, @gender,@address,@salary_level,@supervisor_id,@department_id,@education_id,@position_id,@picture,@level)
 END
 GO
-Drop proc insertEmployee
-go
+
 
 CREATE PROC deleteEmployee
 @id int
@@ -625,4 +633,293 @@ GO
 ALTER TABLE QLNV.dbo.DEPARTMENTS
 ALTER COLUMN ROOM VARCHAR(20); 
 	
+CREATE PROCEDURE blockAccount
+@id INT
+AS
+BEGIN
+    UPDATE ACCOUNTS
+    SET Status = 0
+    WHERE ACCOUNT_ID = @id;
+END
+go
+
+
+
+
+
+
+
+CREATE PROC deleteEmployeeAndAccount
+@employeeId INT,
+@accountId INT
+AS
+BEGIN
+	 BEGIN TRANSACTION;
+    DELETE FROM EMPLOYEES
+    WHERE EMPLOYEE_ID = @employeeId;
+    DELETE FROM ACCOUNTS
+    WHERE ACCOUNT_ID = @accountId;
+	 COMMIT;
+END
+GO
+
+CREATE PROCEDURE deleteAccountAndEmployee
+    @accountId INT,
+    @employeeId INT
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    DELETE FROM ACCOUNTS WHERE ACCOUNT_ID = @accountId;
+    DELETE FROM EMPLOYEES WHERE EMPLOYEE_ID = @employeeId;
+    COMMIT;
+END;
+GO
+
+
+CREATE PROC CheckUsernameExists
+    @username VARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS (SELECT 1 FROM ACCOUNTS WHERE USERNAME = @username)
+        SELECT 1 AS UsernameExists;
+    ELSE
+        SELECT 0 AS UsernameExists;
+END
+GO
+
+
+--Login 
+CREATE PROC LoginAdmin
+    @username VARCHAR(50),
+    @password VARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @status INT, @level VARCHAR(50);
+    
+    SELECT @status = STATUS
+    FROM ACCOUNTS
+    WHERE USERNAME = @username AND PASSWORD = @password;
+
+    IF @status = 1
+    BEGIN
+        SELECT @level = LEVEL
+        FROM EMPLOYEES E
+        JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
+        WHERE A.USERNAME = @username;
+
+        IF @level = 'Admin'
+            SELECT 'Login successful.' AS message;
+        ELSE
+            SELECT 'Your account is not authorized as an Admin. Please choose another account.' AS message;
+    END
+    ELSE IF @status = 0
+		SELECT 'Your account has been locked, please choose another account.' AS message;
+    ELSE
+        SELECT 'Invalid username or password.' AS message;
+END
+GO
+
+
+
+--Login User
+CREATE PROCEDURE loginUser
+	@username VARCHAR(50),
+	@password VARCHAR(50)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	DECLARE @status INT , @level VARCHAR(50);
+	SELECT @status = STATUS
+	FROM ACCOUNTS
+	WHERE @username = USERNAME AND @password = PASSWORD;
+
+	IF @status = 1
+	BEGIN
+		SELECT @level = LEVEL
+		FROM EMPLOYEES E
+		JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
+		WHERE A.USERNAME = @username
+	
+		IF @level = 'Admin' OR @level = 'User'
+			SELECT 'Login successful.' AS message
+	END
+	ELSE IF @status = 0
+		SELECT 'Your account has been locked, please choose another account.' AS message;
+    ELSE
+        SELECT 'Invalid username or password.' AS message
+END
+GO
+
+--Get ID User
+CREATE PROCEDURE GetId
+    @username VARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DECLARE @employeeId INT;
+
+    -- Lấy employee_id từ bảng ACCOUNTS dựa trên username
+    SELECT @employeeId = E.EMPLOYEE_ID
+    FROM EMPLOYEES E
+    JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
+    WHERE A.USERNAME = @username;
+
+    -- Trả về employee_id
+    SELECT @employeeId AS EMPLOYEE_ID;
+END
+GO
+
+--Get User by ID
+CREATE PROCEDURE GetUserById
+    @userId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DECLARE @employeeId INT , @fullname NVARCHAR(50), @ethnicity NVARCHAR(50), @date_of_birth DATE, @gender NVARCHAR(10),@address NVARCHAR(100),@salary_level INT,@supervisor_id INT,@department_id INT,@education_id INT,@position_id INT,@picture VARCHAR(255),@level VARCHAR(50);
+
+    SELECT @employeeId = E.EMPLOYEE_ID,
+           @fullname = E.FULL_NAME,
+           @ethnicity = E.ETHNICITY,
+           @date_of_birth = E.DATE_OF_BIRTH,
+           @gender = E.GENDER,
+           @address = E.ADDRESS,
+           @salary_level = E.SALARY_LEVEL,
+           @supervisor_id = E.SUPERVISOR_ID,
+           @department_id = E.DEPARTMENT_ID,
+           @education_id = E.EDUCATION_ID,
+           @position_id = E.POSITION_ID,
+           @picture = E.IMAGE,
+           @level = E.LEVEL
+    FROM EMPLOYEES E
+    JOIN ACCOUNTS A ON E.EMPLOYEE_ID = A.ACCOUNT_ID
+    WHERE E.EMPLOYEE_ID = @userId;
+
+    SELECT @employeeId AS EMPLOYEE_ID,
+           @fullname AS FULL_NAME,
+           @ethnicity AS ETHNICITY,
+           @date_of_birth AS DATE_OF_BIRTH,
+           @gender AS GENDER,
+           @address AS ADDRESS,
+           @salary_level AS SALARY_LEVEL,
+           @supervisor_id AS SUPERVISOR_ID,
+           @department_id AS DEPARTMENT_ID,
+           @education_id AS EDUCATION_ID,
+           @position_id AS POSITION_ID,
+           @picture AS PICTURE,
+           @level AS LEVEL;
+END
+GO
+
+
+
+
+
+
+
+
+
+
+
+
+--SCHEDULE
+
+CREATE PROC getpersonschedule
+@EMPLOYEE_ID INT
+AS
+BEGIN
+	SELECT * FROM WORK_SCHEDULES
+	WHERE EMPLOYEE_ID = @EMPLOYEE_ID
+	ORDER BY WORK_DATE DESC
+END
+GO
+--ATTEN-PERSONAL
+CREATE PROC getAttpersonal
+@a INT
+AS
+BEGIN
+	SELECT * FROM ATTENDANCES
+	WHERE WORKSCHEDULE_ID IN (
+			SELECT SCHEDULE_ID
+			FROM WORK_SCHEDULES
+			WHERE EMPLOYEE_ID = @a
+		)
+	ORDER BY ATTENDANCE_ID DESC
+END
+GO
+
+
+--TRIGGER
+-- Tạo stored procedure
+CREATE PROCEDURE DailyInsertAtt
+AS
+BEGIN
+    DECLARE @target_date DATE;
+    DECLARE @work_id_to_insert INT;
+
+    -- Lấy ngày hiện tại
+    SET @target_date = CAST(GETDATE() AS DATE);
+
+    -- Tìm id của dòng dữ liệu trong bảng work trùng với ngày hiện tại
+    SELECT TOP 1 @work_id_to_insert = SCHEDULE_ID
+    FROM WORK_SCHEDULES
+    WHERE CONVERT(DATE, WORK_DATE) = @target_date
+    ORDER BY WORK_DATE;
+
+    -- Kiểm tra nếu có dữ liệu
+    IF @work_id_to_insert IS NOT NULL
+    BEGIN
+        -- Thực hiện lệnh insert vào bảng emp với work_id tương ứng
+        INSERT INTO ATTENDANCES ( WORKSCHEDULE_ID,PRESENT, ARRIVAL_TIME, DEPARTURE_TIME, LEAVE_TYPE)
+        VALUES (@work_id_to_insert, 'False', NULL, NULL, 'WP');
+    END
+END
+GO
+
+--EXEC DailyInsertAtt;
+
+--SELECT* FROM ATTENDANCES
+
+
+
+--checkin
+CREATE PROC checkin
+@a INT,
+@Time Time
+AS
+BEGIN
+	UPDATE ATTENDANCES
+	SET ARRIVAL_TIME = @Time,
+	PRESENT = 'True', LEAVE_TYPE=NULL
+	WHERE ATTENDANCE_ID = @a
+END
+GO
+
+CREATE PROC checkout
+@a INT,
+@Time Time
+AS
+BEGIN
+	UPDATE ATTENDANCES
+	SET DEPARTURE_TIME = @Time
+	WHERE ATTENDANCE_ID = @a
+END
+GO
+
+CREATE PROC dayOff
+@a INT
+AS
+BEGIN
+	UPDATE ATTENDANCES
+	SET LEAVE_TYPE = 'P'
+	WHERE ATTENDANCE_ID = @a
+END
+GO
+
 

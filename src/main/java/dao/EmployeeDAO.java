@@ -3,6 +3,7 @@ package dao;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -177,6 +178,40 @@ public class EmployeeDAO {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
+	}
+
+	public Employee getUserById(int userId) { 
+	    Employee employee = null;
+	    try (Connection con = DBCon.getConnection();
+	         CallableStatement cs = con.prepareCall("{call GetUserById(?)}")) {
+	        
+	        cs.setInt(1, userId);
+	        
+	        try (ResultSet rs = cs.executeQuery()) {
+	            if (rs.next()) {
+	                employee = new Employee();
+	                employee.setId(rs.getInt("EMPLOYEE_ID"));
+	                employee.setFull_name(rs.getString("FULL_NAME"));
+	                employee.setEthnicity(rs.getString("ETHNICITY"));
+	                if (!rs.wasNull()) {
+	                    employee.setDate_of_birth(rs.getDate("DATE_OF_BIRTH").toLocalDate());
+	                }
+	                employee.setGender(rs.getString("GENDER"));
+	                employee.setAddress(rs.getString("ADDRESS"));
+	                employee.setSalary_level(rs.getInt("SALARY_LEVEL"));
+	                employee.setSupervisor_id(rs.getInt("SUPERVISOR_ID"));
+	                employee.setDepartment_id(rs.getInt("DEPARTMENT_ID"));
+	                employee.setEducation_id(rs.getInt("EDUCATION_ID"));
+	                employee.setPosition_id(rs.getInt("POSITION_ID"));
+	                employee.setPicture(rs.getString("PICTURE"));
+	                employee.setLevel(rs.getString("LEVEL"));
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return employee;
 	}
 
 }

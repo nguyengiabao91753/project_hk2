@@ -12,6 +12,10 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JPasswordField;
 import javax.swing.border.TitledBorder;
+
+import dao.AccountDAO;
+import entity.Account;
+
 import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -22,6 +26,7 @@ import java.awt.Button;
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -32,6 +37,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.awt.Cursor;
 
 
 
@@ -40,17 +46,19 @@ public class AdminLogin extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panel;
-	private Button button;
-	private JTextField textField;
+	private JTextField txtUsername;
 	private JSeparator separator;
-	private JLabel lblNewLabel;
-	private JLabel lblNewLabel_1;
+	private JLabel lblUsername;
+	private JLabel lblPassword;
 	private JSeparator separator_1;
-	private JPasswordField passwordField;
 	private JLabel lblImage;
 	private JLabel lblLogo;
 	private JLabel lblClose;
 	private int xx, xy;
+	private JPasswordField txtPassword;
+	private JButton btnLogin;
+	private JButton btnReset;
+	App_Admin app = new App_Admin();
 	/**
 	 * Launch the application.
 	 */
@@ -59,6 +67,7 @@ public class AdminLogin extends JFrame {
 			public void run() {
 				try {
 					AdminLogin frame = new AdminLogin();
+					frame.setLocationRelativeTo(null);
 					frame.setUndecorated(true);
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -99,23 +108,18 @@ public class AdminLogin extends JFrame {
 		panel.setBounds(0, 0, 606, 642);
 		panel.setBackground(new Color(255, 255, 255));
 		
-		button = new Button("Log in ");
-		button.setBounds(796, 523, 167, 39);
-		button.setForeground(SystemColor.text);
-		button.setBackground(SystemColor.textHighlight);
-		
-		textField = new JTextField();
-		textField.setBounds(713, 309, 329, 52);
-		textField.setColumns(10);
+		txtUsername = new JTextField();
+		txtUsername.setBounds(713, 309, 329, 52);
+		txtUsername.setColumns(10);
 		
 		separator = new JSeparator();
 		separator.setBounds(713, 359, 329, 2);
 		
-		lblNewLabel = new JLabel("USERNAME ");
-		lblNewLabel.setBounds(713, 268, 75, 30);
+		lblUsername = new JLabel("USERNAME ");
+		lblUsername.setBounds(713, 268, 75, 30);
 		
-		lblNewLabel_1 = new JLabel("PASSWORD");
-		lblNewLabel_1.setBounds(713, 392, 75, 30);
+		lblPassword = new JLabel("PASSWORD");
+		lblPassword.setBounds(713, 392, 75, 30);
 		
 		separator_1 = new JSeparator();
 		separator_1.setBounds(713, 483, 329, 2);
@@ -128,16 +132,11 @@ public class AdminLogin extends JFrame {
 		lblImage.setVerticalAlignment(SwingConstants.TOP);
 		lblImage.setIcon(new ImageIcon("images\\medical-5459631_640.png"));
 		panel.add(lblImage);
-		contentPane.add(button);
-		contentPane.add(textField);
+		contentPane.add(txtUsername);
 		contentPane.add(separator);
-		contentPane.add(lblNewLabel);
-		contentPane.add(lblNewLabel_1);
+		contentPane.add(lblUsername);
+		contentPane.add(lblPassword);
 		contentPane.add(separator_1);
-		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(713, 433, 329, 52);
-		contentPane.add(passwordField);
 		
 		lblLogo = new JLabel("");
 		lblLogo.setIcon(new ImageIcon("images\\z5093637837436_a45c947127ed08faeb08de9ccf099707.jpg"));
@@ -149,7 +148,8 @@ public class AdminLogin extends JFrame {
 	    setScaledImage(scaledImage, lblLogo);
 		
 		lblClose = new JLabel("X");
-		lblClose.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblClose.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblClose.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblClose.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -157,9 +157,36 @@ public class AdminLogin extends JFrame {
 			}
 		});
 		lblClose.setForeground(new Color(0, 128, 128));
-		lblClose.setBounds(1159, 0, 46, 30);
+		lblClose.setBounds(1158, 0, 46, 30);
 		contentPane.add(lblClose);
+		
+		txtPassword = new JPasswordField();
+		txtPassword.setBounds(713, 433, 329, 52);
+		contentPane.add(txtPassword);
+		
+		btnLogin = new JButton("Log in");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnLoginActionPerformed(e);
+			}
+		});
+		btnLogin.setBackground(SystemColor.textHighlight);
+		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnLogin.setBounds(713, 523, 111, 39);
+		contentPane.add(btnLogin);
+		
+		btnReset = new JButton("Reset");
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnResetActionPerformed(e);
+			}
+		});
+		btnReset.setBackground(SystemColor.activeCaptionBorder);
+		btnReset.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnReset.setBounds(931, 523, 111, 39);
+		contentPane.add(btnReset);
 	}
+	
 	protected void lblCloseMouseClicked(MouseEvent e) {
 		System.exit(0);
 	}
@@ -197,4 +224,30 @@ public class AdminLogin extends JFrame {
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
         label.setIcon(scaledIcon);
     }
+    
+	protected void btnLoginActionPerformed(ActionEvent e) {
+		String username = txtUsername.getText();
+	    String password = new String(txtPassword.getPassword()); 
+
+	    Account acc = new Account(); 
+	    acc.setUsername(username); 
+	    acc.setPassword(password); 
+
+	    AccountDAO dao = new AccountDAO();
+	    String loginMessage = dao.login(acc);
+
+	    if (loginMessage.equals("Login successful.")) {
+	        dispose(); 
+	        app.setUndecorated(true);
+	        app.setLocationRelativeTo(null);
+	        app.setVisible(true);
+	    } else {
+	        JOptionPane.showMessageDialog(null, loginMessage);
+	    }
+	}
+	
+	protected void btnResetActionPerformed(ActionEvent e) {
+		txtUsername.setText("");
+		txtPassword.setText("");
+	}
 }

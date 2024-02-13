@@ -399,7 +399,13 @@ public class Work_Schedules extends JInternalFrame {
 	}
 	
 	public void loadWorkSchedule() {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+	         public boolean isCellEditable(int row, int column) {
+	             // Không cho phép chỉnh sửa bất kỳ ô nào
+	             return false;
+	         }
+		};
 		model.addColumn("Id");
 		model.addColumn("Employee_id");
 		model.addColumn("Room");

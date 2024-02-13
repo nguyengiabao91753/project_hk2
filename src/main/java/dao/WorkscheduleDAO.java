@@ -130,4 +130,33 @@ public class WorkscheduleDAO {
 		}
 	}
 	
+	public List<Workschedule> getpersonSchedule(int a) {
+		List<Workschedule> list = new ArrayList<>();
+		try(
+				var con = DBCon.getConnection();
+				var cs = con.prepareCall("{call getpersonschedule(?)}");
+				
+				) {
+			cs.setInt(1, a);
+			ResultSet rs = cs.executeQuery();
+			while(rs.next()) {
+				list.add(new Workschedule(
+						rs.getInt("schedule_id"),
+						rs.getInt("employee_id"),
+						rs.getInt("shift_id"),
+						rs.getInt("room_id"),
+						rs.getDate("work_date").toLocalDate()
+						));
+			}
+			if(cs.executeUpdate() >0) {
+				JOptionPane.showMessageDialog(null, "Delete Success");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
 }

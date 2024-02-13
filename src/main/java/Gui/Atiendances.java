@@ -349,7 +349,7 @@ public class Atiendances extends JInternalFrame {
 				lblNextMouseClicked(e);
 			}
 		});
-		lblNext.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-next-24 (1).png"));
+		lblNext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
 		lblNext.setBounds(878, 416, 24, 24);
 		getContentPane().add(lblNext);
 		
@@ -360,7 +360,7 @@ public class Atiendances extends JInternalFrame {
 				lblLastMouseClicked(e);
 			}
 		});
-		lblLast.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-last-24.png"));
+		lblLast.setIcon(new ImageIcon("images\\icons8-last-24.png"));
 		lblLast.setBounds(905, 416, 24, 24);
 		getContentPane().add(lblLast);
 		
@@ -371,7 +371,7 @@ public class Atiendances extends JInternalFrame {
 				lblPreviousMouseClicked(e);
 			}
 		});
-		lblPrevious.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-next-24 (2).png"));
+		lblPrevious.setIcon(new ImageIcon("images\\icons8-next-24 (2).png"));
 		lblPrevious.setBounds(817, 416, 24, 24);
 		getContentPane().add(lblPrevious);
 		
@@ -383,7 +383,7 @@ public class Atiendances extends JInternalFrame {
 			}
 		});
 		lblFirst.setBackground(new Color(240, 240, 240));
-		lblFirst.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-last-24 (1).png"));
+		lblFirst.setIcon(new ImageIcon("images\\icons8-last-24 (1).png"));
 		lblFirst.setBounds(790, 416, 24, 24);
 		getContentPane().add(lblFirst);
 		
@@ -433,7 +433,13 @@ public class Atiendances extends JInternalFrame {
 		return date;
 	}
 	public void loadAtt() {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+	         public boolean isCellEditable(int row, int column) {
+	             // Không cho phép chỉnh sửa bất kỳ ô nào
+	             return false;
+	         }
+		};
 		model.addColumn("Id");
 		model.addColumn("Schedule_id");
 		model.addColumn("Emp_id");
@@ -521,7 +527,7 @@ public class Atiendances extends JInternalFrame {
 		if(table.getValueAt(rowIndex, 8) == null) {
 			cbbType.setSelectedIndex(0);
 		}else {
-			cbbType.setSelectedIndex((table.getValueAt(rowIndex, 8).toString().equals("permission") ? 1:2));
+			cbbType.setSelectedIndex((table.getValueAt(rowIndex, 8).toString().equals("P") ? 1:2));
 		}
 		
 		
