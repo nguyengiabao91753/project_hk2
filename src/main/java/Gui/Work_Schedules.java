@@ -371,7 +371,7 @@ public class Work_Schedules extends JInternalFrame {
 			}
 		});
 		lblfirst.setIcon(new ImageIcon("images\\icons8-last-24 (1).png"));
-		lblfirst.setBounds(790, 416, 24, 24);
+		lblfirst.setBounds(797, 416, 24, 24);
 		getContentPane().add(lblfirst);
 		
 		hidenextlast();

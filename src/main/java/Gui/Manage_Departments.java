@@ -50,6 +50,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
 
 public class Manage_Departments extends JInternalFrame {
 	private JComponent Barca = ((javax.swing.plaf.basic.BasicInternalFrameUI) getUI()).getNorthPane();
@@ -69,24 +70,25 @@ public class Manage_Departments extends JInternalFrame {
 	Manage_DepartmentsDAO DepDAO = new Manage_DepartmentsDAO();
 	RoomDAO RoomDAO = new RoomDAO();
 	
-	Integer pagenumber =1;
-	Integer rowOfPage =10;
-	Double totalPage =0.0;
-	Integer totalCount =0;
+	Integer pagenumber = 1;
+	Integer rowOfPage = 10;
+	Double totalPage = 0.0;
+	Integer totalCount = 0;
 	
 	private JLabel lblTextsearch;
 	private JTextField textSearch;
 	private JButton btnDelete;
 	private JTextField txtDeparment;
-	private JButton btnPrevious;
-	private JButton btnNext;
-	private JTextField txtPage;
-	private JTextField textTotal;
-	private JLabel lblNewLabel;
-	private JButton btnReset;
 	private JTextField txtRoom;
 	private App_Admin app;
 	private RowFilter<?, ?> someRowFilter;
+	private JLabel lblfirst;
+	private JLabel lblfirst_1;
+	private JLabel lblprevious;
+	private JTextField textPage;
+	private JLabel lblnext;
+	private JLabel lbllast_1;
+    private static Manage_Departments instance;
 
 
 	/**
@@ -267,104 +269,115 @@ public class Manage_Departments extends JInternalFrame {
 		txtDeparment.setBounds(108, 140, 150, 30);
 		getContentPane().add(txtDeparment);
 		
-		btnPrevious = new JButton("Previous");
-		btnPrevious.setBackground(SystemColor.inactiveCaption);
-		btnPrevious.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnPreviousMouseEntered(e);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnPreviousMouseExited(e);
-			}
-		});
-		btnPrevious.setFont(new Font("Times New Roman", Font.BOLD, 11));
-		btnPrevious.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnPreviousActionPerformed(e);
-			}
-		});
-		btnPrevious.setBounds(450, 426, 89, 25);
-		getContentPane().add(btnPrevious);
-		
-		btnNext = new JButton("Next");
-		btnNext.setBackground(SystemColor.inactiveCaption);
-		btnNext.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnNextMouseEntered(e);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnNextMouseExited(e);
-			}
-		});
-		btnNext.setFont(new Font("Times New Roman", Font.BOLD, 11));
-		btnNext.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnNextActionPerformed(e);
-			}
-		});
-		btnNext.setBounds(650, 426, 89, 25);
-		getContentPane().add(btnNext);
-		
-		txtPage = new JTextField();
-		txtPage.setHorizontalAlignment(SwingConstants.CENTER);
-		txtPage.setText("1");
-		txtPage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				txtPageActionPerformed(e);
-			}
-		});
-		txtPage.setBounds(550, 427, 86, 25);
-		getContentPane().add(txtPage);
-		txtPage.setColumns(10);
-		
-		textTotal = new JTextField();
-		textTotal.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textTotalActionPerformed(e);
-			}
-		});
-		textTotal.setBounds(861, 426, 86, 25);
-		getContentPane().add(textTotal);
-		textTotal.setColumns(10);
-		
-		lblNewLabel = new JLabel("Total :");
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblNewLabel.setBounds(820, 426, 40, 25);
-		getContentPane().add(lblNewLabel);
-		
 		loadDepartment();
 		tbemp.setRowHeight(35);
-		
-		btnReset = new JButton("RESET");
-		btnReset.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnResetMouseEntered(e);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnResetMouseExited(e);
-			}
-		});
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnResetActionPerformed(e);
-			}
-		});
-		btnReset.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		btnReset.setBackground(SystemColor.inactiveCaption);
-		btnReset.setBounds(136, 249, 122, 35);
-		getContentPane().add(btnReset);
 		
 		txtRoom = new JTextField();
 		txtRoom.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		txtRoom.setColumns(10);
 		txtRoom.setBounds(108, 185, 150, 30);
 		getContentPane().add(txtRoom);
+		
+		lblfirst = new JLabel("");
+		lblfirst.setOpaque(true);
+		lblfirst.setBounds(765, 470, 24, 24);
+		getContentPane().add(lblfirst);
+		
+		lblfirst_1 = new JLabel("");
+		lblfirst_1.setBackground(SystemColor.menu);
+		lblfirst_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblfirst_1MouseClicked(e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblfirst_1MouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblfirst_1MouseExited(e);
+			}
+		});
+		lblfirst_1.setIcon(new ImageIcon("images\\icons8-last-24 (1).png"));
+		lblfirst_1.setOpaque(true);
+		lblfirst_1.setBounds(773, 433, 24, 24);
+		getContentPane().add(lblfirst_1);
+		
+		lblprevious = new JLabel("");
+		lblprevious.setBackground(SystemColor.menu);
+		lblprevious.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblpreviousMouseClicked(e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblpreviousMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblpreviousMouseExited(e);
+			}
+		});
+		lblprevious.setIcon(new ImageIcon("images\\icons8-next-24 (2).png"));
+		lblprevious.setOpaque(true);
+		lblprevious.setBounds(806, 433, 24, 24);
+		getContentPane().add(lblprevious);
+		
+		textPage = new JTextField();
+		textPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textPageActionPerformed(e);
+			}
+		});
+		textPage.setText("1");
+		textPage.setHorizontalAlignment(SwingConstants.CENTER);
+		textPage.setColumns(10);
+		textPage.setBounds(840, 433, 40, 24);
+		getContentPane().add(textPage);
+		
+		lblnext = new JLabel("");
+		lblnext.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblnextMouseClicked(e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblnextMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblnextMouseExited(e);
+			}
+		});
+		lblnext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
+		lblnext.setOpaque(true);
+		lblnext.setBackground(SystemColor.menu);
+		lblnext.setBounds(884, 433, 24, 24);
+		getContentPane().add(lblnext);
+		
+		lbllast_1 = new JLabel("");
+		lbllast_1.setBackground(SystemColor.menu);
+		lbllast_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lbllast_1MouseClicked(e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lbllast_1MouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lbllast_1MouseExited(e);
+			}
+		});
+		lbllast_1.setIcon(new ImageIcon("images\\icons8-last-24.png"));
+		lbllast_1.setOpaque(true);
+		lbllast_1.setBounds(917, 433, 24, 24);
+		getContentPane().add(lbllast_1);
 
 	}
 	
@@ -422,6 +435,7 @@ public class Manage_Departments extends JInternalFrame {
 				Dep.getHead_of_department(),
 				Dep.getRoom(),
 		}));
+		hidenextlast();
 	}
 	public int validateDepartment() {
 		int count = 0 ;
@@ -455,26 +469,18 @@ public class Manage_Departments extends JInternalFrame {
 			app.desktopPane.add(add);
 			add.toFront();
 			this.hide();
-//			app.pack();
 		}
-//		if(validateDepartment() !=0) {
-//			return;
-//		}else {
-//		var Dep = new Department();
-//		Dep.setDepartment_name(txtName.getText()+1);
-//		Dep.setHead_of_department(txtDeparment.getText()+1);
-//		Dep.setRoom(txtRoom.getText()+1);
-//		DepDAO.insert(Dep);
-//		// load lai du lieu
-//		loadDepartment();
-//		refresh();
-//		}
 	}
 	
 	protected void btnUpdateActionPerformed(ActionEvent e) {
+	    if (tbemp.getSelectedRow() == -1) {
+	        JOptionPane.showMessageDialog(null, "Please select a row to update.", "Warning", JOptionPane.WARNING_MESSAGE);
+	        return; // Không có dòng nào được chọn, thoát khỏi phương thức
+	    }
 		if(validateDepartment()!=0) {
 			return;
 		}else {
+			
 		Department DepNew = new Department();
 		DepNew.setDepartment_id(Integer.parseInt(txtID.getText()));
 		DepNew.setDepartment_name(txtName.getText());
@@ -494,13 +500,30 @@ public class Manage_Departments extends JInternalFrame {
 	protected void btnUpdateMouseExited(MouseEvent e) {
 		btnUpdate.setBackground(Color.yellow);
 		btnUpdate.setForeground(Color.black);
-	}
+	};
 	protected void btnDeleteActionPerformed(ActionEvent e) {
-		JOptionPane.showConfirmDialog(null,"Are you sure want to delete?","Delete",JOptionPane.YES_NO_OPTION);
-		int a = Integer.parseInt(txtID.getText());
-		DepDAO.delete(a);
-		refresh();
+	    // Kiểm tra xem có dòng nào được chọn không
+	    if (tbemp.getSelectedRow() == -1) {
+	        JOptionPane.showMessageDialog(null, "Please select a row to delete.", "Warning", JOptionPane.WARNING_MESSAGE);
+	        return; // Không có dòng nào được chọn, thoát khỏi phương thức
+	    }
+
+	    int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure want to delete?", "Delete", JOptionPane.YES_NO_OPTION);
+
+	    if (dialogResult == JOptionPane.YES_OPTION) {
+	        // Lấy ID từ dòng được chọn
+			int a = Integer.parseInt(txtID.getText());
+
+	        // Xóa dòng được chọn
+	        DepDAO.delete(a);
+
+	        // Refresh sau khi xóa
+	        refresh();
+	    }
 	}
+
+	// Phương thức để lấy ID từ dòng được chọn
+
 	protected void btnDeleteMouseEntered(MouseEvent e) {
 		btnDelete.setBackground(new Color(106,90,205));
 		btnDelete.setForeground(Color.black);
@@ -543,15 +566,52 @@ public class Manage_Departments extends JInternalFrame {
 		
 	    txtRoom.setText(tbemp.getValueAt(rowIndex, 3).toString());
 	    }
-	protected void btnPreviousActionPerformed(ActionEvent e) {
-		if(pagenumber>1) {
+	protected void lblfirst_1MouseClicked(MouseEvent e) {
+		pagenumber = 1;
+		textPage.setText(pagenumber.toString());
+		refresh();
+	}
+	protected void lblpreviousMouseClicked(MouseEvent e) {
+		if(pagenumber >0) {
 			pagenumber--;
-			txtPage.setText(pagenumber.toString());
+			textPage.setText(pagenumber.toString());
 			refresh();
 		}
 	}
-	protected void txtPageActionPerformed(ActionEvent e) {
-		int num = Integer.parseInt(txtPage.getText()) ;
+	protected void lblnextMouseClicked(MouseEvent e) {
+		if(pagenumber < totalPage.intValue()) {
+			pagenumber++;
+			textPage.setText(pagenumber.toString());
+			refresh();
+		}
+	}
+	protected void lblnextMouseEntered(MouseEvent e) {
+		lblnext.setBackground(new Color(106,90,205));
+		lblnext.setForeground(Color.black);
+	}
+	protected void lbllast_1MouseClicked(MouseEvent e) {
+		pagenumber = totalPage.intValue();
+		textPage.setText(pagenumber.toString());
+		refresh();
+	}
+	public void hidenextlast() {
+		if(pagenumber == 1) {
+			lblfirst_1.setVisible(false);
+			lblprevious.setVisible(false);
+		}else {
+			lblfirst_1.setVisible(true);
+			lblprevious.setVisible(true);
+		}
+		if(pagenumber == totalPage.intValue()) {
+			lblnext.setVisible(false);
+			lbllast_1.setVisible(false);
+		}else {
+			lblnext.setVisible(true);
+			lbllast_1.setVisible(true);
+		}
+	}
+	protected void textPageActionPerformed(ActionEvent e) {
+		int num = Integer.parseInt(textPage.getText()) ;
 		if(num>0 && num<totalPage.intValue()) {
 			pagenumber = num;
 			refresh();
@@ -559,50 +619,33 @@ public class Manage_Departments extends JInternalFrame {
 			JOptionPane.showMessageDialog(null, "Page Number is invalid");
 		}
 	}
-	protected void btnNextActionPerformed(ActionEvent e) {
-		if(pagenumber<totalPage.intValue()) {
-			pagenumber++;
-			txtPage.setText(pagenumber.toString());
-			// load lại dữ liệu
-			refresh();
-		}
+	protected void lblpreviousMouseEntered(MouseEvent e) {
+		lblprevious.setBackground(new Color(106,90,205));
+		lblprevious.setForeground(Color.black);
+		
 	}
-	protected void btnResetActionPerformed(ActionEvent e) {
-	    int rowIndex = tbemp.getSelectedRow();
-	    if (rowIndex != -1) { // Kiểm tra xem đã chọn hàng nào hay chưa
-		    txtID.setText(tbemp.getValueAt(rowIndex, 0).toString());
-	        txtName.setText("");
-	        txtDeparment.setText("");
-	        txtRoom.setText("");
-	    }
-
+	protected void lblfirst_1MouseEntered(MouseEvent e) {
+		lblfirst_1.setBackground(new Color(106,90,205));
+		lblfirst_1.setForeground(Color.black);
 	}
-	protected void btnResetMouseEntered(MouseEvent e) {
-		btnReset.setBackground(new Color(106,90,205));
-		btnReset.setForeground(Color.black);
+	protected void lbllast_1MouseEntered(MouseEvent e) {
+		lbllast_1.setBackground(new Color(106,90,205));
+		lbllast_1.setForeground(Color.black);
 	}
-	protected void btnResetMouseExited(MouseEvent e) {
-		btnReset.setBackground(SystemColor.inactiveCaption);
-		btnReset.setForeground(Color.black);
+	protected void lblfirst_1MouseExited(MouseEvent e) {
+		lblfirst_1.setBackground(SystemColor.menu);
+		lblfirst_1.setForeground(Color.black);
 	}
-	protected void btnPreviousMouseEntered(MouseEvent e) {
-		btnPrevious.setBackground(new Color(106,90,205));
-		btnPrevious.setForeground(Color.black);
+	protected void lblpreviousMouseExited(MouseEvent e) {
+		lblprevious.setBackground(SystemColor.menu);
+		lblprevious.setForeground(Color.black);
 	}
-	protected void btnNextMouseEntered(MouseEvent e) {
-		btnNext.setBackground(new Color(106,90,205));
-		btnNext.setForeground(Color.black);
+	protected void lblnextMouseExited(MouseEvent e) {
+		lblnext.setBackground(SystemColor.menu);
+		lblnext.setForeground(Color.black);
 	}
-	protected void btnPreviousMouseExited(MouseEvent e) {
-		btnPrevious.setBackground(SystemColor.inactiveCaption);
-		btnPrevious.setForeground(Color.black);
+	protected void lbllast_1MouseExited(MouseEvent e) {
+		lbllast_1.setBackground(SystemColor.menu);
+		lbllast_1.setForeground(Color.black);
 	}
-	protected void btnNextMouseExited(MouseEvent e) {
-		btnNext.setBackground(SystemColor.inactiveCaption);
-		btnNext.setForeground(Color.black);
-	}
-	protected void textTotalActionPerformed(ActionEvent e) {
-	    int columnCount = tbemp.getColumnCount();
-	    textTotal.setText(Integer.toString(columnCount));
-		}
 }

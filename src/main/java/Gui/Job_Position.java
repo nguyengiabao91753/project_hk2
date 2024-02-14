@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultRowSorter;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
@@ -57,11 +58,6 @@ public class Job_Position extends JInternalFrame {
 	private JButton btnDelete;
 	private JLabel lblTextsearch;
 	private JTextField textSearch;
-	private JButton btnPrevious;
-	private JTextField txtPage;
-	private JButton btnNext;
-	private JLabel lblNewLabel;
-	private JTextField textField_2;
 	PositionDAO PosDAO = new PositionDAO();
 	private App_Admin app;
 	
@@ -69,6 +65,11 @@ public class Job_Position extends JInternalFrame {
 	Integer rowsOfPage =10;
 	Double totalPage =0.0;
 	Integer totalCount =0;
+	private JLabel lblfirst;
+	private JLabel lblprevious;
+	private JTextField textPage;
+	private JLabel lblnext;
+	private JLabel lbllast;
 
 	/**
 	 * Launch the application.
@@ -102,7 +103,7 @@ public class Job_Position extends JInternalFrame {
 	public Job_Position() {
 		Quit();
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
-		getContentPane().setBackground(new Color(255, 255, 255));
+		getContentPane().setBackground(SystemColor.menu);
 		setBounds(223, 37, 957, 626);
 		getContentPane().setLayout(null);
 		
@@ -222,72 +223,122 @@ public class Job_Position extends JInternalFrame {
 		textSearch.setColumns(10);
 		textSearch.setBounds(326, 11, 62, 25);
 		getContentPane().add(textSearch);
-		
-		btnPrevious = new JButton("Previous");
-		btnPrevious.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnPreviousMouseEntered(e);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnPreviousMouseExited(e);
-			}
-		});
-		btnPrevious.setBackground(SystemColor.inactiveCaption);
-		btnPrevious.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnPreviousActionPerformed(e);
-			}
-		});
-		btnPrevious.setFont(new Font("Times New Roman", Font.BOLD, 11));
-		btnPrevious.setBounds(450, 433, 89, 25);
-		getContentPane().add(btnPrevious);
-		
-		txtPage = new JTextField();
-		txtPage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				txtPageActionPerformed(e);
-			}
-		});
-		txtPage.setText("1");
-		txtPage.setHorizontalAlignment(SwingConstants.CENTER);
-		txtPage.setColumns(10);
-		txtPage.setBounds(550, 434, 86, 25);
-		getContentPane().add(txtPage);
-		
-		btnNext = new JButton("Next");
-		btnNext.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnNextMouseEntered(e);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnNextMouseExited(e);
-			}
-		});
-		btnNext.setBackground(SystemColor.inactiveCaption);
-		btnNext.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnNextActionPerformed(e);
-			}
-		});
-		btnNext.setFont(new Font("Times New Roman", Font.BOLD, 11));
-		btnNext.setBounds(650, 433, 89, 25);
-		getContentPane().add(btnNext);
-		
-		lblNewLabel = new JLabel("Total :");
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblNewLabel.setBounds(820, 433, 40, 25);
-		getContentPane().add(lblNewLabel);
-		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(861, 433, 86, 25);
-		getContentPane().add(textField_2);
+		lblprevious.setIcon(new ImageIcon("C:images\\icons8-next-24 (2).png"));
+		lblnext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
 		loadPosition();
 		tbemp.setRowHeight(35);
+		
+		lblfirst = new JLabel("");
+		lblfirst.setBackground(SystemColor.menu);
+		lblfirst.setIcon(new ImageIcon("images\\icons8-last-24 (1).png"));
+		lblfirst.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblfirstMouseClicked(e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblfirstMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblfirstMouseExited(e);
+			}
+		});
+		lblfirst.setOpaque(true);
+		lblfirst.setBounds(773, 433, 24, 24);
+		getContentPane().add(lblfirst);
+		
+		lblprevious = new JLabel("");
+		lblprevious.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblpreviousMouseClicked(e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblpreviousMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblpreviousMouseExited(e);
+			}
+		});
+		lblprevious.setOpaque(true);
+		lblprevious.setBackground(SystemColor.menu);
+		lblprevious.setIcon(new ImageIcon("images\\icons8-next-24 (2).png"));
+		lblprevious.setBounds(806, 433, 24, 24);
+		getContentPane().add(lblprevious);
+		
+		textPage = new JTextField();
+		textPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textPageActionPerformed(e);
+			}
+		});
+		textPage.setText("1");
+		textPage.setHorizontalAlignment(SwingConstants.CENTER);
+		textPage.setColumns(10);
+		textPage.setBounds(840, 433, 40, 24);
+		getContentPane().add(textPage);
+		
+		lblnext = new JLabel("");
+		lblnext.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblnextMouseClicked(e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblnextMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblnextMouseExited(e);
+			}
+		});
+		lblnext.setOpaque(true);
+		lblnext.setBackground(SystemColor.menu);
+		lblnext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
+		
+		lblnext.setBounds(884, 433, 24, 24);
+		getContentPane().add(lblnext);
+		
+		lbllast = new JLabel("");
+		lbllast.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lbllastMouseClicked(e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lbllastMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lbllastMouseExited(e);
+			}
+		});
+		lbllast.setOpaque(true);
+		lbllast.setBounds(918, 433, 24, 24);
+		lbllast.setIcon(new ImageIcon("images\\icons8-last-24.png"));
+		getContentPane().add(lbllast);
+	}
+	public void hidenextlast() {
+		if(pageNumber == 1) {
+			lblfirst.setVisible(false);
+			lblprevious.setVisible(false);
+		}else {
+			lblfirst.setVisible(true);
+			lblprevious.setVisible(true);
+		}
+		if(pageNumber == totalPage.intValue()) {
+			lblnext.setVisible(false);
+			lbllast.setVisible(false);
+		}else {
+			lblnext.setVisible(true);
+			lbllast.setVisible(true);
+		}
 	}
 	//load
 	public void loadPosition() {
@@ -323,30 +374,7 @@ public class Job_Position extends JInternalFrame {
 				Pos.getPosition_id(),
 				Pos.getPosition_name(),
 		}));
-	}
-	protected void btnPreviousActionPerformed(ActionEvent e) {
-		if(pageNumber>1) {
-			pageNumber--;
-			txtPage.setText(pageNumber.toString());
-			refresh();
-		}
-	}
-	protected void btnNextActionPerformed(ActionEvent e) {
-		if(pageNumber<totalPage.intValue()) {
-			pageNumber++;
-			txtPage.setText(pageNumber.toString());
-			// load lại dữ liệu
-			refresh();
-		}
-	}
-	protected void txtPageActionPerformed(ActionEvent e) {
-		int num = Integer.parseInt(txtPage.getText()) ;
-		if(num>0 && num<totalPage.intValue()) {
-			pageNumber = num;
-			refresh();
-		}else {
-			JOptionPane.showMessageDialog(null, "Page Number is invalid");
-		}
+		hidenextlast();
 	}
 	protected void btnInsertActionPerformed(ActionEvent e) {
 		AddPosition add =  AddPosition.getInstance();
@@ -355,7 +383,6 @@ public class Job_Position extends JInternalFrame {
 			app.desktopPane.add(add);
 			add.toFront();
 			this.hide();
-//			app.pack();
 		}
 	}
 	public int validatePosition() {
@@ -367,6 +394,10 @@ public class Job_Position extends JInternalFrame {
 		return count;
 	}
 	protected void btnUpdateActionPerformed(ActionEvent e) {
+	    if (tbemp.getSelectedRow() == -1) {
+	        JOptionPane.showMessageDialog(null, "Please select a row to update.", "Warning", JOptionPane.WARNING_MESSAGE);
+	        return; // Không có dòng nào được chọn, thoát khỏi phương thức
+	    }
 		if(validatePosition()!=0) {
 			return;
 		}else {
@@ -379,10 +410,24 @@ public class Job_Position extends JInternalFrame {
 		}
 	}
 	protected void btnDeleteActionPerformed(ActionEvent e) {
-		JOptionPane.showConfirmDialog(null,"Are you sure want to delete?","Delete",JOptionPane.YES_NO_OPTION);
-		int a = Integer.parseInt(txtID.getText());
-		PosDAO.delete(a);
-		refresh();
+	    // Kiểm tra xem có dòng nào được chọn không
+	    if (tbemp.getSelectedRow() == -1) {
+	        JOptionPane.showMessageDialog(null, "Please select a row to delete.", "Warning", JOptionPane.WARNING_MESSAGE);
+	        return; // Không có dòng nào được chọn, thoát khỏi phương thức
+	    }
+
+	    int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure want to delete?", "Delete", JOptionPane.YES_NO_OPTION);
+
+	    if (dialogResult == JOptionPane.YES_OPTION) {
+	        // Lấy ID từ dòng được chọn
+			int a = Integer.parseInt(txtID.getText());
+
+	        // Xóa dòng được chọn
+	        PosDAO.delete(a);
+
+	        // Refresh sau khi xóa
+	        refresh();
+	    }
 	}
 	protected void btnInsertMouseEntered(MouseEvent e) {
 		btnInsert.setBackground(new Color(106,90,205));
@@ -408,22 +453,6 @@ public class Job_Position extends JInternalFrame {
 		btnDelete.setBackground(Color.red);
 		btnDelete.setForeground(Color.black);
 	}
-	protected void btnPreviousMouseEntered(MouseEvent e) {
-		btnPrevious.setBackground(new Color(106,90,205));
-		btnPrevious.setForeground(Color.black);
-	}
-	protected void btnPreviousMouseExited(MouseEvent e) {
-		btnPrevious.setBackground(SystemColor.inactiveCaption);
-		btnPrevious.setForeground(Color.black);
-	}
-	protected void btnNextMouseEntered(MouseEvent e) {
-		btnNext.setBackground(new Color(106,90,205));
-		btnNext.setForeground(Color.black);
-	}
-	protected void btnNextMouseExited(MouseEvent e) {
-		btnNext.setBackground(SystemColor.inactiveCaption);
-		btnNext.setForeground(Color.black);
-	}
 	protected void textFieldActionPerformed(ActionEvent e) {
 	    String find = textSearch.getText();
 
@@ -438,5 +467,70 @@ public class Job_Position extends JInternalFrame {
 	    DefaultRowSorter<?, ?> sorter = (DefaultRowSorter<?, ?>) tbemp.getRowSorter();
 	    sorter.setRowFilter(RowFilter.regexFilter(find));
 	    sorter.setSortKeys(null);
+	}
+	protected void lblfirstMouseClicked(MouseEvent e) {
+		pageNumber = 1;
+		textPage.setText(pageNumber.toString());
+		refresh();
+	}
+	protected void lblpreviousMouseClicked(MouseEvent e) {
+		if(pageNumber >0) {
+			pageNumber--;
+			textPage.setText(pageNumber.toString());
+			refresh();
+		}
+	}
+	protected void textPageActionPerformed(ActionEvent e) {
+		int num = Integer.parseInt(textPage.getText()) ;
+		if(num>0 && num<totalPage.intValue()) {
+			pageNumber = num;
+			refresh();
+		}else {
+			JOptionPane.showMessageDialog(null, "Page Number is invalid");
+		}
+	}
+	protected void lblnextMouseClicked(MouseEvent e) {
+		if(pageNumber < totalPage.intValue()) {
+			pageNumber++;
+			textPage.setText(pageNumber.toString());
+			refresh();
+		}
+	}
+	protected void lbllastMouseClicked(MouseEvent e) {
+		pageNumber = totalPage.intValue();
+		textPage.setText(pageNumber.toString());
+		refresh();
+	}
+	protected void lblnextMouseEntered(MouseEvent e) {
+		lblnext.setBackground(new Color(106,90,205));
+		lblnext.setForeground(Color.black);
+	}
+	protected void lblnextMouseExited(MouseEvent e) {
+		lblnext.setBackground(SystemColor.menu);
+		lblnext.setForeground(Color.black);
+	}
+	protected void lblfirstMouseEntered(MouseEvent e) {
+		lblfirst.setBackground(new Color(106,90,205));
+		lblfirst.setForeground(Color.black);
+	}
+	protected void lblfirstMouseExited(MouseEvent e) {
+		lblfirst.setBackground(SystemColor.menu);
+		lblfirst.setForeground(Color.black);
+	}
+	protected void lblpreviousMouseEntered(MouseEvent e) {
+		lblprevious.setBackground(new Color(106,90,205));
+		lblprevious.setForeground(Color.black);
+	}
+	protected void lblpreviousMouseExited(MouseEvent e) {
+		lblprevious.setBackground(SystemColor.menu);
+		lblprevious.setForeground(Color.black);
+	}
+	protected void lbllastMouseEntered(MouseEvent e) {
+		lbllast.setBackground(new Color(106,90,205));
+		lbllast.setForeground(Color.black);
+	}
+	protected void lbllastMouseExited(MouseEvent e) {
+		lbllast.setBackground(SystemColor.menu);
+		lbllast.setForeground(Color.black);
 	}
 }

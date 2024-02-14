@@ -45,7 +45,7 @@ public class Manage_DepartmentsDAO {
 		List<Department> list = new ArrayList<>();
 		try(
 				Connection con = DBCon.getConnection();
-				CallableStatement cs =  con.prepareCall("{call getAllDep}");
+				CallableStatement cs =  con.prepareCall("{call getAllDepartment}");
 				ResultSet rs = cs.executeQuery();
 				) {
 			

@@ -113,15 +113,6 @@ public class App_Admin extends JFrame {
 	 * Create the frame.
 	 */
 
-
-	public void openPos() {
-		if(Pos == null || Pos.isClosed()) {
-			Pos = new Job_Position() ;
-			Pos.setBounds(0,0,957,627);
-			desktopPane.add(Pos);
-			Pos.show();
-		}
-	}
 	public void EsconderBotones() {
 		btnSta.setBounds(10, 105, 187, 37);
 		btnSta.setText("");
@@ -322,10 +313,6 @@ public class App_Admin extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				btnDepartmentMouseExited(e);
 			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				btnDepartmentMouseClicked(e);
-			}
 		});
 		btnDepartment.setIcon(new ImageIcon("images\\icons8-hospital-24.png"));
 		btnDepartment.addActionListener(new ActionListener() {
@@ -410,7 +397,6 @@ public class App_Admin extends JFrame {
 		panelLateral.add(panelAtt);
 		panelLateral.add(panelDepart);
 		panelLateral.add(panelEdu);
-		
 		panel = new JPanel();
 		panel.setBounds(78, 72, 117, 4);
 		panelLateral.add(panel);
@@ -431,7 +417,8 @@ public class App_Admin extends JFrame {
 		lblNewLabel_2.setBounds(80, 47, 120, 14);
 		panelLateral.add(lblNewLabel_2);
 		
-		btnPosition = new JButton(" Position");
+		btnPosition = new JButton("Position");
+		btnPosition.setIcon(new ImageIcon("images\\icons8-position-24.png"));
 		btnPosition.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -440,10 +427,6 @@ public class App_Admin extends JFrame {
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnPositionMouseExited(e);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				btnPositionMouseClicked(e);
 			}
 		});
 		btnPosition.addActionListener(new ActionListener() {
@@ -784,9 +767,6 @@ public class App_Admin extends JFrame {
 	protected void btnStaMouseClicked(MouseEvent e) {
 	}	
 	
-	
-	protected void btnDepartmentMouseClicked(MouseEvent e) {
-	}
 	protected void btnPositionActionPerformed(ActionEvent e) {
 		try {
 			if(btnPosition.isVisible() == true) {
@@ -798,10 +778,10 @@ public class App_Admin extends JFrame {
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
 				panelPos.setVisible(true);
+				openPosition();
 			}
+
 			opensidebar();
-			openPos();
-			openPosition();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -831,8 +811,6 @@ public class App_Admin extends JFrame {
 	    }
 		
 	}
-	protected void btnPositionMouseClicked(MouseEvent e) {
-	}
 	void loadAccountForm() {
 		JInternalFrame[] frames = desktopPane.getAllFrames();
         for (JInternalFrame frame : frames) {
@@ -847,4 +825,5 @@ public class App_Admin extends JFrame {
 	        acc.show();
 	    }	
 	}
+
 }

@@ -22,7 +22,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import org.openqa.selenium.html5.Location;
+
 import User_GUI.Attendance;
+import User_GUI.Locations;
 import User_GUI.Schedule;
 import User_GUI.UserLogin;
 import dao.AccountDAO;
@@ -53,6 +56,7 @@ public class App_User extends JFrame {
 	Schedule schedule;
 
 	Attendance att;
+	Locations Loc ;
 
 	UserLogin userLogin;
 	Employee emp;
@@ -203,6 +207,12 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_9);
 		
 		lblNewLabel_8 = new JLabel("");
+		lblNewLabel_8.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblNewLabel_8MouseClicked(e);
+			}
+		});
 		lblNewLabel_8.setIcon(new ImageIcon("images\\icons8-address-96.png"));
 		lblNewLabel_8.setOpaque(true);
 		lblNewLabel_8.setBackground(new Color(255, 255, 255));
@@ -252,7 +262,13 @@ public class App_User extends JFrame {
 		lblSalary.setBounds(456, 565, 98, 31);
 		desktopPane.add(lblSalary);
 		
-		lblLocation = new JLabel("Location");
+		lblLocation = new JLabel("Locations");
+		lblLocation.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblLocationMouseClicked(e);
+			}
+		});
 		lblLocation.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLocation.setForeground(new Color(51, 102, 153));
 		lblLocation.setFont(new Font("Tahoma", Font.BOLD, 17));
@@ -347,6 +363,32 @@ public class App_User extends JFrame {
 	    	
 	    }
 
+	}
+	protected void lblLocationMouseClicked(MouseEvent e) {
+		if(Loc == null || Loc.isClosed()) {
+			Loc = new Locations();
+			
+			Loc.setBounds(0, 0, 1180, 664);
+			Loc.show();
+			Component[] frames = desktopPane.getComponents();
+	        for (Component frame : frames) {
+	            frame.setVisible(false);
+	        }
+			desktopPane.add(Loc);
+		}
+	}
+	protected void lblNewLabel_8MouseClicked(MouseEvent e) {
+		if(Loc == null || Loc.isClosed()) {
+			Loc = new Locations();
+			
+			Loc.setBounds(0, 0, 1180, 664);
+			Loc.show();
+			Component[] frames = desktopPane.getComponents();
+	        for (Component frame : frames) {
+	            frame.setVisible(false);
+	        }
+			desktopPane.add(Loc);
+		}
 	}
 }
 

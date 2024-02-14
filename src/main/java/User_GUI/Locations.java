@@ -1,6 +1,7 @@
 package User_GUI;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -14,14 +15,24 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import java.awt.SystemColor;
+import App.App_User;
 
-public class Location extends JInternalFrame {
+import java.awt.SystemColor;
+import javax.swing.ImageIcon;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class Locations extends JInternalFrame {
 	
 	private JComponent Barca = ((javax.swing.plaf.basic.BasicInternalFrameUI) getUI()).getNorthPane();
 	private Dimension DimensionBarca =null;
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
+    private JPanel panelContent;
 
 	/**
 	 * Launch the application.
@@ -49,7 +60,7 @@ public class Location extends JInternalFrame {
 		Barca.setPreferredSize(new Dimension(0,0));
 		repaint();
 	}
-	public Location() {
+	public Locations() {
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
 		quit();
 		
@@ -62,7 +73,7 @@ public class Location extends JInternalFrame {
 		panel.setBounds(0, 0, 1180, 101);
 		getContentPane().add(panel);
 		panel.setLayout(null);
-		JLabel lblNewLabel_1 = new JLabel("Location");
+		JLabel lblNewLabel_1 = new JLabel("Locations");
 		lblNewLabel_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblNewLabel_1.setBounds(81, 11, 161, 50);
@@ -77,46 +88,46 @@ public class Location extends JInternalFrame {
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel_2.setBounds(81, 61, 161, 18);
 		panel.add(lblNewLabel_2);
+		
+		JLabel lblBack = new JLabel("New label");
+		lblBack.setBackground(SystemColor.activeCaption);
+		lblBack.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblNewLabel_5MouseClicked(e);
+			}
+		});
+		lblBack.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\icons8-back-32 (1).png"));
+		lblBack.setBounds(10, 21, 40, 40);
+		panel.add(lblBack);
 		JPanel panelContent = new JPanel();
 		panelContent.setForeground(Color.BLACK);
 		panelContent.setBackground(Color.WHITE);
 		panelContent.setBounds(0, 101, 1180, 536);
 		getContentPane().add(panelContent);
 		panelContent.setLayout(null);
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBackground(Color.WHITE);
-		scrollPane.setBounds(51, 45, 777, 406);
-		panelContent.add(scrollPane);
 		
-		JTable table = new JTable();
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\icons8-done-16.png"));
+		lblNewLabel.setBounds(25, 22, 30, 50);
+		panelContent.add(lblNewLabel);
 		
-		table.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		scrollPane.setViewportView(table);
-
+		JLabel lblNewLabel_3 = new JLabel("Hospital B.Y.D");
+		lblNewLabel_3.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblNewLabel_3.setBounds(70, 22, 200, 25);
+		panelContent.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_4 = new JLabel("    35/6 Street D5, Ward 25, Binh Thanh, Ho Chi Minh City .");
+		lblNewLabel_4.setFont(new Font("Times New Roman", Font.ITALIC, 20));
+		lblNewLabel_4.setBounds(70, 53, 1100, 25);
+		panelContent.add(lblNewLabel_4);
+		
 	}
-//	public void loaddata() {
-//		DefaultTableModel model = new DefaultTableModel() {
-//			@Override
-//	         public boolean isCellEditable(int row, int column) {
-//	             
-//	             return false;
-//	         }
-//		};
-//		
-//		 
-//		 
-//		model.addColumn("Date");
-//		model.addColumn("Shift");
-//		model.addColumn("Room");
-//		
-//		workdao.getpersonSchedule(UserLogin.getUserId()).stream().forEach(work -> model.addRow(new Object[] {
-//					work.getWork_date(),
-//					nameShift(work.getShift_id()),
-//					nameRoom(work.getRoom_id())
-//			}));
-//		
-//		
-//		table.setModel(model);
-//		table.setRowHeight(40);
-//	}
+	protected void lblNewLabel_5MouseClicked(MouseEvent e) {
+		App_User appus = new App_User();
+		appus.setLocationRelativeTo(null);
+		appus.setUndecorated(true);
+		appus.setVisible(true);
+	    this.setVisible(false);
+	}
 }
