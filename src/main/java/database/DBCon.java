@@ -16,16 +16,16 @@ public class DBCon {
     }
 
     public static Connection getConnection() {
-        Connection c = null;
+        Connection con = null;
 
         try {
-            c = DriverManager.getConnection(getUrl());
+        	con = DriverManager.getConnection(getUrl());
             System.out.println("Connected successfully");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return c;
+        return con;
     }
     
  

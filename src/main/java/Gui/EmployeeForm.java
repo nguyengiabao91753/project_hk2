@@ -26,8 +26,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+
+import dao.Manage_DepartmentsDAO;
 import dao.AccountDAO;
-import dao.DepartmentDAO;
 import dao.EducationDAO;
 import dao.EmployeeDAO;
 import dao.PositionDAO;
@@ -127,7 +128,7 @@ public class EmployeeForm extends JInternalFrame {
 	private JComboBox cbxSalary;
 	SalaryDAO salaryDao = new SalaryDAO();
 	EmployeeDAO employeeDao = new EmployeeDAO();
-	DepartmentDAO departmentDao = new DepartmentDAO();
+	Manage_DepartmentsDAO departmentDao = new Manage_DepartmentsDAO();
 	EducationDAO educationDao = new EducationDAO();
 	PositionDAO positionDao = new PositionDAO();
 	AccountDAO accountDao = new AccountDAO();
@@ -495,7 +496,7 @@ public class EmployeeForm extends JInternalFrame {
 	public String departmentName(int a) {
 		List<Department> listDepartment = departmentDao.selectAllDepartment();
 		for(Department dep : listDepartment) {
-			if(a == dep.getId()) {
+			if(a == dep.getDepartment_id()) {
 				return dep.getDepartment_name();
 			}
 		}
@@ -515,7 +516,7 @@ public class EmployeeForm extends JInternalFrame {
 	public String positionName(int a) {
 		List<Position> listPosition = positionDao.selectAllPosition();
 		for(Position pos : listPosition) {
-			if(a == pos.getId()) {
+			if(a == pos.getPosition_id()) {
 				return pos.getPosition_name();
 			}
 		}
@@ -684,6 +685,12 @@ public class EmployeeForm extends JInternalFrame {
 		List<Education> listEducation =  educationDao.selectAllEducation();
 		List<Position> listPosition = positionDao.selectAllPosition();
 		
+		listSalary.forEach(salary -> salaryModel.addElement(salary.getId()));
+		listSupervisor.forEach(emp -> supervisorModel.addElement(emp.getId()));
+		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_id()));
+		listSupervisor.forEach(sup -> supervisorModel.addElement(sup.getId()));
+		listEducation.forEach(edu -> educationModel.addElement(edu.getId()));
+		listPosition.forEach(pos -> positionModel.addElement(pos.getPosition_id()));
 		listSalary.forEach(salary -> salaryModel.addElement(salary.getBase_salary()));
 		listSupervisor.forEach(sup -> supervisorModel.addElement(sup.getId()));
 		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_name()));
@@ -815,7 +822,7 @@ public class EmployeeForm extends JInternalFrame {
 
 	    SalaryDAO salaryDao = new SalaryDAO();
 	    EmployeeDAO employeeDao = new EmployeeDAO();
-	    DepartmentDAO departmentDao = new DepartmentDAO();
+	    Manage_DepartmentsDAO departmentDao = new Manage_DepartmentsDAO();
 	    EducationDAO educationDao = new EducationDAO();
 	    PositionDAO positionDao = new PositionDAO();
 
@@ -841,7 +848,7 @@ public class EmployeeForm extends JInternalFrame {
 
 	    for (Department dep : listDepartment) {
 	        if (dep.toString().equals(cbxDepartmentId.getSelectedItem())) {
-	            department_id = dep.getId();
+	            department_id = dep.getDepartment_id();
 	            break;
 	        }
 	    }
@@ -855,7 +862,7 @@ public class EmployeeForm extends JInternalFrame {
 
 	    for (Position pos : listPosition) {
 	        if (pos.toString().equals(cbxPositionId.getSelectedItem())) {
-	            position_id = pos.getId();
+	            position_id = pos.getPosition_id();
 	            break;
 	        }
 	    }
