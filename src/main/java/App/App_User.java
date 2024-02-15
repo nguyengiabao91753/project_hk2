@@ -24,6 +24,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import User_GUI.Attendance;
+import User_GUI.Profile;
 import User_GUI.Schedule;
 import User_GUI.UserLogin;
 import dao.AccountDAO;
@@ -54,12 +55,12 @@ public class App_User extends JFrame {
 	Schedule schedule;
 
 	Attendance att;
-
+	Profile pro ;
 	UserLogin userLogin;
 	Employee emp;
 	private int xx, xy;
 
-	public JDesktopPane desktopPane;
+	public static JDesktopPane desktopPane;
 	private int userId;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
@@ -95,7 +96,7 @@ public class App_User extends JFrame {
 
 	/**
 	 * Create the frame.
-	 * @param userId2 
+	 *  
 	 */
 	public App_User() {
 		getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
@@ -168,6 +169,12 @@ public class App_User extends JFrame {
 		panel.add(lblNewLabel_2);
 		
 		lblNewLabel_5 = new JLabel("");
+		lblNewLabel_5.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblNewLabel_5MouseClicked(e);
+			}
+		});
 		lblNewLabel_5.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblNewLabel_5.setIcon(new ImageIcon("images\\icons8-test-account-96.png"));
 		lblNewLabel_5.setBackground(new Color(255, 255, 255));
@@ -366,6 +373,21 @@ public class App_User extends JFrame {
 	    	JOptionPane.showMessageDialog(this, "User information not found!");
 	    }
 
+	}
+	protected void lblNewLabel_5MouseClicked(MouseEvent e) {
+		if(pro == null || pro.isClosed()) {
+	        pro = new Profile();
+	        pro.setBounds(0, 0, 1180, 664);
+	        desktopPane.add(pro);
+	        pro.setVisible(true); 
+
+	        Component[] frames = desktopPane.getComponents();
+	        for (Component frame : frames) {
+	            if (frame != pro) {
+	                frame.setVisible(false);
+	            }
+	        }
+	    }
 	}
 }
 

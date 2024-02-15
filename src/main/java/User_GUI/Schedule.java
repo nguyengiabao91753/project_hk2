@@ -46,6 +46,7 @@ public class Schedule extends JInternalFrame {
 
 	private JComponent Barca = ((javax.swing.plaf.basic.BasicInternalFrameUI) getUI()).getNorthPane();
 	private Dimension DimensionBarca =null;
+	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panel;
@@ -98,7 +99,6 @@ public class Schedule extends JInternalFrame {
 		repaint();
 	}
 	public Schedule() {
-		
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
 		quit();
 		
@@ -148,7 +148,7 @@ public class Schedule extends JInternalFrame {
 			}
 		});
 		lblNewLabel_3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-back-arrow-48.png"));
+		lblNewLabel_3.setIcon(new ImageIcon("images\\icons8-back-arrow-48.png"));
 		lblNewLabel_3.setBounds(10, 11, 46, 50);
 		panel.add(lblNewLabel_3);
 		
@@ -296,7 +296,7 @@ public class Schedule extends JInternalFrame {
 		model.addColumn("Shift");
 		model.addColumn("Room");
 		
-		workdao.getpersonSchedule(1).stream().forEach(work -> model.addRow(new Object[] {
+		workdao.getpersonSchedule(UserLogin.getUserId()).stream().forEach(work -> model.addRow(new Object[] {
 					work.getWork_date(),
 					nameShift(work.getShift_id()),
 					nameRoom(work.getRoom_id())
@@ -327,7 +327,7 @@ public class Schedule extends JInternalFrame {
 	protected void btnApplyActionPerformed(ActionEvent e) {
 		DefaultTableModel model = (DefaultTableModel)table.getModel();
 		model.setRowCount(0);  
-		workdao.getpersonSchedule(1)
+		workdao.getpersonSchedule(UserLogin.getUserId())
         .stream()
         .filter(work -> work.getWork_date().getMonthValue() == Integer.parseInt(cbbMonth.getSelectedItem().toString())  )
         .forEach(work -> model.addRow(new Object[] {
