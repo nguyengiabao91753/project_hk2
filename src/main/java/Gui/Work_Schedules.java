@@ -266,6 +266,7 @@ public class Work_Schedules extends JInternalFrame {
 		table.setRowHeight(32);
 		
 		lblnext = new JLabel("");
+		lblnext.setOpaque(true);
 		lblnext.setBackground(Color.LIGHT_GRAY);
 		lblnext.addMouseListener(new MouseAdapter() {
 			@Override
@@ -294,6 +295,7 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(textPage);
 		
 		lbllast = new JLabel("");
+		lbllast.setOpaque(true);
 		lbllast.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -349,6 +351,7 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(lblUpdate);
 		
 		lblprevious = new JLabel("");
+		lblprevious.setOpaque(true);
 		lblprevious.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -360,6 +363,7 @@ public class Work_Schedules extends JInternalFrame {
 		getContentPane().add(lblprevious);
 		
 		lblfirst = new JLabel("");
+		lblfirst.setOpaque(true);
 		lblfirst.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -367,7 +371,7 @@ public class Work_Schedules extends JInternalFrame {
 			}
 		});
 		lblfirst.setIcon(new ImageIcon("images\\icons8-last-24 (1).png"));
-		lblfirst.setBounds(790, 416, 24, 24);
+		lblfirst.setBounds(797, 416, 24, 24);
 		getContentPane().add(lblfirst);
 		
 		hidenextlast();
@@ -515,7 +519,7 @@ public class Work_Schedules extends JInternalFrame {
 
 	}
 	protected void lblpreviousMouseClicked(MouseEvent e) {
-		if(pageNumber >1) {
+		if(pageNumber >0) {
 			pageNumber--;
 			textPage.setText(pageNumber.toString());
 			refresh();
@@ -555,7 +559,6 @@ public class Work_Schedules extends JInternalFrame {
 		}
 		return false;
 	}
-	
 	public int validateInp() {
 		int count=0;
 		int shift_id=0;
@@ -624,10 +627,10 @@ public class Work_Schedules extends JInternalFrame {
 				}
 			}
 		}
-	
+		
+		
 		return count;
 	}
-	
 	protected void lblUpdateMouseClicked(MouseEvent e) {
 		if(validateInp() != 0) {
 			return;

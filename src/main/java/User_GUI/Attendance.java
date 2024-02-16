@@ -342,6 +342,7 @@ public class Attendance extends JInternalFrame {
 		}
 		//return null;
 	}
+	@SuppressWarnings("unchecked")
 	public void load() {
 		
 		
@@ -379,11 +380,11 @@ public class Attendance extends JInternalFrame {
 	        }
 	    }
 	protected void lblNewLabel_3MouseClicked(MouseEvent e) {
-		App_User appus = new App_User();
-		appus.setLocationRelativeTo(null);
-		appus.setUndecorated(true);
-		appus.setVisible(true);
-	    this.setVisible(false);
+//		App_User appus = new App_User();
+//		appus.setLocationRelativeTo(null);
+//		appus.setUndecorated(true);
+//		appus.setVisible(true);
+	    this.dispose();
 	}
 	protected void lblNewLabelMouseClicked(MouseEvent e) {
 		System.exit(0);

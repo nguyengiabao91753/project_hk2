@@ -140,10 +140,10 @@ public class AdminLogin extends JFrame {
 		
 		lblLogo = new JLabel("");
 		lblLogo.setIcon(new ImageIcon("images\\z5093637837436_a45c947127ed08faeb08de9ccf099707.jpg"));
-		lblLogo.setBounds(713, 82, 329, 140);
+		lblLogo.setBounds(713, 60, 329, 170);
 		contentPane.add(lblLogo);
 		
-		BufferedImage originalImage = loadImage("images\\z5093637837436_a45c947127ed08faeb08de9ccf099707.jpg");
+		BufferedImage originalImage = loadImage("images\\byd2.png");
 	    BufferedImage scaledImage = scaleImage(originalImage, 329, 260); 
 	    setScaledImage(scaledImage, lblLogo);
 		

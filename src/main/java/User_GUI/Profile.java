@@ -9,8 +9,16 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
 import App.App_User;
+import dao.EducationDAO;
 import dao.EmployeeDAO;
+import dao.Manage_DepartmentsDAO;
+import dao.PositionDAO;
+import dao.SalaryDAO;
+import entity.Department;
+import entity.Education;
 import entity.Employee;
+import entity.Position;
+import entity.Salary;
 
 import java.awt.SystemColor;
 import java.awt.event.MouseMotionAdapter;
@@ -18,11 +26,13 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Color;
 import javax.swing.JSplitPane;
 import javax.swing.JSeparator;
@@ -79,6 +89,8 @@ public class Profile extends JInternalFrame {
 	Profile pro;
 	App_User app;
 	private JLabel lblDate;
+	private JLabel lblPicture;
+	private JLabel lblName;
 	/**
 	 * Launch the application.
 	 */
@@ -136,9 +148,9 @@ public class Profile extends JInternalFrame {
 		
 		lblNewLabel = new JLabel("PERSONAL INFORMATION");
 		lblNewLabel.setForeground(new Color(255, 255, 255));
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(0, 0, 1180, 57);
+		lblNewLabel.setBounds(0, 0, 1180, 42);
 		panel.add(lblNewLabel);
 		
 		lblExit = new JLabel("<html>\r\n\t<p style=\"font-size: 24px;color:white\">&#10006;</p>\r\n</html>");
@@ -177,7 +189,7 @@ public class Profile extends JInternalFrame {
 		panel_1 = new JPanel();
 		panel_1.setBorder(null);
 		panel_1.setBackground(new Color(255, 255, 255));
-		panel_1.setBounds(357, 90, 471, 547);
+		panel_1.setBounds(651, 90, 471, 547);
 		getContentPane().add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -348,14 +360,27 @@ public class Profile extends JInternalFrame {
 		lblDate.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblDate.setBounds(236, 146, 225, 14);
 		panel_1.add(lblDate);
+		
+		lblPicture = new JLabel("");
+		lblPicture.setBorder(new LineBorder(SystemColor.activeCaption, 5));
+		lblPicture.setOpaque(true);
+		lblPicture.setBackground(new Color(128, 128, 128));
+		lblPicture.setBounds(163, 215, 302, 224);
+		getContentPane().add(lblPicture);
+		
+		lblName = new JLabel("");
+		lblName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblName.setFont(new Font("Tahoma", Font.BOLD, 25));
+		lblName.setBounds(67, 450, 483, 57);
+		getContentPane().add(lblName);
 		loadData();
 	}
 	protected void lblBackMouseClicked(MouseEvent e) {
-		App_User appus = new App_User();
-		appus.setLocationRelativeTo(null);
-		appus.setUndecorated(true);
-		appus.setVisible(true);
-	    this.setVisible(false);
+//		App_User appus = new App_User();
+//		appus.setLocationRelativeTo(null);
+//		appus.setUndecorated(true);
+//		appus.setVisible(true);
+		this.dispose();
 	}
 //	protected void thisContentPaneMouseDragged(MouseEvent e) {
 //		int x = e.getXOnScreen();
@@ -370,28 +395,119 @@ public class Profile extends JInternalFrame {
 		System.exit(0);
 	}
 	
+	public String showSalary(int userId) {
+		String salary = null;
+		SalaryDAO salaryDao = new SalaryDAO();
+		EmployeeDAO employeeDao = new EmployeeDAO();
+		List<Salary> listSalary = salaryDao.selectAllSalary();
+		List<Employee> listEmployee = employeeDao.selectAllEmployee();
+		for(Employee emp : listEmployee) {
+			if(emp.getId() == userId) {
+				for(Salary sal : listSalary) {
+					if(sal.getId() == emp.getSalary_level()) {
+						salary = String.valueOf(sal.getBase_salary());
+					}
+				}
+				break;
+			}
+		}
+		return salary;
+	}
+	
+	public String showDepartment(int userId) {
+		String department = null;
+		Manage_DepartmentsDAO departmentDao = new Manage_DepartmentsDAO();
+		EmployeeDAO employeeDao = new EmployeeDAO();
+		List<Department> listDepartment = departmentDao.selectAllDepartment();
+		List<Employee> listEmployee = employeeDao.selectAllEmployee();
+		for(Employee emp : listEmployee) {
+			if(emp.getId() == userId) {
+				for(Department dep : listDepartment) {
+					if(dep.getDepartment_id() == emp.getDepartment_id()) {
+						department = String.valueOf(dep.getDepartment_name());
+					}
+				}
+				break;
+			}
+		}
+		return department;
+	}
+	
+	public String showEducation (int userId) {
+		String education = null;
+		EducationDAO educationDao = new EducationDAO();
+		EmployeeDAO employeeDao = new EmployeeDAO();
+		List<Education> listEducation = educationDao.selectAllEducation();
+		List<Employee> listEmployee = employeeDao.selectAllEmployee();
+		for(Employee emp : listEmployee) {
+			if(emp.getId() == userId) {
+				for(Education edu : listEducation) {
+					if(edu.getId() == emp.getEducation_id()) {
+						education = String.valueOf(edu.getDegree_name());
+					}
+				}
+				break;
+			}
+		}
+		return education;
+	}
+	
+	public String showPosition (int userId) {
+		String position = null;
+		PositionDAO positionDao = new PositionDAO();
+		EmployeeDAO employeeDao = new EmployeeDAO();
+		List<Position> listPosition = positionDao.selectAllPosition();
+		List<Employee> listEmployee = employeeDao.selectAllEmployee();
+		for(Employee emp : listEmployee) {
+			if(emp.getId() == userId) {
+				for(Position pos : listPosition) {
+					if(pos.getPosition_id() == emp.getPosition_id()) {
+						position = String.valueOf(pos.getPosition_name());
+					}
+				}
+				break;
+			}
+		}
+		return position;
+	}
+	
 	public void loadData() {
 		EmployeeDAO dao = new EmployeeDAO();
 		Employee emp = dao.getUserById(UserLogin.getUserId());
-		
-		if(emp!= null) {
 			lblFullName.setText(emp.getFull_name());
+			
+			lblName.setText(emp.getFull_name());
+			
 			lblEthnicity.setText(emp.getEthnicity());
 			try {
 			    // Định dạng LocalDate sang String với mẫu phù hợp
 			    String formattedDate = emp.getDate_of_birth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-			    // Thiết lập text cho JLabel
-			    lblDate.setText(formattedDate);
 			  } catch (Exception e) {
 			    e.printStackTrace();
 			}
 			lblGender.setText(emp.getGender());
-			lblAddress.setText(emp.getAddress());
-			lblSalary.setText(emp.getSalary_level());
-		}else {
 			
-		}
+			lblAddress.setText(emp.getAddress());
+			
+			String salary = showSalary(UserLogin.getUserId()); 
+	        lblSalary.setText(salary);
+	        
+	        String department = showDepartment(UserLogin.getUserId());
+	        lblDepartment.setText(department);
+	        
+	        String education = showEducation(UserLogin.getUserId());
+	        lblEducation.setText(education);
+	        
+	        String position = showPosition(UserLogin.getUserId());
+	        lblPosition.setText(position);
+	        
+	        lblLevel.setText(emp.getLevel());
+	        
+	        ImageIcon icon = new ImageIcon(emp.getPicture());
+	        Image image = icon.getImage();
+            Image scaledImage = image.getScaledInstance(lblPicture.getWidth(), lblPicture.getHeight(), Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+            lblPicture.setIcon(scaledIcon);
 		
 	}
 }

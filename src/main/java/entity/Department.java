@@ -1,7 +1,7 @@
 package entity;
 
 public class Department {
-	private int id ;
+	private int department_id ;
 	private String department_name;
 	private String head_of_department;
 	private String room;
@@ -10,20 +10,20 @@ public class Department {
 		
 	}
 
-	public Department(int id, String department_name, String head_of_department, String room) {
+	public Department(int department_id, String department_name, String head_of_department, String room) {
 		super();
-		this.id = id;
+		this.department_id = department_id;
 		this.department_name = department_name;
 		this.head_of_department = head_of_department;
 		this.room = room;
 	}
 
-	public int getId() {
-		return id;
+	public int getDepartment_id() {
+		return department_id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setDepartment_id(int department_id) {
+		this.department_id = department_id;
 	}
 
 	public String getDepartment_name() {
@@ -52,9 +52,11 @@ public class Department {
 
 	@Override
 	public String toString() {
-		return "Department [id=" + id + ", department_name=" + department_name + ", head_of_department="
+		return "Department [department_id=" + department_id + ", department_name=" + department_name + ", head_of_department="
 				+ head_of_department + ", room=" + room + "]";
 	}
+
+
 	
 	
 }

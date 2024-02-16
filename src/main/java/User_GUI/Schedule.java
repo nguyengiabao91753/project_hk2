@@ -255,11 +255,11 @@ public class Schedule extends JInternalFrame {
 		System.exit(0);
 	}
 	protected void lblNewLabel_3MouseClicked(MouseEvent e) {
-		App_User appus = new App_User();
-		appus.setLocationRelativeTo(null);
-		appus.setUndecorated(true);
-		appus.setVisible(true);
-	    this.setVisible(false);
+//		App_User appus = new App_User();
+//		appus.setLocationRelativeTo(null);
+//		appus.setUndecorated(true);
+//		appus.setVisible(true);
+		this.dispose();
 	}
 	
 	public String nameRoom(int a) {

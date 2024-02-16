@@ -1,39 +1,34 @@
 package entity;
-
 public class Position {
-	private int id ;
-	private String position_name;
-	
+	private int position_id ;
+	private String position_name ;
 	public Position() {
 		
 	}
-
-	public Position(int id, String position_name) {
+	/**
+	 * @param position_id
+	 * @param position_name
+	 */
+	public Position(int position_id, String position_name) {
 		super();
-		this.id = id;
+		this.position_id = position_id;
 		this.position_name = position_name;
 	}
-
-	public int getId() {
-		return id;
+	public int getPosition_id() {
+		return position_id;
 	}
-
-	public void setId(int id) {
-		this.id = id;
+	public void setPosition_id(int position_id) {
+		this.position_id = position_id;
 	}
-
 	public String getPosition_name() {
 		return position_name;
 	}
-
 	public void setPosition_name(String position_name) {
 		this.position_name = position_name;
 	}
-
 	@Override
 	public String toString() {
-		return "Position [id=" + id + ", position_name=" + position_name + "]";
+		return "Position [position_id=" + position_id + ", position_name=" + position_name + "]";
 	}
-	
 	
 }

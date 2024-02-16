@@ -10,7 +10,7 @@ GO
 
 CREATE TABLE EMPLOYEES
 (
-    EMPLOYEE_ID INT PRIMARY KEY IDENTITY ,
+    EMPLOYEE_ID INT PRIMARY KEY IDENTITY,
     FULL_NAME NVARCHAR(50),
     ETHNICITY NVARCHAR(50),
     DATE_OF_BIRTH DATE,
@@ -35,7 +35,6 @@ CREATE TABLE ACCOUNTS
 	FOREIGN KEY (ACCOUNT_ID) REFERENCES EMPLOYEES(EMPLOYEE_ID)
 );
 GO
-
 
 CREATE TABLE DEPARTMENTS
 (
@@ -177,6 +176,10 @@ GO
 
 
 
+ALTER TABLE EMPLOYEES
+ALTER COLUMN  SUPERVISOR_ID INT NULL
+GO
+
 ALTER TABLE DEPARTMENTS
 ALTER COLUMN  HEAD_OF_DEPARTMENT VARCHAR(50)
 GO
@@ -195,6 +198,15 @@ GO
 
 ALTER TABLE SHIFTS
 ALTER COLUMN  SHIFT_NAME VARCHAR(50)
+GO
+
+ALTER TABLE DEPARTMENTS
+ALTER COLUMN ROOM VARCHAR(20); 
+go
+
+--THAY DỔI CỘT ROOM
+ALTER TABLE DEPARTMENTS
+ALTER COLUMN ROOM VARCHAR(50);
 GO
 
 --NHẬP DỮ LIỆU
@@ -318,7 +330,7 @@ VALUES
 GO
 
 
-DBCC CHECKIDENT ('EMPLOYEES', RESEED, 4);
+DBCC CHECKIDENT ('ACCOUNTS', RESEED, 3);
 
  INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE, LEVEL)
 VALUES ('Boss', 'Asian', '1990-05-15', 'Male', '123 Main Street', 1, NuLL, 1, 1, 1, null, 'Admin');
@@ -354,33 +366,17 @@ VALUES
 (1,'True', '04:00', '12:00',NULL)
 GO
 
-CREATE PROC getAllAccount
-AS
-BEGIN
-	SELECT * FROM ACCOUNTS
-END
-GO
 
-CREATE PROC getAccount
-@pageNumber INT , @rowOfPage INT
-AS
-BEGIN
-	SELECT *FROM ACCOUNTS
-	ORDER BY ACCOUNT_ID
-	OFFSET (@pageNumber -1)*@rowOfPage rows
-	FETCH NEXT @rowOfPage ROWS ONLY
-END
-GO
 
+
+
+--EMPLOYEE
 CREATE PROC getAllEmployee
 AS
 BEGIN
 	SELECT * FROM EMPLOYEES
 END
 GO
-
-
-
 
 CREATE PROC getEmployee
 @pageNumber INT , @rowOfPage INT
@@ -400,6 +396,28 @@ BEGIN
 END
 GO
 
+CREATE PROC updateEmployee
+	@fullname NVARCHAR(50), 
+	@ethnicity NVARCHAR(50) ,
+	@dateofbirth DATE ,
+	@gender NVARCHAR(10) , 
+	@address NVARCHAR(100),
+	@salarylevel INT , 
+	@supervisorid INT ,
+	@departmentid INT , 
+	@educationid INT , 
+	@positionid INT ,
+	@image VARCHAR(255) ,
+	@level VARCHAR(50) ,
+	@id INT
+AS
+BEGIN
+	UPDATE EMPLOYEES
+	SET FULL_NAME = @fullname, ETHNICITY = @ethnicity , DATE_OF_BIRTH = @dateofbirth , GENDER = @gender , ADDRESS = @address , SALARY_LEVEL = @salarylevel , SUPERVISOR_ID = @supervisorid , DEPARTMENT_ID = @departmentid , EDUCATION_ID = @educationid , POSITION_ID =@positionid , IMAGE = @image , LEVEL = @level
+	WHERE EMPLOYEE_ID = @id
+END
+GO
+
 CREATE PROC insertEmployee
 @fullname NVARCHAR(50), @ethnicity NVARCHAR(50), @date_of_birth DATE, @gender NVARCHAR(10),@address NVARCHAR(100),@salary_level INT,@supervisor_id INT,@department_id INT,@education_id INT,@position_id INT,@picture VARCHAR(255),@level VARCHAR(50)
 AS
@@ -409,7 +427,6 @@ BEGIN
 END
 GO
 
-
 CREATE PROC deleteEmployee
 @id int
 AS
@@ -418,6 +435,9 @@ BEGIN
 	WHERE EMPLOYEE_ID = @id
 END
 GO
+
+
+
 
 
 CREATE PROC getAllSchedule
@@ -448,6 +468,9 @@ BEGIN
 END
 GO
 
+//Manage_Departments
+
+CREATE PROC getAllDep
 
 CREATE PROC updateSchedule
     @SCHEDULE_ID INT,
@@ -457,11 +480,11 @@ CREATE PROC updateSchedule
     @WORK_DATE DATE
 AS
 BEGIN
-	UPDATE WORK_SCHEDULES
-	SET EMPLOYEE_ID = @EMPLOYEE_ID, SHIFT_ID = @SHIFT_ID, ROOM_ID = @ROOM_ID, WORK_DATE = @WORK_DATE
-	WHERE SCHEDULE_ID = @SCHEDULE_ID
+	Select * from WORK_SCHEDULES
 END
-GO
+GO 
+
+
 
 
 
@@ -472,12 +495,7 @@ BEGIN
 END
 GO
 
-CREATE PROC getAllDepartment
-AS
-BEGIN
-	SELECT * FROM DEPARTMENTS
-END
-GO
+
 
 CREATE PROC getAllPosition
 AS
@@ -486,27 +504,10 @@ BEGIN
 END
 GO
 
-CREATE PROC updateEmployee
-	@fullname NVARCHAR(50), 
-	@ethnicity NVARCHAR(50) ,
-	@dateofbirth DATE ,
-	@gender NVARCHAR(10) , 
-	@address NVARCHAR(100),
-	@salarylevel INT , 
-	@supervisorid INT ,
-	@departmentid INT , 
-	@educationid INT , 
-	@positionid INT ,
-	@image VARCHAR(255) ,
-	@level VARCHAR(50) ,
-	@id INT
-AS
-BEGIN
-	UPDATE EMPLOYEES
-	SET FULL_NAME = @fullname, ETHNICITY = @ethnicity , DATE_OF_BIRTH = @dateofbirth , GENDER = @gender , ADDRESS = @address , SALARY_LEVEL = @salarylevel , SUPERVISOR_ID = @supervisorid , DEPARTMENT_ID = @departmentid , EDUCATION_ID = @educationid , POSITION_ID =@positionid , IMAGE = @image , LEVEL = @level
-	WHERE EMPLOYEE_ID = @id
-END
-GO
+
+
+
+
 
 CREATE PROC insertSchedule
 	@EMPLOYEE_ID INT,
@@ -553,7 +554,15 @@ GO
 
 
 
---ATT
+
+
+
+
+
+
+
+
+
 CREATE PROC getAllAtt
 AS
 BEGIN
@@ -573,51 +582,31 @@ BEGIN
 END
 GO
 
-CREATE PROC countAtt
-AS
-BEGIN
-	SELECT COUNT(ATTENDANCE_ID) total FROM ATTENDANCES
-END
-GO
 
-CREATE PROC insertAtt
-    @WORKSCHEDULE_ID INT,
-    @PRESENT VARCHAR(7), --PRESENT: TRUE OR FALSE
-    @ARRIVAL_TIME TIME , --arrival time
-    @DEPARTURE_TIME TIME , --departure time
-    @LEAVE_TYPE VARCHAR(7)
-AS
-BEGIN
-	INSERT INTO ATTENDANCES(WORKSCHEDULE_ID,PRESENT,ARRIVAL_TIME , DEPARTURE_TIME ,LEAVE_TYPE)
-	VALUES
-		(@WORKSCHEDULE_ID,@PRESENT,@ARRIVAL_TIME,@DEPARTURE_TIME,@LEAVE_TYPE)
-END
-GO
 
-CREATE PROC updateAtt
-	@ATTENDANCE_ID INT ,
-    @WORKSCHEDULE_ID INT,
-    @PRESENT VARCHAR(7), --PRESENT: TRUE OR FALSE
-    @ARRIVAL_TIME TIME , --arrival time
-    @DEPARTURE_TIME TIME , --departure time
-    @LEAVE_TYPE VARCHAR(7)
-AS
-BEGIN
-	UPDATE ATTENDANCES
-	SET  WORKSCHEDULE_ID = @WORKSCHEDULE_ID, PRESENT = @PRESENT, ARRIVAL_TIME = @ARRIVAL_TIME, DEPARTURE_TIME = @DEPARTURE_TIME, LEAVE_TYPE = @LEAVE_TYPE
-	WHERE ATTENDANCE_ID = @ATTENDANCE_ID
-END
-GO
 
-CREATE PROC deleteAtt
-@a INT
-AS
-BEGIN
-	DELETE FROM ATTENDANCES
-	WHERE ATTENDANCE_ID = @a
-END
-GO
+
+
+
 --ACCOUNT
+CREATE PROC getAllAccount
+AS
+BEGIN
+	SELECT * FROM ACCOUNTS
+END
+GO
+
+CREATE PROC getAccount
+@pageNumber INT , @rowOfPage INT
+AS
+BEGIN
+	SELECT *FROM ACCOUNTS
+	ORDER BY ACCOUNT_ID
+	OFFSET (@pageNumber -1)*@rowOfPage rows
+	FETCH NEXT @rowOfPage ROWS ONLY
+END
+GO
+
 CREATE PROC countAccount
 AS
 BEGIN
@@ -626,21 +615,21 @@ END
 GO
 
 CREATE PROC updateAccount
-@username VARCHAR(50),@password VARCHAR(50),@status INT,@id INT
+@username VARCHAR(50),@password VARCHAR(50),@id INT
 AS
 BEGIN
 	UPDATE ACCOUNTS
-	SET USERNAME = @username , PASSWORD = @password , STATUS = @status
+	SET USERNAME = @username , PASSWORD = @password
 	WHERE ACCOUNT_ID = @id
 END
 GO
 
 CREATE PROC insertAccount
- @username VARCHAR(50) , @password VARCHAR(50),@status INT
+@id int , @username VARCHAR(50) , @password VARCHAR(50)
 AS
 BEGIN
-	INSERT INTO ACCOUNTS(USERNAME,PASSWORD,STATUS)
-	VALUES(@username,@password,@status)
+	INSERT INTO ACCOUNTS(ACCOUNT_ID,USERNAME,PASSWORD)
+	VALUES(@id,@username,@password)
 END
 GO
 
@@ -653,12 +642,6 @@ BEGIN
     WHERE ACCOUNT_ID = @id;
 END
 go
-
-
-
-
-
-
 
 CREATE PROC deleteEmployeeAndAccount
 @employeeId INT,
@@ -701,7 +684,7 @@ END
 GO
 
 
---Login 
+--Login Admin
 CREATE PROC LoginAdmin
     @username VARCHAR(50),
     @password VARCHAR(50)
@@ -839,11 +822,6 @@ GO
 
 
 
-
-
-
-
-
 --SCHEDULE
 
 CREATE PROC getpersonschedule
@@ -937,3 +915,156 @@ BEGIN
 	WHERE ATTENDANCE_ID = @a
 END
 GO
+
+
+
+
+
+
+
+
+
+--POSITION
+
+CREATE PROC getAllPos
+AS
+BEGIN
+	Select * from POSITIONS
+END
+GO
+
+--position
+--LẤY từ dòng nào đến , và lấy bao nhiêu dòng .
+
+CREATE PROC getPosition
+@pageNumber int , @rowsOfPage int 
+AS
+BEGIN
+	SELECT * FROM POSITIONS
+	ORDER BY POSITION_ID
+	OFFSET (@pageNumber - 1)*@rowsOfPage ROWS
+	FETCH NEXT @rowsOfPage ROWS ONLY
+END
+GO
+
+CREATE Proc countPosition
+AS
+BEGIN
+	SELECT COUNT(POSITION_ID) total FROM POSITIONS
+END
+GO
+
+CREATE PROC insertPos
+	 @POSITION_NAME VARCHAR(20)
+AS
+BEGIN
+    -- Thay đổi câu lệnh INSERT
+    INSERT INTO POSITIONS(POSITION_NAME)
+    VALUES(@POSITION_NAME)
+END
+GO
+
+CREATE PROC deletePos
+@id int
+AS
+BEGIN
+	DELETE FROM POSITIONS
+	WHERE POSITION_ID = @id 
+END
+GO
+
+CREATE PROC updatePos
+    @POSITION_ID INT ,
+	@POSITION_NAME VARCHAR(20)
+AS 
+
+BEGIN
+	UPDATE POSITIONS
+	SET POSITION_NAME = @POSITION_NAME 
+	WHERE POSITION_ID = @POSITION_ID
+END
+GO 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--Department
+CREATE PROC getAllDepartment
+AS
+BEGIN
+	SELECT * FROM DEPARTMENTS
+END
+GO
+
+CREATE PROC getDepartments
+@pageNumber int , @rowsOfPage int 
+AS
+BEGIN
+	SELECT * FROM DEPARTMENTS
+	ORDER BY DEPARTMENT_ID
+	OFFSET (@pageNumber - 1)*@rowsOfPage ROWS
+	FETCH NEXT @rowsOfPage ROWS ONLY
+END
+GO
+
+CREATE Proc countDepartments
+AS
+BEGIN
+	SELECT COUNT(DEPARTMENT_ID) total FROM DEPARTMENTS
+END
+GO
+
+CREATE PROC insertDep
+@department_id int , @department_name VARCHAR(100) , @head_of_department VARCHAR(20),@room VARCHAR(20)
+AS
+BEGIN
+	INSERT INTO DEPARTMENTS(DEPARTMENT_ID,DEPARTMENT_NAME,HEAD_OF_DEPARTMENT,ROOM)
+	VALUES(@department_id,@department_name,@head_of_department,@room)
+END
+GO
+ALTER PROCEDURE insertDep
+    @department_name VARCHAR(100),
+    @head_of_department VARCHAR(20),
+    @room VARCHAR(20)
+AS
+BEGIN
+    -- Thay đổi câu lệnh INSERT
+    INSERT INTO DEPARTMENTS(DEPARTMENT_NAME, HEAD_OF_DEPARTMENT, ROOM)
+    VALUES(@department_name, @head_of_department, @room)
+END
+GO
+
+CREATE PROC deleteDepartments
+@id int
+AS
+BEGIN
+	DELETE FROM DEPARTMENTS
+	WHERE DEPARTMENT_ID = @id
+END
+GO
+
+CREATE PROC updateDepartments
+    @DEPARTMENT_ID INT ,
+    @DEPARTMENT_NAME NVARCHAR(100),
+    @HEAD_OF_DEPARTMENT VARCHAR(20),
+    @ROOM VARCHAR(20)
+AS 
+
+BEGIN
+	UPDATE DEPARTMENTS
+	SET DEPARTMENT_NAME = @DEPARTMENT_NAME , HEAD_OF_DEPARTMENT = @HEAD_OF_DEPARTMENT , ROOM = @ROOM 
+
+	WHERE DEPARTMENT_ID = @DEPARTMENT_ID
+END
+GO 

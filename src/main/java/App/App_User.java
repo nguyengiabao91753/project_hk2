@@ -23,8 +23,14 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import org.openqa.selenium.html5.Location;
+
 import User_GUI.Attendance;
+
 import User_GUI.Profile;
+
+import User_GUI.Locations;
+
 import User_GUI.Schedule;
 import User_GUI.UserLogin;
 import dao.AccountDAO;
@@ -55,7 +61,12 @@ public class App_User extends JFrame {
 	Schedule schedule;
 
 	Attendance att;
+
 	Profile pro ;
+
+	Locations Loc ;
+
+
 	UserLogin userLogin;
 	Employee emp;
 	private int xx, xy;
@@ -76,6 +87,7 @@ public class App_User extends JFrame {
 		this.userId = userId;
 	}
 
+	
 	/**
 	 * Launch the application.
 	 */
@@ -83,10 +95,14 @@ public class App_User extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					App_User frame = new App_User();
-					frame.setLocationRelativeTo(null);
-					frame.setUndecorated(true);
-					frame.setVisible(true);
+					if (!UserLogin.isLoggedIn()) {
+			            JOptionPane.showMessageDialog(null, "Please log in first.");
+			        }else {
+						App_User frame = new App_User();
+						frame.setLocationRelativeTo(null);
+						frame.setUndecorated(true);
+						frame.setVisible(true);
+			        }
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -99,6 +115,7 @@ public class App_User extends JFrame {
 	 *  
 	 */
 	public App_User() {
+
 		getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -213,7 +230,7 @@ public class App_User extends JFrame {
 		lblNewLabel_7.setOpaque(true);
 		lblNewLabel_7.setBackground(new Color(255, 255, 255));
 		lblNewLabel_7.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_7.setBounds(681, 270, 132, 132);
+		lblNewLabel_7.setBounds(675, 270, 132, 132);
 		desktopPane.add(lblNewLabel_7);
 		
 		lblNewLabel_9 = new JLabel("");
@@ -225,6 +242,12 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_9);
 		
 		lblNewLabel_8 = new JLabel("");
+		lblNewLabel_8.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblNewLabel_8MouseClicked(e);
+			}
+		});
 		lblNewLabel_8.setIcon(new ImageIcon("images\\icons8-address-96.png"));
 		lblNewLabel_8.setOpaque(true);
 		lblNewLabel_8.setBackground(new Color(255, 255, 255));
@@ -233,6 +256,12 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_8);
 		
 		lblprofile = new JLabel("Profile");
+		lblprofile.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblprofileMouseClicked(e);
+			}
+		});
 		lblprofile.setForeground(new Color(51, 102, 153));
 		lblprofile.setHorizontalAlignment(SwingConstants.CENTER);
 		lblprofile.setFont(new Font("Tahoma", Font.BOLD, 17));
@@ -274,7 +303,13 @@ public class App_User extends JFrame {
 		lblSalary.setBounds(456, 565, 98, 31);
 		desktopPane.add(lblSalary);
 		
-		lblLocation = new JLabel("Location");
+		lblLocation = new JLabel("Locations");
+		lblLocation.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblLocationMouseClicked(e);
+			}
+		});
 		lblLocation.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLocation.setForeground(new Color(51, 102, 153));
 		lblLocation.setFont(new Font("Tahoma", Font.BOLD, 17));
@@ -291,14 +326,16 @@ public class App_User extends JFrame {
 			schedule = new Schedule();
 			
 			schedule.setBounds(0, 0, 1180, 664);
-			schedule.show();
-			Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            frame.setVisible(false);
-	        }
 			desktopPane.add(schedule);
+			schedule.show();
+			schedule.toFront();
+//			Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            frame.setVisible(false);
+//	        }
 			//this.setVisible(false);
-		}
+	        schedule.setVisible(true); 
+	    }
 	}
 	protected void lblScheduleMouseClicked(MouseEvent e) {
 		
@@ -306,14 +343,14 @@ public class App_User extends JFrame {
 			schedule = new Schedule();
 			
 			schedule.setBounds(0, 0, 1180, 664);
-			schedule.show();
-			Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            frame.setVisible(false);
-	        }
 			desktopPane.add(schedule);
-			
-			//this.setVisible(false);
+			schedule.show();
+			schedule.toFront();
+//			Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            frame.setVisible(false);
+//	        }
+			schedule.setVisible(true);
 		}
 	}
 
@@ -322,14 +359,16 @@ public class App_User extends JFrame {
 			att = new Attendance();
 			
 			att.setBounds(0, 0, 1180, 664);
-			att.show();
-			Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            frame.setVisible(false);
-	        }
 			desktopPane.add(att);
+			att.show();
+			att.toFront();
+//			Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            frame.setVisible(false);
+//	        }
 			
 			//this.setVisible(false);
+			att.setVisible(true);
 		}
 	}
 	protected void lblAttendanceMouseClicked(MouseEvent e) {
@@ -337,14 +376,10 @@ public class App_User extends JFrame {
 			att = new Attendance();
 			
 			att.setBounds(0, 0, 1180, 664);
-			att.show();
-			Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            frame.setVisible(false);
-	        }
 			desktopPane.add(att);
-			
-			//this.setVisible(false);
+			att.show();
+			att.toFront();
+			att.setVisible(true);
 		}
 	}
 
@@ -378,17 +413,55 @@ public class App_User extends JFrame {
 		if(pro == null || pro.isClosed()) {
 	        pro = new Profile();
 	        pro.setBounds(0, 0, 1180, 664);
+	        pro.show();
 	        desktopPane.add(pro);
-	        pro.setVisible(true); 
-
-	        Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            if (frame != pro) {
-	                frame.setVisible(false);
-	            }
-	        }
+	        pro.toFront();
+//	        Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            if (frame != pro) {
+//	                frame.setVisible(false);
+//	            }
+//	        }
+	    	pro.setVisible(true);
 	    }
 	}
+	protected void lblprofileMouseClicked(MouseEvent e) {
+		if(pro == null || pro.isClosed()) {
+	        pro = new Profile();
+	        pro.setBounds(0, 0, 1180, 664);
+	        pro.show();
+	        desktopPane.add(pro);
+	        pro.toFront();
+	    	pro.setVisible(true);
+	    }
+	}
+	protected void lblLocationMouseClicked(MouseEvent e) {
+		if(Loc == null || Loc.isClosed()) {
+			Loc = new Locations();
+			
+			Loc.setBounds(0, 0, 1180, 664);
+			Loc.show();
+			Component[] frames = desktopPane.getComponents();
+	        for (Component frame : frames) {
+	            frame.setVisible(false);
+	        }
+			desktopPane.add(Loc);
+		}
+	}
+	protected void lblNewLabel_8MouseClicked(MouseEvent e) {
+		if(Loc == null || Loc.isClosed()) {
+			Loc = new Locations();
+			
+			Loc.setBounds(0, 0, 1180, 664);
+			Loc.show();
+			Component[] frames = desktopPane.getComponents();
+	        for (Component frame : frames) {
+	            frame.setVisible(false);
+	        }
+			desktopPane.add(Loc);
+		}
+	}
+
 }
 
 	

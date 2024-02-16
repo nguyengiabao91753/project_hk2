@@ -6,11 +6,14 @@ public class Account {
 	private String password;
 	private int status;
 	
-	public Account(){
+	public Account() {
 		
 	}
-
-	
+	/**
+	 * @param account_id
+	 * @param usserName
+	 * @param password
+	 */
 
 	public Account(int id, String username, String password, int status) {
 		super();
@@ -34,8 +37,8 @@ public class Account {
 		return username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUsername(String usserName) {
+		username = usserName;
 	}
 
 	public String getPassword() {
@@ -62,6 +65,7 @@ public class Account {
 
 	@Override
 	public String toString() {
+
 		return "Account [id=" + id + ", username=" + username + ", password=" + password + ", status=" + status + "]";
 	}
 

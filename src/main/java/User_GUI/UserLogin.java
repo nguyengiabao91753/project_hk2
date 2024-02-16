@@ -58,6 +58,7 @@ public class UserLogin extends JFrame {
 	private JPasswordField txtPassword;
 	private JLabel lblShow;
 	private static int userId;
+	private static boolean isLoggedIn = false;
 	public static void setUserId(int id) {
         userId = id;
     }
@@ -67,11 +68,11 @@ public class UserLogin extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+//		try {
+//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//		} catch (Throwable e) {
+//			e.printStackTrace();
+//		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -319,5 +320,8 @@ public class UserLogin extends JFrame {
 	    }
 	}
 	
+	 public static boolean isLoggedIn() {
+	        return isLoggedIn;
+	    }
 	
 }
