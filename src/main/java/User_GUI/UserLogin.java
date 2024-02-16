@@ -306,6 +306,7 @@ public class UserLogin extends JFrame {
 	    String loginMessage = dao.login(acc);
 
 	    if (loginMessage.equals("Login successful.")) {
+	    	isLoggedIn = true;
 	    	userId = dao.getUserId(username); 
 	        dispose();
 //	    	this.setVisible(false);
@@ -322,6 +323,6 @@ public class UserLogin extends JFrame {
 	
 	 public static boolean isLoggedIn() {
 	        return isLoggedIn;
-	    }
+	 }
 	
 }

@@ -139,7 +139,6 @@ public class EmployeeForm extends JInternalFrame {
 	private JButton btnNext;
 	private JButton btnLast;
 	private JTextField txtPage;
-	private JComboBox comboBox;
  
 
 
@@ -498,16 +497,6 @@ public class EmployeeForm extends JInternalFrame {
 		txtPage.setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 0, 255)));
 		txtPage.setBounds(793, 497, 111, 20);
 		getContentPane().add(txtPage);
-		
-		comboBox = new JComboBox();
-		comboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				comboBoxActionPerformed(e);
-			}
-		});
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"10", "20"}));
-		comboBox.setBounds(793, 528, 111, 22);
-		getContentPane().add(comboBox);
 		loadEmployee();
 		hidenextlast();
 	}
@@ -715,12 +704,6 @@ public class EmployeeForm extends JInternalFrame {
 		List<Education> listEducation =  educationDao.selectAllEducation();
 		List<Position> listPosition = positionDao.selectAllPosition();
 		
-		listSalary.forEach(salary -> salaryModel.addElement(salary.getId()));
-		listSupervisor.forEach(emp -> supervisorModel.addElement(emp.getId()));
-		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_id()));
-		listSupervisor.forEach(sup -> supervisorModel.addElement(sup.getId()));
-		listEducation.forEach(edu -> educationModel.addElement(edu.getId()));
-		listPosition.forEach(pos -> positionModel.addElement(pos.getPosition_id()));
 		listSalary.forEach(salary -> salaryModel.addElement(salary.getBase_salary()));
 		listSupervisor.forEach(sup -> supervisorModel.addElement(sup.getId()));
 		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_name()));
@@ -1076,15 +1059,6 @@ public class EmployeeForm extends JInternalFrame {
 		pageNumber = totalPage.intValue();
 		txtPage.setText(pageNumber.toString());
 		refresh();
-	}
-	
-	protected void comboBoxActionPerformed(ActionEvent e) {
-		if(table!=null) {
-			pageNumber =1 ;
-			txtPage.setText(pageNumber.toString());
-			rowOfPage = Integer.parseInt(comboBox.getSelectedItem().toString());
-			refresh();
-		}
 	}
 	
 	protected void txtPageActionPerformed(ActionEvent e) {

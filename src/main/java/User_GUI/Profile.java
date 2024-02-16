@@ -482,6 +482,8 @@ public class Profile extends JInternalFrame {
 			try {
 			    // Định dạng LocalDate sang String với mẫu phù hợp
 			    String formattedDate = emp.getDate_of_birth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			    // Thiết lập text cho JLabel
+			    lblDate.setText(formattedDate);
 			  } catch (Exception e) {
 			    e.printStackTrace();
 			}
@@ -491,6 +493,8 @@ public class Profile extends JInternalFrame {
 			
 			String salary = showSalary(UserLogin.getUserId()); 
 	        lblSalary.setText(salary);
+	        
+	        lblSupervisor.setText(String.valueOf(emp.getSupervisor_id()));
 	        
 	        String department = showDepartment(UserLogin.getUserId());
 	        lblDepartment.setText(department);

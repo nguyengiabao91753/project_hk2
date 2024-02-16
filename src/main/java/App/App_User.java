@@ -164,24 +164,24 @@ public class App_User extends JFrame {
 		
 		lblFullName = new JLabel("Full Name");
 		lblFullName.setForeground(new Color(255, 255, 255));
-		lblFullName.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblFullName.setBounds(198, 69, 242, 19);
+		lblFullName.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lblFullName.setBounds(198, 69, 242, 27);
 		panel.add(lblFullName);
 		
 		lblGender = new JLabel("Gender");
 		lblGender.setForeground(new Color(255, 255, 255));
-		lblGender.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblGender.setBounds(198, 170, 93, 19);
+		lblGender.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lblGender.setBounds(198, 170, 93, 27);
 		panel.add(lblGender);
 		desktopPane.add(panel);
 		
 		lblNewLabel_1 = new JLabel("FULL NAME");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
-		lblNewLabel_1.setBounds(198, 25, 154, 38);
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 28));
+		lblNewLabel_1.setBounds(198, 25, 180, 38);
 		panel.add(lblNewLabel_1);
 		
 		lblNewLabel_2 = new JLabel("GENDER");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 28));
 		lblNewLabel_2.setBounds(198, 132, 125, 27);
 		panel.add(lblNewLabel_2);
 		
