@@ -44,21 +44,23 @@ import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 public class AddPosition extends JInternalFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
-	private JTextField txtID;
 	private JTextField txtNAME;
-	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_2;
 	private JButton btnInput;
-	private JButton btnNewButton_1;
 	private JLabel lblCreateDepartment;
 	private static AddPosition instance ;
 	AddDepartment AddDep ;
 	private Object DimensionBarca;
 	private JComponent Barca;
+	private JLabel lblBack;
+	private JPanel panel_1;
 	/**
 	 * Launch the application.
 	 */
@@ -100,63 +102,83 @@ public class AddPosition extends JInternalFrame {
 		panel.setBackground(SystemColor.controlHighlight);
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(69)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 788, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(100, Short.MAX_VALUE))
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addGap(24)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 902, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(31, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(52)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 343, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(204, Short.MAX_VALUE))
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 708, GroupLayout.PREFERRED_SIZE))
 		);
 		panel.setLayout(null);
 		
-		txtID = new JTextField();
-		txtID.setEnabled(false);
-		txtID.setBounds(139, 162, 214, 38);
-		panel.add(txtID);
-		txtID.setColumns(10);
-		
 		txtNAME = new JTextField();
+		txtNAME.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtNAME.setColumns(10);
-		txtNAME.setBounds(549, 162, 214, 38);
+		txtNAME.setBounds(240, 137, 500, 40);
 		panel.add(txtNAME);
 		
-		lblNewLabel = new JLabel(" ID :");
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblNewLabel.setBounds(29, 162, 100, 38);
-		panel.add(lblNewLabel);
-		
-		lblNewLabel_2 = new JLabel("NAME");
-		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblNewLabel_2.setBounds(423, 162, 125, 38);
+		lblNewLabel_2 = new JLabel("NAME :");
+		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblNewLabel_2.setBounds(150, 136, 100, 40);
 		panel.add(lblNewLabel_2);
 		
 		btnInput = new JButton("CREATE");
+		btnInput.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnInputMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnInputMouseExited(e);
+			}
+		});
 		btnInput.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnInputActionPerformed(e);
 			}
 		});
 		btnInput.setBackground(Color.BLUE);
-		btnInput.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		btnInput.setBounds(319, 276, 142, 38);
+		btnInput.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		btnInput.setBounds(319, 276, 180, 45);
 		panel.add(btnInput);
-		
-		btnNewButton_1 = new JButton("New button");
-		btnNewButton_1.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\Back (1).png"));
-		btnNewButton_1.setBounds(10, 14, 60, 38);
-		panel.add(btnNewButton_1);
 		
 		lblCreateDepartment = new JLabel("     CREATE POSITION");
 		lblCreateDepartment.setForeground(Color.BLUE);
-		lblCreateDepartment.setFont(new Font("Times New Roman", Font.BOLD, 30));
-		lblCreateDepartment.setBounds(229, 14, 357, 52);
+		lblCreateDepartment.setFont(new Font("Times New Roman", Font.BOLD, 35));
+		lblCreateDepartment.setBounds(229, 10, 400, 60);
 		panel.add(lblCreateDepartment);
+		
+		lblBack = new JLabel("");
+		lblBack.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblBackMouseClicked(e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblBackMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblBackMouseExited(e);
+			}
+		});
+		lblBack.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\icons8-back-48.png"));
+		lblBack.setOpaque(true);
+		lblBack.setBackground(new Color(0, 191, 255));
+		lblBack.setBounds(10, 10, 48, 48);
+		panel.add(lblBack);
+		
+		panel_1 = new JPanel();
+		panel_1.setBackground(new Color(0, 191, 255));
+		panel_1.setBounds(0, 0, 902, 78);
+		panel.add(panel_1);
 		getContentPane().setLayout(groupLayout);
 	}
 	protected void btnInputActionPerformed(ActionEvent e) {
@@ -179,9 +201,34 @@ public class AddPosition extends JInternalFrame {
 	public int validatePosition() {
 		int count = 0 ;
 		if( txtNAME.getText().trim().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Please fill in all information");
+			JOptionPane.showMessageDialog(null, "Please fill in your name .");
 			count++;
 		}
 		return count;
 	}
+	protected void lblBackMouseClicked(MouseEvent e) {
+		App_Admin appus = new App_Admin();
+		appus.setLocationRelativeTo(null);
+		appus.setUndecorated(true);
+		appus.setVisible(true);
+	    this.setVisible(false);
+	}
+	protected void lblBackMouseEntered(MouseEvent e) {
+		lblBack.setBackground(new Color(0, 191, 255));
+		lblBack.setForeground(Color.black);
+	}
+	protected void lblBackMouseExited(MouseEvent e) {
+		lblBack.setBackground(new Color(0, 191, 255));
+		lblBack.setForeground(Color.black);
+	}
+	protected void btnInputMouseEntered(MouseEvent e) {
+		btnInput.setBackground(new Color(106,90,205));
+		btnInput.setForeground(Color.black);
+		
+	}
+	protected void btnInputMouseExited(MouseEvent e) {
+		btnInput.setBackground(new Color(0, 191, 255));
+		btnInput.setForeground(Color.black);
+	}
+	
 }

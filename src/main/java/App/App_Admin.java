@@ -510,18 +510,18 @@ public class App_Admin extends JFrame {
 			dep.setApp(this);
 			dep.show();
 		}
-	}	public void openPosition() {
+	}	public void openPos() {
 		JInternalFrame[] frames = desktopPane.getAllFrames();
         for (JInternalFrame frame : frames) {
             frame.doDefaultCloseAction();
         }
-		if(Pos == null || Pos.isClosed()) {
-			Pos = new Job_Position() ;
-			Pos.setBounds(0,0,957,626);
-			desktopPane.add(Pos);
-			Pos.setApp(this);
-			Pos.show();
-		}
+        if(Pos == null || Pos.isClosed()) {
+        	Pos = new Job_Position();
+        	Pos.setBounds(0, 0,957,626);
+        	desktopPane.add(Pos);
+        	Pos.setApp(this);
+        	Pos.show();
+        }
 	}
 	public void openAttendance() {
 		JInternalFrame[] frames = desktopPane.getAllFrames();
@@ -778,7 +778,7 @@ public class App_Admin extends JFrame {
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
 				panelPos.setVisible(true);
-				openPosition();
+				openPos();
 			}
 
 			opensidebar();

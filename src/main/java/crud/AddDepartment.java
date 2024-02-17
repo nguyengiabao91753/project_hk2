@@ -50,10 +50,8 @@ public class AddDepartment extends JInternalFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
-	private JTextField txtID;
 	private JTextField txtNAME;
 	private JTextField txtDEPARTMENT;
-	private JLabel lblNewLabel;
 	private JLabel lblName;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
@@ -67,6 +65,7 @@ public class AddDepartment extends JInternalFrame {
 	private App_Admin app;
 	Manage_Departments dep;
 	private JDesktopPane desktopPane;
+	private JPanel panel_1;
 	/**
 	 * Launch the application.
 	 */
@@ -126,54 +125,44 @@ public class AddDepartment extends JInternalFrame {
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addGap(75)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 788, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(78, Short.MAX_VALUE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap(27, Short.MAX_VALUE)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 902, GroupLayout.PREFERRED_SIZE)
+					.addGap(28))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(35)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 343, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(218, Short.MAX_VALUE))
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 533, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(66, Short.MAX_VALUE))
 		);
 		panel.setLayout(null);
 		
-		txtID = new JTextField();
-		txtID.setEnabled(false);
-		txtID.setBounds(140, 133, 214, 38);
-		panel.add(txtID);
-		txtID.setColumns(10);
-		
 		txtNAME = new JTextField();
+		txtNAME.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		txtNAME.setColumns(10);
-		txtNAME.setBounds(140, 199, 214, 38);
+		txtNAME.setBounds(101, 140, 300, 40);
 		panel.add(txtNAME);
 		
 		txtDEPARTMENT = new JTextField();
+		txtDEPARTMENT.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		txtDEPARTMENT.setColumns(10);
-		txtDEPARTMENT.setBounds(550, 133, 214, 38);
+		txtDEPARTMENT.setBounds(580, 140, 300, 40);
 		panel.add(txtDEPARTMENT);
 		
-		lblNewLabel = new JLabel(" ID :");
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblNewLabel.setBounds(30, 133, 100, 38);
-		panel.add(lblNewLabel);
-		
 		lblName = new JLabel("NAME :");
-		lblName.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblName.setBounds(30, 199, 100, 38);
+		lblName.setFont(new Font("Times New Roman", Font.BOLD, 19));
+		lblName.setBounds(20, 140, 71, 40);
 		panel.add(lblName);
 		
 		lblNewLabel_2 = new JLabel("DEPARTMENT :");
-		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblNewLabel_2.setBounds(424, 133, 125, 38);
+		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblNewLabel_2.setBounds(420, 140, 150, 40);
 		panel.add(lblNewLabel_2);
 		
 		lblNewLabel_3 = new JLabel("ROOM :");
-		lblNewLabel_3.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblNewLabel_3.setBounds(424, 199, 100, 38);
+		lblNewLabel_3.setFont(new Font("Times New Roman", Font.BOLD, 19));
+		lblNewLabel_3.setBounds(20, 232, 82, 40);
 		panel.add(lblNewLabel_3);
 		
 		btnInput = new JButton("CREATE");
@@ -192,19 +181,20 @@ public class AddDepartment extends JInternalFrame {
 				btnbtnInputActionPerformed(e);
 			}
 		});
-		btnInput.setBackground(SystemColor.textHighlight);
-		btnInput.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		btnInput.setBounds(353, 277, 142, 38);
+		btnInput.setBackground(new Color(0, 120, 215));
+		btnInput.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		btnInput.setBounds(345, 334, 180, 45);
 		panel.add(btnInput);
 		
 		lblCreateDepartment = new JLabel("CREATE DEPARTMENT");
 		lblCreateDepartment.setForeground(Color.BLUE);
-		lblCreateDepartment.setFont(new Font("Times New Roman", Font.BOLD, 30));
-		lblCreateDepartment.setBounds(229, 14, 357, 52);
+		lblCreateDepartment.setFont(new Font("Times New Roman", Font.BOLD, 35));
+		lblCreateDepartment.setBounds(229, 0, 407, 78);
 		panel.add(lblCreateDepartment);
 		
 		cbbRoom = new JComboBox();
-		cbbRoom.setBounds(550, 199, 214, 38);
+		cbbRoom.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		cbbRoom.setBounds(101, 235, 300, 38);
 		panel.add(cbbRoom);
 		
 		lblBack = new JLabel("");
@@ -222,11 +212,16 @@ public class AddDepartment extends JInternalFrame {
 				lblBackMouseExited(e);
 			}
 		});
-		lblBack.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\icons8-back-32 (1).png"));
+		lblBack.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\icons8-back-48.png"));
 		lblBack.setOpaque(true);
-		lblBack.setBackground(UIManager.getColor("Button.background"));
-		lblBack.setBounds(10, 14, 40, 40);
+		lblBack.setBackground(new Color(0, 191, 255));
+		lblBack.setBounds(10, 10, 48, 48);
 		panel.add(lblBack);
+		
+		panel_1 = new JPanel();
+		panel_1.setBackground(new Color(0, 191, 255));
+		panel_1.setBounds(0, 0, 902, 78);
+		panel.add(panel_1);
 		getContentPane().setLayout(groupLayout);
 		loadDep();
 	}
@@ -287,11 +282,11 @@ public class AddDepartment extends JInternalFrame {
 	    this.setVisible(false);
 	}
 	protected void lblBackMouseEntered(MouseEvent e) {
-		lblBack.setBackground(new Color(106,90,205));
+		lblBack.setBackground(new Color(0, 191, 255));
 		lblBack.setForeground(Color.black);
 	}
 	protected void lblBackMouseExited(MouseEvent e) {
-		lblBack.setBackground(UIManager.getColor("Button.background"));
+		lblBack.setBackground(new Color(0, 191, 255));
 		lblBack.setForeground(Color.black);
 	}
 	protected void btnInputMouseEntered(MouseEvent e) {
@@ -299,7 +294,7 @@ public class AddDepartment extends JInternalFrame {
 		btnInput.setForeground(Color.black);
 	}
 	protected void btnInputMouseExited(MouseEvent e) {
-		btnInput.setBackground(SystemColor.textHighlight);
+		btnInput.setBackground(new Color(0, 191, 255));
 		btnInput.setForeground(Color.black);
 		
 	}

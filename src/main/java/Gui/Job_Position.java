@@ -223,14 +223,12 @@ public class Job_Position extends JInternalFrame {
 		textSearch.setColumns(10);
 		textSearch.setBounds(326, 11, 62, 25);
 		getContentPane().add(textSearch);
-		lblprevious.setIcon(new ImageIcon("C:images\\icons8-next-24 (2).png"));
-		lblnext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
 		loadPosition();
 		tbemp.setRowHeight(35);
 		
 		lblfirst = new JLabel("");
-		lblfirst.setBackground(SystemColor.menu);
 		lblfirst.setIcon(new ImageIcon("images\\icons8-last-24 (1).png"));
+		lblfirst.setBackground(SystemColor.menu);
 		lblfirst.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -246,10 +244,11 @@ public class Job_Position extends JInternalFrame {
 			}
 		});
 		lblfirst.setOpaque(true);
-		lblfirst.setBounds(773, 433, 24, 24);
+		lblfirst.setBounds(783, 433, 24, 24);
 		getContentPane().add(lblfirst);
 		
 		lblprevious = new JLabel("");
+		lblprevious.setIcon(new ImageIcon("images\\icons8-next-24 (2).png"));
 		lblprevious.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -266,7 +265,6 @@ public class Job_Position extends JInternalFrame {
 		});
 		lblprevious.setOpaque(true);
 		lblprevious.setBackground(SystemColor.menu);
-		lblprevious.setIcon(new ImageIcon("images\\icons8-next-24 (2).png"));
 		lblprevious.setBounds(806, 433, 24, 24);
 		getContentPane().add(lblprevious);
 		
@@ -283,6 +281,7 @@ public class Job_Position extends JInternalFrame {
 		getContentPane().add(textPage);
 		
 		lblnext = new JLabel("");
+		lblnext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
 		lblnext.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -299,12 +298,12 @@ public class Job_Position extends JInternalFrame {
 		});
 		lblnext.setOpaque(true);
 		lblnext.setBackground(SystemColor.menu);
-		lblnext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
 		
 		lblnext.setBounds(884, 433, 24, 24);
 		getContentPane().add(lblnext);
 		
 		lbllast = new JLabel("");
+		lbllast.setIcon(new ImageIcon("images\\icons8-last-24.png"));
 		lbllast.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -321,7 +320,6 @@ public class Job_Position extends JInternalFrame {
 		});
 		lbllast.setOpaque(true);
 		lbllast.setBounds(918, 433, 24, 24);
-		lbllast.setIcon(new ImageIcon("images\\icons8-last-24.png"));
 		getContentPane().add(lbllast);
 	}
 	public void hidenextlast() {
