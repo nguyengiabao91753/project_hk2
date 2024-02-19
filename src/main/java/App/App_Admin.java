@@ -24,6 +24,7 @@ import Gui.Accounts;
 import Gui.Atiendances;
 
 import Gui.Work_Schedules;
+import User_GUI.UserLogin;
 import crud.AddDepartment;
 import crud.Addaccount;
 import crud.Addemployee;
@@ -98,10 +99,14 @@ public class App_Admin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					if (!AdminLogin.isLoggedIn()) {
+			            JOptionPane.showMessageDialog(null, "Please log in first.");
+			        }else {
 					App_Admin frame = new App_Admin();
 					frame.setLocationRelativeTo(null);
 					frame.setUndecorated(true);
 					frame.setVisible(true);
+			        }
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

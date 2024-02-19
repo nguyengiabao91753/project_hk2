@@ -149,7 +149,7 @@ public class Schedule extends JInternalFrame {
 			}
 		});
 		lblNewLabel_3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-back-arrow-48.png"));
+		lblNewLabel_3.setIcon(new ImageIcon("images\\icons8-back-arrow-48.png"));
 		lblNewLabel_3.setBounds(10, 11, 46, 50);
 		panel.add(lblNewLabel_3);
 		

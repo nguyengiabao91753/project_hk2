@@ -9,8 +9,11 @@ import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -19,15 +22,18 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import dao.AttendanceDAO;
 import dao.EmployeeDAO;
 import dao.SalaryDAO;
+import dao.ShiftDAO;
 import dao.WorkscheduleDAO;
 import entity.Attendance;
 import entity.Employee;
+import entity.Shift;
 import entity.Workschedule;
 
 import javax.swing.SwingConstants;
@@ -81,6 +87,12 @@ public class Salary extends JInternalFrame {
 	AttendanceDAO attdao=new AttendanceDAO();
 	private JLabel lblAbsent;
 	private JLabel lblFAsent;
+	public int sa;
+	public float saperday;
+	LocalDate currentDate = LocalDate.now();
+	private JLabel lbldola;
+	private JLabel lbldola_1;
+	private JLabel lbldola_2;
 	/**
 	 * Launch the application.
 	 */
@@ -188,7 +200,7 @@ public class Salary extends JInternalFrame {
 		
 		lblBS = new JLabel("");
 		lblBS.setForeground(SystemColor.windowBorder);
-		lblBS.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblBS.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblBS.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblBS.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblBS.setBounds(316, 125, 98, 34);
@@ -196,7 +208,7 @@ public class Salary extends JInternalFrame {
 		
 		lblSF = new JLabel("");
 		lblSF.setForeground(SystemColor.windowBorder);
-		lblSF.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblSF.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblSF.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblSF.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblSF.setBounds(316, 186, 98, 34);
@@ -204,7 +216,7 @@ public class Salary extends JInternalFrame {
 		
 		lblAF = new JLabel("");
 		lblAF.setForeground(SystemColor.windowBorder);
-		lblAF.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblAF.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblAF.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblAF.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblAF.setBounds(316, 242, 98, 34);
@@ -257,26 +269,26 @@ public class Salary extends JInternalFrame {
 		
 		lblFOvertime = new JLabel("");
 		lblFOvertime.setForeground(SystemColor.windowBorder);
-		lblFOvertime.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFOvertime.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblFOvertime.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblFOvertime.setBorder(new LineBorder(new Color(0, 0, 0)));
-		lblFOvertime.setBounds(914, 298, 98, 34);
+		lblFOvertime.setBounds(914, 298, 144, 34);
 		panelContent.add(lblFOvertime);
 		
 		lblLateLeave = new JLabel("");
 		lblLateLeave.setForeground(SystemColor.windowBorder);
-		lblLateLeave.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblLateLeave.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblLateLeave.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblLateLeave.setBorder(new LineBorder(new Color(0, 0, 0)));
-		lblLateLeave.setBounds(914, 242, 98, 34);
+		lblLateLeave.setBounds(914, 242, 144, 34);
 		panelContent.add(lblLateLeave);
 		
 		lblFSalary = new JLabel("");
 		lblFSalary.setForeground(SystemColor.windowBorder);
-		lblFSalary.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFSalary.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblFSalary.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblFSalary.setBorder(new LineBorder(new Color(0, 0, 0)));
-		lblFSalary.setBounds(915, 125, 98, 34);
+		lblFSalary.setBounds(915, 125, 143, 34);
 		panelContent.add(lblFSalary);
 		
 		lblTotal = new JLabel("Total:");
@@ -287,7 +299,7 @@ public class Salary extends JInternalFrame {
 		
 		lblFTotal = new JLabel("");
 		lblFTotal.setForeground(SystemColor.windowBorder);
-		lblFTotal.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFTotal.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblFTotal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblFTotal.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblFTotal.setBounds(914, 376, 98, 34);
@@ -355,11 +367,29 @@ public class Salary extends JInternalFrame {
 		
 		lblFAsent = new JLabel("");
 		lblFAsent.setForeground(SystemColor.windowBorder);
-		lblFAsent.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFAsent.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblFAsent.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblFAsent.setBorder(new LineBorder(new Color(0, 0, 0)));
-		lblFAsent.setBounds(915, 186, 98, 34);
+		lblFAsent.setBounds(915, 186, 143, 34);
 		panelContent.add(lblFAsent);
+		
+		lbldola = new JLabel("$");
+		lbldola.setForeground(SystemColor.windowBorder);
+		lbldola.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lbldola.setBounds(415, 125, 22, 34);
+		panelContent.add(lbldola);
+		
+		lbldola_1 = new JLabel("$");
+		lbldola_1.setForeground(SystemColor.windowBorder);
+		lbldola_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lbldola_1.setBounds(1059, 125, 16, 34);
+		panelContent.add(lbldola_1);
+		
+		lbldola_2 = new JLabel("$");
+		lbldola_2.setForeground(SystemColor.windowBorder);
+		lbldola_2.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lbldola_2.setBounds(1013, 376, 22, 34);
+		panelContent.add(lbldola_2);
 		
 		loadcbb();
 		showinfo();
@@ -387,6 +417,23 @@ public class Salary extends JInternalFrame {
 			}
 		}
 		return date;
+	}
+	public String showShift(int a) {
+		String shift=null;
+		WorkscheduleDAO workdao = new WorkscheduleDAO();
+		ShiftDAO shiftdao = new ShiftDAO();
+		List<Workschedule> listwork = workdao.selectAllSchedule();
+		List<Shift> listshift = shiftdao.getAllShift();
+		for (Workschedule workschedule : listwork) {
+			if(workschedule.getId() == a) {
+				for (Shift shift2 : listshift) {
+					if(shift2.getId() == workschedule.getShift_id()) {
+						shift = shift2.toString();
+					}
+				}
+			}
+		}
+		return shift;
 	}
 	public void loadcbb() {
 		List<Attendance> listatt = attdao.getAttpersonal(7);
@@ -469,26 +516,99 @@ public class Salary extends JInternalFrame {
 				lblBS.setText(salary.getBase_salary()+"");
 				lblSF.setText(salary.getSalary_factor()+"");
 				lblAF.setText(salary.getAllowance_factor()+"");
+				sa = salary.getBase_salary() * salary.getSalary_factor() * salary.getAllowance_factor();
+				saperday = salary.getBase_salary()/30;
+				break;
 			}
 		}
 	}
+	public boolean late(String time1, String time2) {
+		 LocalTime time1Start = LocalTime.parse(time1.split("-")[0]);
+	        LocalTime time2Value = LocalTime.parse(time2);
+
+	        // So sánh thời gian
+	        Duration duration = Duration.between(time1Start, time2Value);
+
+	        // Xuất ra sự chênh lệch
+	        if (time2Value.isAfter(time1Start)) {
+		        long hours = duration.toHours();
+		        long minutes = duration.toMinutesPart();
+		      
+		        return true; //co di tre
+	        }else {
+	        	return false;
+	        }
+	}
+	public boolean leaveearly(String time1, String time2) {
+		LocalTime time1End = LocalTime.parse(time1.split("-")[1]);
+        LocalTime time2Value = LocalTime.parse(time2);
+
+        // So sánh thời gian
+        Duration duration = Duration.between(time1End, time2Value);
+        long hours = duration.toHours();
+        long minutes = duration.toMinutesPart();
+        // Xuất ra sự chênh lệch
+        if (time2Value.isAfter(time1End)) {
+	        return false; //overtime
+        }else {
+        	return true; //ve som
+        }
+	}
 	protected void btnNewButtonActionPerformed(ActionEvent e) {
 		List<Attendance> listatt = attdao.getAttpersonal(UserLogin.getUserId());
+		List<Attendance> newlist = new ArrayList<>();
+		
 		int month, year;
+		int countwp=0, countlate=0, countovertime=0,countp=0;
+		float saabsent=0, salate= 0, saover=0, total=0;
 		if(!cbbMonth.getSelectedItem().toString().equals("Select Month") && !cbbYear.getSelectedItem().toString().equals("Select Year")) {
 			 month = Integer.parseInt(cbbMonth.getSelectedItem().toString());
 			 year = Integer.parseInt(cbbYear.getSelectedItem().toString());
 		}else {
 			return;
 		}
+		if(month >= currentDate.getMonthValue() && year == currentDate.getYear()) {
+			JOptionPane.showMessageDialog(null, "The working month hasn't ended yet so there's no salary yet");
+			return;
+		}
 		
+		//loc list theo lua chon
 		for (Attendance att : listatt) {
 			LocalDate dateFromData = LocalDate.parse(showDate(att.getWorkschedule_id()), DateTimeFormatter.ofPattern("yyyy-M-d"));
 			if(dateFromData.getMonthValue() == month && dateFromData.getYear() == year) {
-				
+				newlist.add(att);
+				if(!att.isPresent() ) {
+					if(att.getLeave_type().equals("WP")) {
+						countwp++;
+					}else {
+						countp++;
+					}
+				}
+				if(late(showShift(att.getWorkschedule_id()), att.getArrival_time().toString()) ){
+					countlate++;
+				}
+				if(leaveearly(showShift(att.getWorkschedule_id()), att.getDeparture_time().toString())) {
+					countlate++;
+				}else {
+					countovertime++;
+				}
 			}
 		}
-		
+		if(countp ==0) {
+			saabsent = saperday*(countwp+((countp)/2));
+		}else if(countp==1) {
+			saabsent = saperday*(countwp+((countp-1)/2));
+		}else {
+			saabsent = saperday*(countwp+((countp-2)/2));
+		}
+		salate = (saperday/2) *countlate;
+		saover=(saperday/2)* countovertime;
+		total = sa - saabsent - salate + saover;
+		lblFSalary.setText(sa+"");
+		lblFAsent.setText("-"+saabsent+" ("+(countwp+countp)+"times)");
+		lblLateLeave.setText("-"+salate+" ("+(countlate)+"times)");
+		lblFOvertime.setText("+"+saover+" ("+(countovertime)+"times)");
+		lblFTotal.setText(""+total);
 	}
 	
 	public void loaddata() {

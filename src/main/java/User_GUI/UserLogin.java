@@ -58,6 +58,7 @@ public class UserLogin extends JFrame {
 	private JPasswordField txtPassword;
 	private JLabel lblShow;
 	private static int userId;
+	private static boolean isLoggedIn = false;
 	public static void setUserId(int id) {
         userId = id;
     }
@@ -305,7 +306,8 @@ public class UserLogin extends JFrame {
 	    String loginMessage = dao.loginUser(acc);
 
 	    if (loginMessage.equals("Login successful.")) {
-	    	 userId = dao.getUserId(username); 
+	    	isLoggedIn = true;
+	    	userId = dao.getUserId(username); 
 	        dispose();
 //	    	this.setVisible(false);
 	        App_User app = new App_User();
@@ -319,5 +321,8 @@ public class UserLogin extends JFrame {
 	    }
 	}
 	
+	 public static boolean isLoggedIn() {
+	        return isLoggedIn;
+	 }
 	
 }
