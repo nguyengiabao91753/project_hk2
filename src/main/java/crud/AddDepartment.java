@@ -212,7 +212,7 @@ public class AddDepartment extends JInternalFrame {
 				lblBackMouseExited(e);
 			}
 		});
-		lblBack.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\icons8-back-48.png"));
+		lblBack.setIcon(new ImageIcon("images//icons8-back-48.png"));
 		lblBack.setOpaque(true);
 		lblBack.setBackground(new Color(0, 191, 255));
 		lblBack.setBounds(10, 10, 48, 48);

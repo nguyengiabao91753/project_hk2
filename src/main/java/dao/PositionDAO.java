@@ -24,7 +24,6 @@ public class PositionDAO {
 				cs.setInt(2, rowsOfPage);
 				ResultSet rs = cs.executeQuery();
 				while(rs.next()) {
-					//lấy dữ liệu 
 					list.add(new Position(
 							rs.getInt("position_id"), 
 							rs.getString("position_name")

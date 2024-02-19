@@ -59,6 +59,7 @@ public class AdminLogin extends JFrame {
 	private JButton btnLogin;
 	private JButton btnReset;
 	App_Admin app = new App_Admin();
+	private static boolean isLoggedIn = false;
 	/**
 	 * Launch the application.
 	 */
@@ -249,5 +250,9 @@ public class AdminLogin extends JFrame {
 	protected void btnResetActionPerformed(ActionEvent e) {
 		txtUsername.setText("");
 		txtPassword.setText("");
+	}
+	
+	public static boolean isLoggedIn() {
+        return isLoggedIn;
 	}
 }

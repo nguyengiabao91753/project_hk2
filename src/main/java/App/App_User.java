@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -22,10 +23,14 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import org.openqa.selenium.html5.Location;
+//import org.openqa.selenium.html5.Location;
 
 import User_GUI.Attendance;
+
+import User_GUI.Profile;
+
 import User_GUI.Locations;
+
 import User_GUI.Schedule;
 import User_GUI.UserLogin;
 import dao.AccountDAO;
@@ -56,14 +61,20 @@ public class App_User extends JFrame {
 	Schedule schedule;
 
 	Attendance att;
+
+	Profile pro ;
+
 	Locations Loc ;
+
 
 	UserLogin userLogin;
 	Employee emp;
 	private int xx, xy;
 
-	public JDesktopPane desktopPane;
+	public static JDesktopPane desktopPane;
 	private int userId;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_2;
 	
 
 
@@ -76,6 +87,7 @@ public class App_User extends JFrame {
 		this.userId = userId;
 	}
 
+	
 	/**
 	 * Launch the application.
 	 */
@@ -83,10 +95,14 @@ public class App_User extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					App_User frame = new App_User();
-					frame.setLocationRelativeTo(null);
-					frame.setUndecorated(true);
-					frame.setVisible(true);
+					if (!UserLogin.isLoggedIn()) {
+			            JOptionPane.showMessageDialog(null, "Please log in first.");
+			        }else {
+						App_User frame = new App_User();
+						frame.setLocationRelativeTo(null);
+						frame.setUndecorated(true);
+						frame.setVisible(true);
+			        }
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -99,6 +115,7 @@ public class App_User extends JFrame {
 	 *  
 	 */
 	public App_User() {
+
 		getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -142,21 +159,39 @@ public class App_User extends JFrame {
 		lblPicture = new JLabel("");
 		lblPicture.setIcon(new ImageIcon("images\\icons8-employee-16.png"));
 		lblPicture.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPicture.setBounds(41, 47, 147, 142);
+		lblPicture.setBounds(41, 25, 147, 164);
 		panel.add(lblPicture);
 		
 		lblFullName = new JLabel("Full Name");
-		lblFullName.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblFullName.setBounds(198, 66, 242, 39);
+		lblFullName.setForeground(new Color(255, 255, 255));
+		lblFullName.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lblFullName.setBounds(198, 69, 242, 27);
 		panel.add(lblFullName);
 		
 		lblGender = new JLabel("Gender");
-		lblGender.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblGender.setBounds(198, 127, 93, 19);
+		lblGender.setForeground(new Color(255, 255, 255));
+		lblGender.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lblGender.setBounds(198, 170, 93, 27);
 		panel.add(lblGender);
 		desktopPane.add(panel);
 		
+		lblNewLabel_1 = new JLabel("FULL NAME");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 28));
+		lblNewLabel_1.setBounds(198, 25, 180, 38);
+		panel.add(lblNewLabel_1);
+		
+		lblNewLabel_2 = new JLabel("GENDER");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 28));
+		lblNewLabel_2.setBounds(198, 132, 125, 27);
+		panel.add(lblNewLabel_2);
+		
 		lblNewLabel_5 = new JLabel("");
+		lblNewLabel_5.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblNewLabel_5MouseClicked(e);
+			}
+		});
 		lblNewLabel_5.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblNewLabel_5.setIcon(new ImageIcon("images\\icons8-test-account-96.png"));
 		lblNewLabel_5.setBackground(new Color(255, 255, 255));
@@ -195,7 +230,7 @@ public class App_User extends JFrame {
 		lblNewLabel_7.setOpaque(true);
 		lblNewLabel_7.setBackground(new Color(255, 255, 255));
 		lblNewLabel_7.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_7.setBounds(681, 270, 132, 132);
+		lblNewLabel_7.setBounds(675, 270, 132, 132);
 		desktopPane.add(lblNewLabel_7);
 		
 		lblNewLabel_9 = new JLabel("");
@@ -221,6 +256,12 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_8);
 		
 		lblprofile = new JLabel("Profile");
+		lblprofile.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblprofileMouseClicked(e);
+			}
+		});
 		lblprofile.setForeground(new Color(51, 102, 153));
 		lblprofile.setHorizontalAlignment(SwingConstants.CENTER);
 		lblprofile.setFont(new Font("Tahoma", Font.BOLD, 17));
@@ -285,14 +326,16 @@ public class App_User extends JFrame {
 			schedule = new Schedule();
 			
 			schedule.setBounds(0, 0, 1180, 664);
-			schedule.show();
-			Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            frame.setVisible(false);
-	        }
 			desktopPane.add(schedule);
+			schedule.show();
+			schedule.toFront();
+//			Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            frame.setVisible(false);
+//	        }
 			//this.setVisible(false);
-		}
+	        schedule.setVisible(true); 
+	    }
 	}
 	protected void lblScheduleMouseClicked(MouseEvent e) {
 		
@@ -300,14 +343,14 @@ public class App_User extends JFrame {
 			schedule = new Schedule();
 			
 			schedule.setBounds(0, 0, 1180, 664);
-			schedule.show();
-			Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            frame.setVisible(false);
-	        }
 			desktopPane.add(schedule);
-			
-			//this.setVisible(false);
+			schedule.show();
+			schedule.toFront();
+//			Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            frame.setVisible(false);
+//	        }
+			schedule.setVisible(true);
 		}
 	}
 
@@ -316,14 +359,16 @@ public class App_User extends JFrame {
 			att = new Attendance();
 			
 			att.setBounds(0, 0, 1180, 664);
-			att.show();
-			Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            frame.setVisible(false);
-	        }
 			desktopPane.add(att);
+			att.show();
+			att.toFront();
+//			Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            frame.setVisible(false);
+//	        }
 			
 			//this.setVisible(false);
+			att.setVisible(true);
 		}
 	}
 	protected void lblAttendanceMouseClicked(MouseEvent e) {
@@ -331,14 +376,10 @@ public class App_User extends JFrame {
 			att = new Attendance();
 			
 			att.setBounds(0, 0, 1180, 664);
-			att.show();
-			Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            frame.setVisible(false);
-	        }
 			desktopPane.add(att);
-			
-			//this.setVisible(false);
+			att.show();
+			att.toFront();
+			att.setVisible(true);
 		}
 	}
 
@@ -356,13 +397,43 @@ public class App_User extends JFrame {
 	    Employee emp = dao.getUserById(UserLogin.getUserId());
 
 	    if (emp != null) {
-
 	        lblFullName.setText(emp.getFull_name());
 	        lblGender.setText(emp.getGender());
+	        ImageIcon icon = new ImageIcon(emp.getPicture());
+	        Image image = icon.getImage();
+            Image scaledImage = image.getScaledInstance(lblPicture.getWidth(), lblPicture.getHeight(), Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+            lblPicture.setIcon(scaledIcon);
 	    } else {
-	    	
+	    	JOptionPane.showMessageDialog(this, "User information not found!");
 	    }
 
+	}
+	protected void lblNewLabel_5MouseClicked(MouseEvent e) {
+		if(pro == null || pro.isClosed()) {
+	        pro = new Profile();
+	        pro.setBounds(0, 0, 1180, 664);
+	        pro.show();
+	        desktopPane.add(pro);
+	        pro.toFront();
+//	        Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            if (frame != pro) {
+//	                frame.setVisible(false);
+//	            }
+//	        }
+	    	pro.setVisible(true);
+	    }
+	}
+	protected void lblprofileMouseClicked(MouseEvent e) {
+		if(pro == null || pro.isClosed()) {
+	        pro = new Profile();
+	        pro.setBounds(0, 0, 1180, 664);
+	        pro.show();
+	        desktopPane.add(pro);
+	        pro.toFront();
+	    	pro.setVisible(true);
+	    }
 	}
 	protected void lblLocationMouseClicked(MouseEvent e) {
 		if(Loc == null || Loc.isClosed()) {
@@ -390,6 +461,7 @@ public class App_User extends JFrame {
 			desktopPane.add(Loc);
 		}
 	}
+
 }
 
 	

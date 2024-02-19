@@ -122,6 +122,22 @@ public class Accounts extends JInternalFrame {
 	    repaint();
 
 	}
+	public void hidenextlast() {
+		if(pageNumber==1) {
+			btnFirst.setVisible(false);
+			btnPrevious.setVisible(false);
+		}else {
+			btnFirst.setVisible(true);
+			btnPrevious.setVisible(true);
+		}
+		if(pageNumber == totalPage.intValue()) {
+			btnNext.setVisible(false);
+			btnLast.setVisible(false);
+		}else {
+			btnNext.setVisible(true);
+			btnLast.setVisible(true);
+		}
+	}
 
 	/**
 	 * Create the frame.
@@ -291,6 +307,7 @@ public class Accounts extends JInternalFrame {
 		btnFirst.setBounds(741, 485, 21, 23);
 		getContentPane().add(btnFirst);
 		loadAccount();
+		hidenextlast();
 	}
 	
 	

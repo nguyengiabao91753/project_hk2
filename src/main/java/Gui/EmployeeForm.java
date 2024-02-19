@@ -160,6 +160,23 @@ public class EmployeeForm extends JInternalFrame {
 		return app;
 	}
 	
+	public void hidenextlast() {
+		if(pageNumber==1) {
+			btnFirst.setVisible(false);
+			btnPrevious.setVisible(false);
+		}else {
+			btnFirst.setVisible(true);
+			btnPrevious.setVisible(true);
+		}
+		if(pageNumber == totalPage.intValue()) {
+			btnNext.setVisible(false);
+			btnLast.setVisible(false);
+		}else {
+			btnNext.setVisible(true);
+			btnLast.setVisible(true);
+		}
+	}
+	
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -481,6 +498,7 @@ public class EmployeeForm extends JInternalFrame {
 		txtPage.setBounds(793, 497, 111, 20);
 		getContentPane().add(txtPage);
 		loadEmployee();
+		hidenextlast();
 	}
 	
 	public String baseSalary(int a) {
@@ -569,7 +587,8 @@ public class EmployeeForm extends JInternalFrame {
 		model.addColumn("Level");
 
 		EmployeeDAO dao = new EmployeeDAO();
-		
+		totalCount = dao.countEmployee();
+		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
 		totalCount = dao.countEmployee();
 		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
 		dao.selectEmployee(pageNumber, rowOfPage)
@@ -685,12 +704,6 @@ public class EmployeeForm extends JInternalFrame {
 		List<Education> listEducation =  educationDao.selectAllEducation();
 		List<Position> listPosition = positionDao.selectAllPosition();
 		
-		listSalary.forEach(salary -> salaryModel.addElement(salary.getId()));
-		listSupervisor.forEach(emp -> supervisorModel.addElement(emp.getId()));
-		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_id()));
-		listSupervisor.forEach(sup -> supervisorModel.addElement(sup.getId()));
-		listEducation.forEach(edu -> educationModel.addElement(edu.getId()));
-		listPosition.forEach(pos -> positionModel.addElement(pos.getPosition_id()));
 		listSalary.forEach(salary -> salaryModel.addElement(salary.getBase_salary()));
 		listSupervisor.forEach(sup -> supervisorModel.addElement(sup.getId()));
 		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_name()));

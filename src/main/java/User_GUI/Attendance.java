@@ -164,7 +164,7 @@ public class Attendance extends JInternalFrame {
 			}
 		});
 		lblNewLabel_3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-back-arrow-48.png"));
+		lblNewLabel_3.setIcon(new ImageIcon("images\\icons8-back-arrow-48.png"));
 		lblNewLabel_3.setBounds(10, 11, 46, 50);
 		panel.add(lblNewLabel_3);
 		
@@ -342,6 +342,7 @@ public class Attendance extends JInternalFrame {
 		}
 		//return null;
 	}
+	@SuppressWarnings("unchecked")
 	public void load() {
 		
 		
@@ -379,11 +380,11 @@ public class Attendance extends JInternalFrame {
 	        }
 	    }
 	protected void lblNewLabel_3MouseClicked(MouseEvent e) {
-		App_User appus = new App_User();
-		appus.setLocationRelativeTo(null);
-		appus.setUndecorated(true);
-		appus.setVisible(true);
-	    this.setVisible(false);
+//		App_User appus = new App_User();
+//		appus.setLocationRelativeTo(null);
+//		appus.setUndecorated(true);
+//		appus.setVisible(true);
+	    this.dispose();
 	}
 	protected void lblNewLabelMouseClicked(MouseEvent e) {
 		System.exit(0);
