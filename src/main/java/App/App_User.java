@@ -75,8 +75,6 @@ public class App_User extends JFrame {
 	private int userId;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
-	
-
 
 
 	public int getUserId() {
@@ -416,12 +414,6 @@ public class App_User extends JFrame {
 	        pro.show();
 	        desktopPane.add(pro);
 	        pro.toFront();
-//	        Component[] frames = desktopPane.getComponents();
-//	        for (Component frame : frames) {
-//	            if (frame != pro) {
-//	                frame.setVisible(false);
-//	            }
-//	        }
 	    	pro.setVisible(true);
 	    }
 	}

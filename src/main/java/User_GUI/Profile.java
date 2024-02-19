@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
@@ -22,6 +23,7 @@ import entity.Salary;
 
 import java.awt.SystemColor;
 import java.awt.event.MouseMotionAdapter;
+import java.beans.PropertyVetoException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,15 +33,20 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JSplitPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
 import com.toedter.calendar.JDateChooser;
+import java.awt.Cursor;
 
 public class Profile extends JInternalFrame {
 	
@@ -87,10 +94,11 @@ public class Profile extends JInternalFrame {
 	private JPanel panel_2;
 	private JLabel lblBack;
 	Profile pro;
-	App_User app;
+		
 	private JLabel lblDate;
 	private JLabel lblPicture;
 	private JLabel lblName;
+	private JLabel lblLogout;
 	/**
 	 * Launch the application.
 	 */
@@ -371,8 +379,23 @@ public class Profile extends JInternalFrame {
 		lblName = new JLabel("");
 		lblName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblName.setFont(new Font("Tahoma", Font.BOLD, 25));
-		lblName.setBounds(67, 450, 483, 57);
+		lblName.setBounds(73, 450, 477, 57);
 		getContentPane().add(lblName);
+		
+		lblLogout = new JLabel("LOG OUT");
+		lblLogout.setOpaque(true);
+		lblLogout.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblLogout.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblLogoutMouseClicked(e);
+			}
+		});
+		lblLogout.setBackground(SystemColor.activeCaption);
+		lblLogout.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblLogout.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLogout.setBounds(163, 557, 302, 51);
+		getContentPane().add(lblLogout);
 		loadData();
 	}
 	protected void lblBackMouseClicked(MouseEvent e) {
@@ -513,5 +536,21 @@ public class Profile extends JInternalFrame {
             ImageIcon scaledIcon = new ImageIcon(scaledImage);
             lblPicture.setIcon(scaledIcon);
 		
+	}
+	
+	protected void lblLogoutMouseClicked(MouseEvent e) {
+//		try {
+//			this.setClosed(true);
+//		} catch (PropertyVetoException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		this.setVisible(false);
+		App_User appUser = (App_User) SwingUtilities.getWindowAncestor(this); // Lấy đối tượng App_User
+		appUser.dispose();
+	    UserLogin login = new UserLogin();
+	    login.setUndecorated(true);
+	    login.setLocationRelativeTo(null);
+	    login.setVisible(true);	
 	}
 }
