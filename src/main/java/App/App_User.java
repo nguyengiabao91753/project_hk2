@@ -31,6 +31,7 @@ import User_GUI.UserLogin;
 import dao.AccountDAO;
 import dao.EmployeeDAO;
 import entity.Employee;
+import entity.Salary;
 
 import java.awt.SystemColor;
 
@@ -54,7 +55,7 @@ public class App_User extends JFrame {
 	private JLabel lblSalary;
 	private JLabel lblLocation;
 	Schedule schedule;
-
+	User_GUI.Salary sa;
 	Attendance att;
 	Locations Loc ;
 
@@ -199,6 +200,13 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_7);
 		
 		lblNewLabel_9 = new JLabel("");
+		lblNewLabel_9.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblNewLabel_9.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblNewLabel_9MouseClicked(e);
+			}
+		});
 		lblNewLabel_9.setIcon(new ImageIcon("images\\icons8-salary-96.png"));
 		lblNewLabel_9.setOpaque(true);
 		lblNewLabel_9.setBackground(new Color(255, 255, 255));
@@ -256,6 +264,13 @@ public class App_User extends JFrame {
 		desktopPane.add(lblAttendance);
 		
 		lblSalary = new JLabel("Salary");
+		lblSalary.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblSalary.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblSalaryMouseClicked(e);
+			}
+		});
 		lblSalary.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSalary.setForeground(new Color(51, 102, 153));
 		lblSalary.setFont(new Font("Tahoma", Font.BOLD, 17));
@@ -285,12 +300,14 @@ public class App_User extends JFrame {
 			schedule = new Schedule();
 			
 			schedule.setBounds(0, 0, 1180, 664);
-			schedule.show();
-			Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            frame.setVisible(false);
-	        }
 			desktopPane.add(schedule);
+			schedule.show();
+			schedule.toFront();
+//			Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            frame.setVisible(false);
+//	        }
+			
 			//this.setVisible(false);
 		}
 	}
@@ -300,12 +317,14 @@ public class App_User extends JFrame {
 			schedule = new Schedule();
 			
 			schedule.setBounds(0, 0, 1180, 664);
-			schedule.show();
-			Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            frame.setVisible(false);
-	        }
 			desktopPane.add(schedule);
+			schedule.show();
+			schedule.toFront();
+//			Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            frame.setVisible(false);
+//	        }
+			
 			
 			//this.setVisible(false);
 		}
@@ -314,14 +333,15 @@ public class App_User extends JFrame {
 	protected void lblNewLabel_7MouseClicked(MouseEvent e) {
 		if(att == null || att.isClosed()) {
 			att = new Attendance();
-			
+//			Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            frame.setVisible(false);
+//	        }
 			att.setBounds(0, 0, 1180, 664);
-			att.show();
-			Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            frame.setVisible(false);
-	        }
 			desktopPane.add(att);
+			att.show();
+			att.toFront();
+			
 			
 			//this.setVisible(false);
 		}
@@ -329,14 +349,15 @@ public class App_User extends JFrame {
 	protected void lblAttendanceMouseClicked(MouseEvent e) {
 		if(att == null || att.isClosed()) {
 			att = new Attendance();
-			
+//			Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            frame.setVisible(false);
+//	        }
 			att.setBounds(0, 0, 1180, 664);
-			att.show();
-			Component[] frames = desktopPane.getComponents();
-	        for (Component frame : frames) {
-	            frame.setVisible(false);
-	        }
 			desktopPane.add(att);
+			att.show();
+			att.toFront();
+			
 			
 			//this.setVisible(false);
 		}
@@ -388,6 +409,24 @@ public class App_User extends JFrame {
 	            frame.setVisible(false);
 	        }
 			desktopPane.add(Loc);
+		}
+	}
+	protected void lblNewLabel_9MouseClicked(MouseEvent e) {
+		if(sa == null || sa.isClosed()) {
+			sa = new User_GUI.Salary();
+			sa.setBounds(0, 0, 1180, 664);
+			desktopPane.add(sa);
+			sa.show();
+			sa.toFront();
+		}
+	}
+	protected void lblSalaryMouseClicked(MouseEvent e) {
+		if(sa == null || sa.isClosed()) {
+			sa = new User_GUI.Salary();
+			sa.setBounds(0, 0, 1180, 664);
+			desktopPane.add(sa);
+			sa.show();
+			sa.toFront();
 		}
 	}
 }

@@ -67,11 +67,11 @@ public class UserLogin extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+//		try {
+//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//		} catch (Throwable e) {
+//			e.printStackTrace();
+//		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -302,7 +302,7 @@ public class UserLogin extends JFrame {
 	    acc.setPassword(password); 
 
 	    AccountDAO dao = new AccountDAO();
-	    String loginMessage = dao.login(acc);
+	    String loginMessage = dao.loginUser(acc);
 
 	    if (loginMessage.equals("Login successful.")) {
 	    	 userId = dao.getUserId(username); 

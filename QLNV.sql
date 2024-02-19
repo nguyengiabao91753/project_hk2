@@ -306,18 +306,7 @@ VALUES
     ('Late Night Shift', '23:00', '07:00'),
     ('Early Morning Shift', '05:00', '13:00'),
     ('Day Shift', '10:00', '18:00'),
-    ('Night Shift', '20:00', '04:00'),
-    ('Morning Shift', '07:30', '15:30'),
-    ('Afternoon Shift', '15:30', '23:30'),
-    ('Night Shift', '23:30', '07:30'),
-    ('Day Shift', '08:30', '16:30'),
-    ('Evening Shift', '16:30', '00:30'),
-    ('Night Shift', '22:30', '06:30'),
-    ('Morning Shift', '06:30', '14:30'),
-    ('Day Shift', '09:30', '17:30'),
-    ('Night Shift', '21:30', '05:30'),
-    ('Morning Shift', '08:00', '16:00'),
-    ('Afternoon Shift', '16:00', '00:00');
+    ('Night Shift', '20:00', '04:00')
 GO
 
 
@@ -451,9 +440,6 @@ BEGIN
 END
 GO
 
-//Manage_Departments
-
-CREATE PROC getAllDep
 
 CREATE PROC updateSchedule
     @SCHEDULE_ID INT,
@@ -463,11 +449,13 @@ CREATE PROC updateSchedule
     @WORK_DATE DATE
 AS
 BEGIN
-	Select * from WORK_SCHEDULES
+	UPDATE WORK_SCHEDULES
+	SET EMPLOYEE_ID = @EMPLOYEE_ID, SHIFT_ID = @SHIFT_ID, ROOM_ID = @ROOM_ID, WORK_DATE = @WORK_DATE
+	WHERE SCHEDULE_ID = @SCHEDULE_ID
 END
 GO 
 
-//Job_Positions
+--Job_Positions
 
 CREATE PROC getAllPos
 AS
@@ -608,7 +596,7 @@ BEGIN
     VALUES(@department_name, @head_of_department, @room)
 END
 
-//THAY DỔI CỘT ROOM
+--THAY DỔI CỘT ROOM
 ALTER TABLE DEPARTMENTS
 ALTER COLUMN ROOM VARCHAR(50);
 GO
@@ -654,8 +642,8 @@ END
 GO
 
 
-SELECT * FROM POSITIONS
-GO
+
+
 CREATE PROC getAllAtt
 AS
 BEGIN
@@ -941,6 +929,7 @@ BEGIN
 	ORDER BY WORK_DATE DESC
 END
 GO
+
 --ATTEN-PERSONAL
 CREATE PROC getAttpersonal
 @a INT
@@ -1025,3 +1014,29 @@ END
 GO
 
 
+Alter PROC insertAtt
+@work_id INT
+AS
+BEGIN
+	 INSERT INTO ATTENDANCES ( WORKSCHEDULE_ID,PRESENT, ARRIVAL_TIME, DEPARTURE_TIME, LEAVE_TYPE)
+     VALUES (@work_id, 'False', NULL, NULL, 'WP');
+END
+GO
+
+--TRIGGER
+CREATE TRIGGER AutoinsertAtt
+ON WORK_SCHEDULES
+AFTER INSERT
+AS
+BEGIN
+    -- Insert new records into ATTENDANCES based on newly inserted records in WORK_SCHEDULES
+    INSERT INTO ATTENDANCES (WORKSCHEDULE_ID, PRESENT, ARRIVAL_TIME, DEPARTURE_TIME, LEAVE_TYPE)
+    SELECT SCHEDULE_ID, 'False', NULL, NULL, 'WP'
+    FROM INSERTED;
+END
+GO
+
+--Select * from ACCOUNTS
+--Select * from ATTENDANCES
+--Select * from SHIFTS
+--Select * from SALARIES

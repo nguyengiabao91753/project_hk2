@@ -81,7 +81,7 @@ public class Job_Position extends JInternalFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Manage_Departments frame = new Manage_Departments();
+					Job_Position frame = new Job_Position();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

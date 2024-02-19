@@ -89,7 +89,7 @@ public class Locations extends JInternalFrame {
 		lblNewLabel_2.setBounds(81, 61, 161, 18);
 		panel.add(lblNewLabel_2);
 		
-		JLabel lblBack = new JLabel("New label");
+		JLabel lblBack = new JLabel("");
 		lblBack.setBackground(SystemColor.activeCaption);
 		lblBack.addMouseListener(new MouseAdapter() {
 			@Override

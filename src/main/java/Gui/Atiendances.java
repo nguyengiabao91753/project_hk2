@@ -178,6 +178,7 @@ public class Atiendances extends JInternalFrame {
 		textSearch.setColumns(10);
 		
 		lblFid = new JLabel("");
+		lblFid.setEnabled(false);
 		lblFid.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblFid.setBounds(127, 90, 117, 20);
 		getContentPane().add(lblFid);
@@ -499,6 +500,16 @@ public class Atiendances extends JInternalFrame {
 //			
 //		}
 //	}
+	
+	public int validateAtt() {
+		int count =0;
+		int ss = cbbType.getSelectedIndex();
+		if(!chckbxGender.isSelected() && ss==0) {
+			JOptionPane.showMessageDialog(null, "CANNOT chosse 'Null' at 'Type' if Employee was absent");
+			count++;
+		}
+		return count;
+	}
 	protected void textFieldActionPerformed(ActionEvent e) {
 		String find = textSearch.getText();
 		
@@ -522,8 +533,19 @@ public class Atiendances extends JInternalFrame {
 			e2.printStackTrace();
 		}
 		chckbxGender.setSelected(table.getValueAt(rowIndex, 5).toString().equals("true"));
-		lblArrivalTime.setText(table.getValueAt(rowIndex, 6).toString());
-		lblDepTime.setText(table.getValueAt(rowIndex, 7).toString());
+		if(table.getValueAt(rowIndex, 6) == null) {
+			lblArrivalTime.setText("");
+		}else {
+			lblArrivalTime.setText(table.getValueAt(rowIndex, 6).toString());
+		}
+		
+		
+		if(table.getValueAt(rowIndex, 7) == null) {
+			lblDepTime.setText("");
+		}else {
+			lblDepTime.setText(table.getValueAt(rowIndex, 7).toString());
+		}
+		
 		if(table.getValueAt(rowIndex, 8) == null) {
 			cbbType.setSelectedIndex(0);
 		}else {
@@ -535,32 +557,66 @@ public class Atiendances extends JInternalFrame {
 	}
 	protected void chckbxGenderItemStateChanged(ItemEvent e) {
 		if(chckbxGender.isSelected()) {
+			//cbbType.insertItemAt("Null", 0);
 			cbbType.setSelectedIndex(0);
 			cbbType.setEnabled(false);
 			lblArrivalTime.setEnabled(true);
 			lblDepTime.setEnabled(true);
 		}else {
 			cbbType.setEnabled(true);
+			//cbbType.removeItem("Null");
+			lblArrivalTime.setText("");;
+			lblDepTime.setText("");
 			lblArrivalTime.setEnabled(false);
 			lblDepTime.setEnabled(false);
 		}
 	}
+	public void resetfield() {
+		lblFid.setText("");
+		textFsche.setText("");
+		chckbxGender.setSelected(false);
+		lblArrivalTime.setText("");
+		lblDepTime.setText("");
+		
+	}
 	protected void lblUpdateMouseClicked(MouseEvent e) {
+		if(lblFid.getText().equals("")) {
+			JOptionPane.showMessageDialog(null,"Please select row to update");
+		}else if(validateAtt()!=0) {
+			return;
+		}
+		else {
 		Attendance newatt = new Attendance();
 		newatt.setAttendance_id(Integer.parseInt(lblFid.getText()));
-		newatt.setWorkschedule_id(Integer.parseInt(lblScheduleid.getText()));
+		newatt.setWorkschedule_id(Integer.parseInt(textFsche.getText()));
 		newatt.setPresent(chckbxGender.isSelected());
 		newatt.setArrival_time(Time.valueOf(lblArrivalTime.getText()));
 		newatt.setDeparture_time(Time.valueOf(lblDepTime.getText()));
-		newatt.setLeave_type(lblType.getText());
+		int a = cbbType.getSelectedIndex();
+		String c;
+		if(a ==0) {
+			c=null;
+			
+		}else {
+			c=(a==1)? "P" : "WP";
+		}
+		newatt.setLeave_type(c);
 		
 		attdao.update(newatt);
 		refresh();
+		}
 	}
 	protected void lblDeleteMouseClicked(MouseEvent e) {
+		if(lblFid.getText().equals("")) {
+			JOptionPane.showMessageDialog(null,"Please select row to delete");
+		}else {
 		int a = Integer.parseInt(lblFid.getText());
-		attdao.delete(a);
-		refresh();
+		int choose=JOptionPane.showConfirmDialog(null,"Are you sure want to delete?","Delete",JOptionPane.YES_NO_OPTION);
+		if(choose == JOptionPane.YES_OPTION) {
+			attdao.delete(a);
+			refresh();
+		}
+		}
 	}
 	protected void txtPageActionPerformed(ActionEvent e) {
 		int a = Integer.parseInt(txtPage.getText());

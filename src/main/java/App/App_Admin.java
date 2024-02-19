@@ -778,10 +778,11 @@ public class App_Admin extends JFrame {
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
 				panelPos.setVisible(true);
-				openPosition();
+				
 			}
 
 			opensidebar();
+			openPosition();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
