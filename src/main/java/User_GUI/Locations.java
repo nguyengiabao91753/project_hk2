@@ -89,7 +89,7 @@ public class Locations extends JInternalFrame {
 		lblNewLabel_2.setBounds(81, 61, 161, 18);
 		panel.add(lblNewLabel_2);
 		
-		JLabel lblBack = new JLabel("New label");
+		JLabel lblBack = new JLabel("");
 		lblBack.setBackground(SystemColor.activeCaption);
 		lblBack.addMouseListener(new MouseAdapter() {
 			@Override
@@ -97,7 +97,7 @@ public class Locations extends JInternalFrame {
 				lblNewLabel_5MouseClicked(e);
 			}
 		});
-		lblBack.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\icons8-back-32 (1).png"));
+		lblBack.setIcon(new ImageIcon("image\\icons8-back-32 (1).png"));
 		lblBack.setBounds(10, 21, 40, 40);
 		panel.add(lblBack);
 		JPanel panelContent = new JPanel();
@@ -108,7 +108,7 @@ public class Locations extends JInternalFrame {
 		panelContent.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\icons8-done-16.png"));
+		lblNewLabel.setIcon(new ImageIcon("image\\icons8-done-16.png"));
 		lblNewLabel.setBounds(25, 22, 30, 50);
 		panelContent.add(lblNewLabel);
 		

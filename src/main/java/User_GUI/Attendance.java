@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyVetoException;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -41,6 +42,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
 
 public class Attendance extends JInternalFrame {
 
@@ -211,7 +215,8 @@ public class Attendance extends JInternalFrame {
 		lblShift.setBounds(929, 167, 166, 36);
 		panelContent.add(lblShift);
 		
-		btnCheckin = new JButton("Check-in");
+		btnCheckin = new JButton("Clock in");
+		btnCheckin.setVisible(false);
 		btnCheckin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -233,7 +238,8 @@ public class Attendance extends JInternalFrame {
 		btnCheckin.setBounds(805, 214, 110, 36);
 		panelContent.add(btnCheckin);
 		
-		btnCheckout = new JButton("Check-out");
+		btnCheckout = new JButton("Clock out");
+		btnCheckout.setVisible(false);
 		btnCheckout.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -256,6 +262,7 @@ public class Attendance extends JInternalFrame {
 		panelContent.add(btnCheckout);
 		
 		btnRequestForDayoff = new JButton("Request for day-off");
+		btnRequestForDayoff.setVisible(false);
 		btnRequestForDayoff.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseExited(MouseEvent e) {
@@ -342,22 +349,46 @@ public class Attendance extends JInternalFrame {
 		}
 		//return null;
 	}
-	@SuppressWarnings("unchecked")
+	public String durationLeaveTime(String time1, String time2) {
+		 LocalTime time1End = LocalTime.parse(time1.split("-")[1]);
+	        LocalTime time2Value = LocalTime.parse(time2);
+
+	        // So sánh thời gian
+	        Duration duration = Duration.between(time1End, time2Value);
+	        long hours = duration.toHours();
+	        long minutes = duration.toMinutesPart();
+	        // Xuất ra sự chênh lệch
+	        if (time2Value.isAfter(time1End)) {
+		        
+		        if(hours>0) {
+		        	return "Overtime: "+hours+"h "+minutes +"m";
+		        }
+		        return "Overtime: "+minutes +"m";
+	        }else if(time2Value.isBefore(time1End)) {
+	        	return "Early: "+hours +"m";
+	        }else {
+	        	return "on time";
+	        }
+	}
+	public String statusLeave(entity.Attendance att) {
+		
+		return "Leave - "+durationLeaveTime(showShift(att.getWorkschedule_id()), att.getDeparture_time().toString());
+	}
 	public void load() {
 		
 		
 		DefaultListModel model = new DefaultListModel();
-		List<entity.Attendance> listatt =  attdao.getAttpersonal(1);
+		List<entity.Attendance> listatt =  attdao.getAttpersonal(UserLogin.getUserId());
 		for (entity.Attendance att : listatt) {
 			LocalDate dateFromData = LocalDate.parse(showDate(att.getWorkschedule_id()), DateTimeFormatter.ofPattern("yyyy-M-d"));
 			if(currentDate.isEqual(dateFromData) && att.getArrival_time() == null && att.getLeave_type().equals("WP")) {
 				model.addElement("<html><body style='width: 491px; padding: 5px; border-bottom: 1px solid black;'>"+
 						"(Id: "+att.getAttendance_id()+") "+showDate(att.getWorkschedule_id())+": Please check-in"
-						+ "</body></html>");
+						+"</body></html>");
 			}else if(currentDate.isAfter(dateFromData) || currentDate.isEqual(dateFromData)) {
 				model.addElement("<html><body style='width: 491px; padding: 5px; border-bottom: 1px solid black;'>"+
 						"(Id: "+att.getAttendance_id()+") "+showDate(att.getWorkschedule_id())+": "+statusPresent(att)
-						+ "</body></html>");
+						+ " / "+statusLeave(att)+"</body></html>");
 			}
 		}
 //		attdao.getAttpersonal(1).stream().forEach(att ->model.addElement("<html><body style='width: 491px; padding: 5px; border-bottom: 1px solid black;'>"+
@@ -380,11 +411,12 @@ public class Attendance extends JInternalFrame {
 	        }
 	    }
 	protected void lblNewLabel_3MouseClicked(MouseEvent e) {
-//		App_User appus = new App_User();
-//		appus.setLocationRelativeTo(null);
-//		appus.setUndecorated(true);
-//		appus.setVisible(true);
-	    this.dispose();
+		try {
+			this.setClosed(true);
+		} catch (PropertyVetoException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	protected void lblNewLabelMouseClicked(MouseEvent e) {
 		System.exit(0);
@@ -395,7 +427,7 @@ public class Attendance extends JInternalFrame {
 	     int closingParenthesisIndex = value.indexOf(')'); 
 	     String att_id = value.substring(colonIndex + 3, closingParenthesisIndex).trim();
 		lblId.setText(att_id);
-		List<entity.Attendance> listatt =  attdao.getAttpersonal(1);
+		List<entity.Attendance> listatt =  attdao.getAttpersonal(UserLogin.getUserId());
 		for (entity.Attendance att : listatt) {
 			if(att.getAttendance_id() == Integer.parseInt(att_id)) {
 				lblDate.setText(showDate(att.getWorkschedule_id()));

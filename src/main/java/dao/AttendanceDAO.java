@@ -111,19 +111,14 @@ public class AttendanceDAO {
 			e.printStackTrace();
 		}
 	}
-	public void insert(Attendance att) {
+	public void insert(int a) {
 		try(
 				var con = DBCon.getConnection();
-				var cs = con.prepareCall("{call insertAtt(?,?,?,?,?)}");
+				var cs = con.prepareCall("{call insertAtt(?)}");
 				) {
-			cs.setInt(1, att.getWorkschedule_id());
-			cs.setBoolean(2, att.isPresent());
-			cs.setTime(3, att.getArrival_time());
-			cs.setTime(4, att.getDeparture_time());
-			cs.setString(5, att.getLeave_type());
-			
+			cs.setInt(1, a);
 			if(cs.executeUpdate() >0) {
-				JOptionPane.showMessageDialog(null, "Success");
+				//JOptionPane.showMessageDialog(null, "Success");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

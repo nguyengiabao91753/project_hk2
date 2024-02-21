@@ -303,7 +303,7 @@ public class UserLogin extends JFrame {
 	    acc.setPassword(password); 
 
 	    AccountDAO dao = new AccountDAO();
-	    String loginMessage = dao.login(acc);
+	    String loginMessage = dao.loginUser(acc);
 
 	    if (loginMessage.equals("Login successful.")) {
 	    	isLoggedIn = true;

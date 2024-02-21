@@ -182,7 +182,7 @@ public class Profile extends JInternalFrame {
 				lblBackMouseClicked(e);
 			}
 		});
-		lblBack.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-back-arrow-48.png"));
+		lblBack.setIcon(new ImageIcon("images\\icons8-back-arrow-48.png"));
 		lblBack.setBounds(0, 0, 58, 68);
 		panel.add(lblBack);
 		

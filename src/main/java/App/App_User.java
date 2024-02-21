@@ -36,6 +36,7 @@ import User_GUI.UserLogin;
 import dao.AccountDAO;
 import dao.EmployeeDAO;
 import entity.Employee;
+import entity.Salary;
 
 import java.awt.SystemColor;
 
@@ -59,7 +60,7 @@ public class App_User extends JFrame {
 	private JLabel lblSalary;
 	private JLabel lblLocation;
 	Schedule schedule;
-
+	User_GUI.Salary sa;
 	Attendance att;
 
 	Profile pro ;
@@ -234,6 +235,13 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_7);
 		
 		lblNewLabel_9 = new JLabel("");
+		lblNewLabel_9.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblNewLabel_9.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblNewLabel_9MouseClicked(e);
+			}
+		});
 		lblNewLabel_9.setIcon(new ImageIcon("images\\icons8-salary-96.png"));
 		lblNewLabel_9.setOpaque(true);
 		lblNewLabel_9.setBackground(new Color(255, 255, 255));
@@ -297,6 +305,13 @@ public class App_User extends JFrame {
 		desktopPane.add(lblAttendance);
 		
 		lblSalary = new JLabel("Salary");
+		lblSalary.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblSalary.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblSalaryMouseClicked(e);
+			}
+		});
 		lblSalary.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSalary.setForeground(new Color(51, 102, 153));
 		lblSalary.setFont(new Font("Tahoma", Font.BOLD, 17));
@@ -333,6 +348,7 @@ public class App_User extends JFrame {
 //	        for (Component frame : frames) {
 //	            frame.setVisible(false);
 //	        }
+
 			//this.setVisible(false);
 	        schedule.setVisible(true); 
 	    }
@@ -350,36 +366,37 @@ public class App_User extends JFrame {
 //	        for (Component frame : frames) {
 //	            frame.setVisible(false);
 //	        }
+
+			
+			
+			//this.setVisible(false);
+
 			schedule.setVisible(true);
+
 		}
 	}
 
 	protected void lblNewLabel_7MouseClicked(MouseEvent e) {
 		if(att == null || att.isClosed()) {
 			att = new Attendance();
-			
+
 			att.setBounds(0, 0, 1180, 664);
 			desktopPane.add(att);
 			att.show();
 			att.toFront();
-//			Component[] frames = desktopPane.getComponents();
-//	        for (Component frame : frames) {
-//	            frame.setVisible(false);
-//	        }
-			
-			//this.setVisible(false);
-			att.setVisible(true);
 		}
 	}
 	protected void lblAttendanceMouseClicked(MouseEvent e) {
 		if(att == null || att.isClosed()) {
 			att = new Attendance();
-			
+//			Component[] frames = desktopPane.getComponents();
+//	        for (Component frame : frames) {
+//	            frame.setVisible(false);
+//	        }
 			att.setBounds(0, 0, 1180, 664);
 			desktopPane.add(att);
 			att.show();
 			att.toFront();
-			att.setVisible(true);
 		}
 	}
 
@@ -462,6 +479,24 @@ public class App_User extends JFrame {
 		}
 	}
 
+	protected void lblNewLabel_9MouseClicked(MouseEvent e) {
+		if(sa == null || sa.isClosed()) {
+			sa = new User_GUI.Salary();
+			sa.setBounds(0, 0, 1180, 664);
+			desktopPane.add(sa);
+			sa.show();
+			sa.toFront();
+		}
+	}
+	protected void lblSalaryMouseClicked(MouseEvent e) {
+		if(sa == null || sa.isClosed()) {
+			sa = new User_GUI.Salary();
+			sa.setBounds(0, 0, 1180, 664);
+			desktopPane.add(sa);
+			sa.show();
+			sa.toFront();
+		}
+	}
 }
 
 	

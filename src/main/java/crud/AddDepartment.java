@@ -46,26 +46,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.UIManager;
+import javax.swing.LayoutStyle.ComponentPlacement;
 public class AddDepartment extends JInternalFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
-	private JTextField txtNAME;
-	private JTextField txtDEPARTMENT;
-	private JLabel lblName;
+	private JTextField txtDepparment;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
 	private JButton btnInput;
-	private JLabel lblCreateDepartment;
 	private static AddDepartment instance ;
 	private Object DimensionBarca;
 	private JComponent Barca;
-	private JComboBox cbbRoom;
-	private JLabel lblBack;
 	private App_Admin app;
 	Manage_Departments dep;
 	private JDesktopPane desktopPane;
 	private JPanel panel_1;
+	private JLabel lblNewLabel;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_4;
+	private JTextField txtRoom;
+	private JLabel lblNewLabel_5;
+	private JTextField txtName;
+	private JPanel panel_2;
 	/**
 	 * Launch the application.
 	 */
@@ -111,61 +114,83 @@ public class AddDepartment extends JInternalFrame {
 		
 		roommodel.addAll(listroom);
 		
-		cbbRoom.setModel(roommodel);
-		
 	}	
 	public AddDepartment() {
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
 		quit();
 		getContentPane().setBackground(new Color(255, 255, 255));
-		setBounds(0,0,957,626);
+		setBounds(100, 100, 637, 521);
 		
 		panel = new JPanel();
-		panel.setBackground(UIManager.getColor("Button.background"));
+		panel.setBackground(new Color(255, 255, 255));
+		
+		panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setBackground(new Color(102, 0, 255));
+		
+		lblNewLabel = new JLabel("<html>\r\n\t<p style=\"font-size: 24px;color:white\">&#10006;</p>\r\n</html>");
+		lblNewLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblNewLabelMouseClicked(e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblNewLabelMouseEntered(e);
+			}
+		});
+		lblNewLabel.setBounds(600, 11, 26, 35);
+		panel_1.add(lblNewLabel);
+		
+		lblNewLabel_1 = new JLabel("Manager Department");
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 23));
+		lblNewLabel_1.setBounds(10, 18, 216, 25);
+		panel_1.add(lblNewLabel_1);
+		
+		lblNewLabel_4 = new JLabel("-Create");
+		lblNewLabel_4.setForeground(Color.WHITE);
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_4.setBounds(236, 27, 63, 14);
+		panel_1.add(lblNewLabel_4);
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(27, Short.MAX_VALUE)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 902, GroupLayout.PREFERRED_SIZE)
-					.addGap(28))
-		);
-		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 533, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(66, Short.MAX_VALUE))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 636, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(11)
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 625, Short.MAX_VALUE)))
+					.addContainerGap())
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		panel.setLayout(null);
 		
-		txtNAME = new JTextField();
-		txtNAME.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		txtNAME.setColumns(10);
-		txtNAME.setBounds(101, 140, 300, 40);
-		panel.add(txtNAME);
-		
-		txtDEPARTMENT = new JTextField();
-		txtDEPARTMENT.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		txtDEPARTMENT.setColumns(10);
-		txtDEPARTMENT.setBounds(580, 140, 300, 40);
-		panel.add(txtDEPARTMENT);
-		
-		lblName = new JLabel("NAME :");
-		lblName.setFont(new Font("Times New Roman", Font.BOLD, 19));
-		lblName.setBounds(20, 140, 71, 40);
-		panel.add(lblName);
+		txtDepparment = new JTextField();
+		txtDepparment.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		txtDepparment.setColumns(10);
+		txtDepparment.setBounds(180, 129, 300, 40);
+		panel.add(txtDepparment);
 		
 		lblNewLabel_2 = new JLabel("DEPARTMENT :");
-		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblNewLabel_2.setBounds(420, 140, 150, 40);
+		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblNewLabel_2.setBounds(49, 130, 121, 40);
 		panel.add(lblNewLabel_2);
 		
 		lblNewLabel_3 = new JLabel("ROOM :");
-		lblNewLabel_3.setFont(new Font("Times New Roman", Font.BOLD, 19));
-		lblNewLabel_3.setBounds(20, 232, 82, 40);
+		lblNewLabel_3.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblNewLabel_3.setBounds(49, 211, 82, 40);
 		panel.add(lblNewLabel_3);
 		
-		btnInput = new JButton("CREATE");
+		btnInput = new JButton("Submit");
 		btnInput.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -181,47 +206,33 @@ public class AddDepartment extends JInternalFrame {
 				btnbtnInputActionPerformed(e);
 			}
 		});
-		btnInput.setBackground(new Color(0, 120, 215));
-		btnInput.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		btnInput.setBounds(345, 334, 180, 45);
+		btnInput.setBackground(new Color(0, 0, 255));
+		btnInput.setFont(new Font("Times New Roman", Font.BOLD, 17));
+		btnInput.setBounds(236, 324, 150, 40);
 		panel.add(btnInput);
 		
-		lblCreateDepartment = new JLabel("CREATE DEPARTMENT");
-		lblCreateDepartment.setForeground(Color.BLUE);
-		lblCreateDepartment.setFont(new Font("Times New Roman", Font.BOLD, 35));
-		lblCreateDepartment.setBounds(229, 0, 407, 78);
-		panel.add(lblCreateDepartment);
+		txtRoom = new JTextField();
+		txtRoom.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		txtRoom.setColumns(10);
+		txtRoom.setBounds(180, 210, 300, 40);
+		panel.add(txtRoom);
 		
-		cbbRoom = new JComboBox();
-		cbbRoom.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		cbbRoom.setBounds(101, 235, 300, 38);
-		panel.add(cbbRoom);
+		lblNewLabel_5 = new JLabel("NAME :");
+		lblNewLabel_5.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblNewLabel_5.setBounds(49, 50, 82, 40);
+		panel.add(lblNewLabel_5);
 		
-		lblBack = new JLabel("");
-		lblBack.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				lblBackMouseClicked(e);
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				lblBackMouseEntered(e);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				lblBackMouseExited(e);
-			}
-		});
-		lblBack.setIcon(new ImageIcon("images//icons8-back-48.png"));
-		lblBack.setOpaque(true);
-		lblBack.setBackground(new Color(0, 191, 255));
-		lblBack.setBounds(10, 10, 48, 48);
-		panel.add(lblBack);
+		txtName = new JTextField();
+		txtName.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		txtName.setColumns(10);
+		txtName.setBounds(180, 49, 300, 40);
+		panel.add(txtName);
 		
-		panel_1 = new JPanel();
-		panel_1.setBackground(new Color(0, 191, 255));
-		panel_1.setBounds(0, 0, 902, 78);
-		panel.add(panel_1);
+		panel_2 = new JPanel();
+		panel_2.setLayout(null);
+		panel_2.setBackground(new Color(235, 234, 233));
+		panel_2.setBounds(-11, 312, 636, 65);
+		panel.add(panel_2);
 		getContentPane().setLayout(groupLayout);
 		loadDep();
 	}
@@ -230,16 +241,16 @@ public class AddDepartment extends JInternalFrame {
 			return;
 		}else {
 	Department newDEP = new Department();
-	newDEP.setDepartment_name(txtNAME.getText()+1);
-	newDEP.setHead_of_department(txtDEPARTMENT.getText()+1);
-	newDEP.setRoom(cbbRoom.getActionCommand()+1);
+	newDEP.setDepartment_name(txtName.getText()+1);
+	newDEP.setHead_of_department(txtDepparment.getText()+1);
+	newDEP.setHead_of_department(txtRoom.getText()+1);
 	Manage_DepartmentsDAO workdao = new Manage_DepartmentsDAO();
 	if(workdao.insert(newDEP)) {
 		JOptionPane.showMessageDialog(null, "Add successfully!");
 		}
-    	txtNAME.setText("");
-    	txtDEPARTMENT.setText("");
-    	cbbRoom.setToolTipText("");
+    	txtName.setText("");
+    	txtDepparment.setText("");
+    	txtRoom.setText("");
 		}
 
 }
@@ -249,53 +260,36 @@ public class AddDepartment extends JInternalFrame {
 		Manage_DepartmentsDAO DepDAO = new Manage_DepartmentsDAO();
 		List<Department> listDep = DepDAO.selectAllDepartment();
 		RoomDAO RoomDAO = new RoomDAO();
-		List<Room> listRoom = RoomDAO.selectAllRoom();
-		for (Room room : listRoom) {
-			if(room.toString().equals(cbbRoom.getSelectedItem())) {
-				room_name = room.getName();
-				break;
-			}
-		}
-		 Object selectedValue = cbbRoom.getSelectedItem();
-		if( txtNAME.getText() == null || txtDEPARTMENT.getText() == null ||  cbbRoom.getSelectedItem() == null) {
+		if( txtDepparment.getText() == null || txtDepparment.getText() == null ||  txtDepparment.getText() == null) {
 			JOptionPane.showMessageDialog(null, "Please fill in all information");
 			count++;
-		}else if(txtNAME.getText().trim().isEmpty()) {
+		}else if(txtName.getText().trim().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Please fill in your name");
 			count++;
-		}else if(txtDEPARTMENT.getText().trim().isEmpty()) {
+		}else if(txtDepparment.getText().trim().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Please fill in your Department");
 			count++;
-		}else if(selectedValue == null) {
+		}else if(txtRoom.getText().trim().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Please fill in your Room");
 			count++;
 		}
 		return count;
 
 	}
-	
-	protected void lblBackMouseClicked(MouseEvent e) {
-		App_Admin appus = new App_Admin();
-		appus.setLocationRelativeTo(null);
-		appus.setUndecorated(true);
-		appus.setVisible(true);
-	    this.setVisible(false);
-	}
-	protected void lblBackMouseEntered(MouseEvent e) {
-		lblBack.setBackground(new Color(0, 191, 255));
-		lblBack.setForeground(Color.black);
-	}
-	protected void lblBackMouseExited(MouseEvent e) {
-		lblBack.setBackground(new Color(0, 191, 255));
-		lblBack.setForeground(Color.black);
-	}
 	protected void btnInputMouseEntered(MouseEvent e) {
 		btnInput.setBackground(new Color(106,90,205));
 		btnInput.setForeground(Color.black);
 	}
 	protected void btnInputMouseExited(MouseEvent e) {
-		btnInput.setBackground(new Color(0, 191, 255));
+		btnInput.setBackground(new Color(102, 0, 255));
 		btnInput.setForeground(Color.black);
 		
+	}
+	protected void lblNewLabelMouseClicked(MouseEvent e) {
+		this.setVisible(false);
+	}
+	protected void lblNewLabelMouseEntered(MouseEvent e) {
+		lblNewLabel.setBackground(new Color(106,90,205));
+		lblNewLabel.setForeground(Color.black);
 	}
 }

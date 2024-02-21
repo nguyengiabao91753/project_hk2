@@ -52,7 +52,7 @@ CREATE TABLE SALARIES
     SALARY_ID INT PRIMARY KEY IDENTITY,
     BASE_SALARY FLOAT, --base salary
     SALARY_FACTOR INT, --salary factor
-    ALLOWANCE_FACTOR INT --allowance factor
+    ALLOWANCE_FACTOR FLOAT --allowance factor
 );
 GO
 
@@ -185,7 +185,6 @@ GO
 ALTER TABLE DEPARTMENTS
 ALTER COLUMN  HEAD_OF_DEPARTMENT VARCHAR(50)
 GO
-
 ALTER TABLE EDUCATIONS
 ALTER COLUMN  DEGREE_NAME VARCHAR(50)
 GO
@@ -317,22 +316,11 @@ VALUES
     ('Late Night Shift', '23:00', '07:00'),
     ('Early Morning Shift', '05:00', '13:00'),
     ('Day Shift', '10:00', '18:00'),
-    ('Night Shift', '20:00', '04:00'),
-    ('Morning Shift', '07:30', '15:30'),
-    ('Afternoon Shift', '15:30', '23:30'),
-    ('Night Shift', '23:30', '07:30'),
-    ('Day Shift', '08:30', '16:30'),
-    ('Evening Shift', '16:30', '00:30'),
-    ('Night Shift', '22:30', '06:30'),
-    ('Morning Shift', '06:30', '14:30'),
-    ('Day Shift', '09:30', '17:30'),
-    ('Night Shift', '21:30', '05:30'),
-    ('Morning Shift', '08:00', '16:00'),
-    ('Afternoon Shift', '16:00', '00:00');
+    ('Night Shift', '20:00', '04:00')
 GO
 
 
-DBCC CHECKIDENT ('ACCOUNTS', RESEED, 3);
+DBCC CHECKIDENT ('EMPLOYEES', RESEED, 9);
 
  INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE, LEVEL)
 VALUES ('Boss', 'Asian', '1990-05-15', 'Male', '123 Main Street', 1, NuLL, 1, 1, 1, null, 'Admin');
@@ -343,7 +331,7 @@ VALUES ('Admin', 'Admin12345', 1);
 GO
 
 
-DBCC CHECKIDENT ('ACCOUNTS', RESEED, 6);
+DBCC CHECKIDENT ('ACCOUNTS', RESEED, 9);
 INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE, LEVEL)
 VALUES ('John Doe', 'Asian', '1990-05-15', 'Male', '123 Main Street', 3, 4, 2, 2, 2, 'john_doe.jpg', 'Admin');
 
@@ -470,9 +458,6 @@ BEGIN
 END
 GO
 
-//Manage_Departments
-
-CREATE PROC getAllDep
 
 CREATE PROC updateSchedule
     @SCHEDULE_ID INT,
@@ -482,12 +467,13 @@ CREATE PROC updateSchedule
     @WORK_DATE DATE
 AS
 BEGIN
-	Select * from WORK_SCHEDULES
+	UPDATE WORK_SCHEDULES
+	SET EMPLOYEE_ID = @EMPLOYEE_ID, SHIFT_ID = @SHIFT_ID, ROOM_ID = @ROOM_ID, WORK_DATE = @WORK_DATE
+	WHERE SCHEDULE_ID = @SCHEDULE_ID
 END
 GO 
 
-
-
+--Job_Positions
 
 
 CREATE PROC getAllSalary
@@ -554,15 +540,54 @@ BEGIN
 End
 GO
 
+--position
+--LẤY từ dòng nào đến , và lấy bao nhiêu dòng .
 
+CREATE PROC getPosition
+@pageNumber int , @rowsOfPage int 
+AS
+BEGIN
+	SELECT * FROM POSITIONS
+	ORDER BY POSITION_ID
+	OFFSET (@pageNumber - 1)*@rowsOfPage ROWS
+	FETCH NEXT @rowsOfPage ROWS ONLY
+END
+GO
 
+CREATE PROC getDepartments
+@pageNumber int , @rowsOfPage int 
+AS
+BEGIN
+	SELECT * FROM DEPARTMENTS
+	ORDER BY DEPARTMENT_ID
+	OFFSET (@pageNumber - 1)*@rowsOfPage ROWS
+	FETCH NEXT @rowsOfPage ROWS ONLY
+END
+GO
 
+CREATE PROC insertDep
+@department_id int , @department_name VARCHAR(100) , @head_of_department VARCHAR(20),@room VARCHAR(20)
+AS
+BEGIN
+	INSERT INTO DEPARTMENTS(DEPARTMENT_ID,DEPARTMENT_NAME,HEAD_OF_DEPARTMENT,ROOM)
+	VALUES(@department_id,@department_name,@head_of_department,@room)
+END
+GO
+ALTER PROCEDURE insertDep
+    @department_name VARCHAR(100),
+    @head_of_department VARCHAR(20),
+    @room VARCHAR(20)
+AS
+BEGIN
+    -- Thay đổi câu lệnh INSERT
+    INSERT INTO DEPARTMENTS(DEPARTMENT_NAME, HEAD_OF_DEPARTMENT, ROOM)
+    VALUES(@department_name, @head_of_department, @room)
+END
 
-
-
-
-
-
+--THAY DỔI CỘT ROOM
+ALTER TABLE DEPARTMENTS
+ALTER COLUMN ROOM VARCHAR(50);
+GO
 
 
 CREATE PROC getAllAtt
@@ -835,6 +860,7 @@ BEGIN
 	ORDER BY WORK_DATE DESC
 END
 GO
+
 --ATTEN-PERSONAL
 CREATE PROC getAttpersonal
 @a INT
@@ -919,6 +945,35 @@ END
 GO
 
 
+
+Alter PROC insertAtt
+@work_id INT
+AS
+BEGIN
+	 INSERT INTO ATTENDANCES ( WORKSCHEDULE_ID,PRESENT, ARRIVAL_TIME, DEPARTURE_TIME, LEAVE_TYPE)
+     VALUES (@work_id, 'False', NULL, NULL, 'WP');
+END
+GO
+
+--TRIGGER
+CREATE TRIGGER AutoinsertAtt
+ON WORK_SCHEDULES
+AFTER INSERT
+AS
+BEGIN
+    -- Insert new records into ATTENDANCES based on newly inserted records in WORK_SCHEDULES
+    INSERT INTO ATTENDANCES (WORKSCHEDULE_ID, PRESENT, ARRIVAL_TIME, DEPARTURE_TIME, LEAVE_TYPE)
+    SELECT SCHEDULE_ID, 'False', NULL, NULL, 'WP'
+    FROM INSERTED;
+END
+GO
+
+--Select * from ACCOUNTS
+--Select * from ATTENDANCES
+--Select * from SHIFTS
+--Select * from SALARIES
+--Select * from EMPLOYEES
+--Select * from POSITIONS
 
 
 

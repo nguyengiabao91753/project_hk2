@@ -162,7 +162,7 @@ public class Manage_Departments extends JInternalFrame {
 		lblRoom = new JLabel("ROOM :");
 		lblRoom.setBackground(SystemColor.controlHighlight);
 		lblRoom.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblRoom.setBounds(10, 185, 100, 30);
+		lblRoom.setBounds(10, 181, 100, 30);
 		getContentPane().add(lblRoom);
 		
 		btnInsert = new JButton("ADD");

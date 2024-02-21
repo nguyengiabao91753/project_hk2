@@ -29,9 +29,9 @@ public class DBCon {
     }
     
  
-//    public static void main(String[] args) {
-//    	Connection connection = DBCon.getConnection();
-//    	System.out.println(connection);
-//    }
+    public static void main(String[] args) {
+    	Connection connection = DBCon.getConnection();
+    	System.out.println(connection);
+    }
 }
 

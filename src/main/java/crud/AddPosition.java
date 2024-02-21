@@ -54,13 +54,15 @@ public class AddPosition extends JInternalFrame {
 	private JTextField txtNAME;
 	private JLabel lblNewLabel_2;
 	private JButton btnInput;
-	private JLabel lblCreateDepartment;
 	private static AddPosition instance ;
 	AddDepartment AddDep ;
 	private Object DimensionBarca;
 	private JComponent Barca;
-	private JLabel lblBack;
 	private JPanel panel_1;
+	private JLabel lblNewLabel;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_3;
+	private JPanel panel_2;
 	/**
 	 * Launch the application.
 	 */
@@ -96,38 +98,75 @@ public class AddPosition extends JInternalFrame {
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
 		quit();
 		getContentPane().setBackground(new Color(255, 255, 255));
-		setBounds(0,0,957,626);
+		setBounds(100, 100, 637, 521);
 		
 		panel = new JPanel();
-		panel.setBackground(SystemColor.controlHighlight);
+		panel.setBackground(new Color(255, 255, 255));
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addGap(24)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 902, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(31, Short.MAX_VALUE))
+				.addComponent(panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 708, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 342, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(152, Short.MAX_VALUE))
 		);
 		panel.setLayout(null);
 		
 		txtNAME = new JTextField();
 		txtNAME.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtNAME.setColumns(10);
-		txtNAME.setBounds(240, 137, 500, 40);
+		txtNAME.setBounds(169, 136, 347, 40);
 		panel.add(txtNAME);
 		
 		lblNewLabel_2 = new JLabel("NAME :");
-		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblNewLabel_2.setBounds(150, 136, 100, 40);
+		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblNewLabel_2.setBounds(64, 136, 82, 40);
 		panel.add(lblNewLabel_2);
 		
+		panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setBackground(new Color(102, 0, 255));
+		panel_1.setBounds(0, 0, 636, 56);
+		panel.add(panel_1);
+		
+		lblNewLabel = new JLabel("<html>\r\n\t<p style=\"font-size: 24px;color:white\">&#10006;</p>\r\n</html>");
+		lblNewLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblNewLabelMouseEntered(e);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblNewLabelMouseClicked(e);
+			}
+		});
+		lblNewLabel.setBounds(601, 11, 25, 34);
+		panel_1.add(lblNewLabel);
+		
+		lblNewLabel_1 = new JLabel("    Job Position");
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 23));
+		lblNewLabel_1.setBounds(10, 18, 159, 25);
+		panel_1.add(lblNewLabel_1);
+		
+		lblNewLabel_3 = new JLabel("-Create");
+		lblNewLabel_3.setForeground(Color.WHITE);
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_3.setBounds(167, 27, 63, 14);
+		panel_1.add(lblNewLabel_3);
+		
+		panel_2 = new JPanel();
+		panel_2.setLayout(null);
+		panel_2.setBackground(new Color(235, 234, 233));
+		panel_2.setBounds(0, 266, 636, 65);
+		panel.add(panel_2);
+		
 		btnInput = new JButton("CREATE");
+		btnInput.setBounds(246, 11, 150, 40);
+		panel_2.add(btnInput);
 		btnInput.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -144,41 +183,7 @@ public class AddPosition extends JInternalFrame {
 			}
 		});
 		btnInput.setBackground(Color.BLUE);
-		btnInput.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		btnInput.setBounds(319, 276, 180, 45);
-		panel.add(btnInput);
-		
-		lblCreateDepartment = new JLabel("     CREATE POSITION");
-		lblCreateDepartment.setForeground(Color.BLUE);
-		lblCreateDepartment.setFont(new Font("Times New Roman", Font.BOLD, 35));
-		lblCreateDepartment.setBounds(229, 10, 400, 60);
-		panel.add(lblCreateDepartment);
-		
-		lblBack = new JLabel("");
-		lblBack.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				lblBackMouseClicked(e);
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				lblBackMouseEntered(e);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				lblBackMouseExited(e);
-			}
-		});
-		lblBack.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\icons8-back-48.png"));
-		lblBack.setOpaque(true);
-		lblBack.setBackground(new Color(0, 191, 255));
-		lblBack.setBounds(10, 10, 48, 48);
-		panel.add(lblBack);
-		
-		panel_1 = new JPanel();
-		panel_1.setBackground(new Color(0, 191, 255));
-		panel_1.setBounds(0, 0, 902, 78);
-		panel.add(panel_1);
+		btnInput.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		getContentPane().setLayout(groupLayout);
 	}
 	protected void btnInputActionPerformed(ActionEvent e) {
@@ -206,21 +211,6 @@ public class AddPosition extends JInternalFrame {
 		}
 		return count;
 	}
-	protected void lblBackMouseClicked(MouseEvent e) {
-		App_Admin appus = new App_Admin();
-		appus.setLocationRelativeTo(null);
-		appus.setUndecorated(true);
-		appus.setVisible(true);
-	    this.setVisible(false);
-	}
-	protected void lblBackMouseEntered(MouseEvent e) {
-		lblBack.setBackground(new Color(0, 191, 255));
-		lblBack.setForeground(Color.black);
-	}
-	protected void lblBackMouseExited(MouseEvent e) {
-		lblBack.setBackground(new Color(0, 191, 255));
-		lblBack.setForeground(Color.black);
-	}
 	protected void btnInputMouseEntered(MouseEvent e) {
 		btnInput.setBackground(new Color(106,90,205));
 		btnInput.setForeground(Color.black);
@@ -229,6 +219,14 @@ public class AddPosition extends JInternalFrame {
 	protected void btnInputMouseExited(MouseEvent e) {
 		btnInput.setBackground(new Color(0, 191, 255));
 		btnInput.setForeground(Color.black);
+	}
+	
+	protected void lblNewLabelMouseEntered(MouseEvent e) {
+		lblNewLabel.setBackground(new Color(106,90,205));
+		lblNewLabel.setForeground(Color.black);
+	}
+	protected void lblNewLabelMouseClicked(MouseEvent e) {
+		this.setVisible(false);
 	}
 	
 }
