@@ -58,6 +58,7 @@ public class AdminLogin extends JFrame {
 	private JPasswordField txtPassword;
 	private JButton btnLogin;
 	private JButton btnReset;
+	private static int adminId;
 	App_Admin app = new App_Admin();
 	private static boolean isLoggedIn = false;
 	/**
@@ -238,6 +239,8 @@ public class AdminLogin extends JFrame {
 	    String loginMessage = dao.login(acc);
 
 	    if (loginMessage.equals("Login successful.")) {
+	    	isLoggedIn = true;
+	    	adminId = dao.getUserId(username);
 	        dispose(); 
 	        app.setUndecorated(true);
 	        app.setLocationRelativeTo(null);
