@@ -21,10 +21,12 @@ import com.toedter.calendar.JDateChooser;
 
 import App.App_Admin;
 import crud.Addschedule;
+import dao.AttendanceDAO;
 import dao.EmployeeDAO;
 import dao.RoomDAO;
 import dao.ShiftDAO;
 import dao.WorkscheduleDAO;
+import entity.Attendance;
 import entity.Employee;
 import entity.Room;
 import entity.Shift;
@@ -552,6 +554,16 @@ public class Work_Schedules extends JInternalFrame {
 			
 		}else {
 			int a = Integer.parseInt(lblId.getText());
+			
+			AttendanceDAO attdao = new AttendanceDAO();
+			List<Attendance> listatt = attdao.getAllAtt();
+			for (Attendance att : listatt) {
+				if(att.getWorkschedule_id() == a) {
+					JOptionPane.showMessageDialog(null,"Cannot Delete this schedule! Because this schedule was checked ");
+					return;
+				}
+			}
+			
 			int choose=JOptionPane.showConfirmDialog(null,"Are you sure want to delete?","Delete",JOptionPane.YES_NO_OPTION);
 			if(choose == JOptionPane.YES_OPTION) {
 				workdao.delete(a);

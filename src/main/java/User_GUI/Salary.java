@@ -517,7 +517,7 @@ public class Salary extends JInternalFrame {
 				lblSF.setText(salary.getSalary_factor()+"");
 				lblAF.setText(salary.getAllowance_factor()+"");
 				sa = salary.getBase_salary() * salary.getSalary_factor() * salary.getAllowance_factor();
-				saperday = salary.getBase_salary()/30;
+				saperday = salary.getBase_salary() / 30;
 				break;
 			}
 		}
@@ -601,7 +601,7 @@ public class Salary extends JInternalFrame {
 		}else {
 			saabsent = saperday*(countwp+((countp-2)/2));
 		}
-		salate = (saperday/2) *countlate;
+		salate = (saperday/2)* countlate;
 		saover=(saperday/2)* countovertime;
 		total = sa - saabsent - salate + saover;
 		lblFSalary.setText(sa+"");
