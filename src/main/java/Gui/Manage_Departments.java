@@ -114,6 +114,23 @@ public class Manage_Departments extends JInternalFrame {
 	 * Create the frame.
 	 */
 	
+	public void hidenextlast() {
+		if(pagenumber == 1) {
+			lblfirst_1.setVisible(false);
+			lblprevious.setVisible(false);
+		}else {
+			lblfirst_1.setVisible(true);
+			lblprevious.setVisible(true);
+		}
+		if(pagenumber == totalPage.intValue()) {
+			lblnext.setVisible(false);
+			lbllast_1.setVisible(false);
+		}else {
+			lblnext.setVisible(true);
+			lbllast_1.setVisible(true);
+		}
+	}
+	
 	public void Quit() {
 		Barca = ((javax.swing.plaf.basic.BasicInternalFrameUI) getUI()).getNorthPane();
 		DimensionBarca =Barca.getPreferredSize();
@@ -124,7 +141,7 @@ public class Manage_Departments extends JInternalFrame {
 	public Manage_Departments() {
 		Quit();
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
-		getContentPane().setBackground(SystemColor.control);
+		getContentPane().setBackground(Color.WHITE);
 		setBounds(223, 37, 957, 626);
 		getContentPane().setLayout(null);
 		
@@ -143,30 +160,31 @@ public class Manage_Departments extends JInternalFrame {
 		
 		lblID = new JLabel("ID :");
 		lblID.setBackground(SystemColor.controlHighlight);
-		lblID.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblID.setBounds(10, 50, 100, 30);
+		lblID.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		lblID.setBounds(25, 50, 80, 30);
 		getContentPane().add(lblID);
 		
 		lblName = new JLabel("NAME :");
 		lblName.setBackground(SystemColor.controlHighlight);
-		lblName.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblName.setBounds(20, 95, 80, 30);
+		lblName.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		lblName.setBounds(25, 95, 80, 30);
 		getContentPane().add(lblName);
 		
 		lblDeparment = new JLabel("DEPARTMENT :");
 		lblDeparment.setBackground(SystemColor.controlHighlight);
-		lblDeparment.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblDeparment.setBounds(10, 140, 95, 30);
+		lblDeparment.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		lblDeparment.setBounds(25, 140, 80, 30);
 		getContentPane().add(lblDeparment);
 		
 		lblRoom = new JLabel("ROOM :");
 		lblRoom.setBackground(SystemColor.controlHighlight);
-		lblRoom.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblRoom.setBounds(10, 185, 100, 30);
+		lblRoom.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		lblRoom.setBounds(25, 185, 80, 30);
 		getContentPane().add(lblRoom);
 		
 		btnInsert = new JButton("ADD");
-		btnInsert.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		btnInsert.setForeground(new Color(255, 255, 255));
+		btnInsert.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnInsertActionPerformed(e);
@@ -183,12 +201,13 @@ public class Manage_Departments extends JInternalFrame {
 			}
 		});
 		btnInsert.setBackground(SystemColor.textHighlight);
-		btnInsert.setBounds(136, 295, 122, 35);
+		btnInsert.setBounds(266, 433, 100, 30);
 		getContentPane().add(btnInsert);
 		
 		btnUpdate = new JButton("UPDATE");
-		btnUpdate.setBackground(Color.YELLOW);
-		btnUpdate.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		btnUpdate.setForeground(new Color(255, 255, 255));
+		btnUpdate.setBackground(new Color(0, 255, 128));
+		btnUpdate.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnUpdate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -204,7 +223,7 @@ public class Manage_Departments extends JInternalFrame {
 				btnUpdateActionPerformed(e);
 			}
 		});
-		btnUpdate.setBounds(134, 341, 122, 35);
+		btnUpdate.setBounds(158, 295, 100, 30);
 		getContentPane().add(btnUpdate);
 		
 		scrollPane = new JScrollPane();
@@ -228,7 +247,7 @@ public class Manage_Departments extends JInternalFrame {
 
 		
 		lblTextsearch = new JLabel(" Search :");
-		lblTextsearch.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblTextsearch.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		lblTextsearch.setBounds(266, 10, 67, 25);
 		getContentPane().add(lblTextsearch);
 		
@@ -243,8 +262,9 @@ public class Manage_Departments extends JInternalFrame {
 		getContentPane().add(textSearch);
 		
 		btnDelete = new JButton("DELETE");
+		btnDelete.setForeground(new Color(255, 255, 255));
 		btnDelete.setBackground(Color.RED);
-		btnDelete.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		btnDelete.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -260,7 +280,7 @@ public class Manage_Departments extends JInternalFrame {
 				btnDeleteActionPerformed(e);
 			}
 		});
-		btnDelete.setBounds(136, 387, 122, 35);
+		btnDelete.setBounds(158, 355, 100, 30);
 		getContentPane().add(btnDelete);
 		
 		txtDeparment = new JTextField();
@@ -279,6 +299,7 @@ public class Manage_Departments extends JInternalFrame {
 		getContentPane().add(txtRoom);
 		
 		lblfirst = new JLabel("");
+		lblfirst.setVisible(false);
 		lblfirst.setOpaque(true);
 		lblfirst.setBounds(765, 470, 24, 24);
 		getContentPane().add(lblfirst);
@@ -378,7 +399,8 @@ public class Manage_Departments extends JInternalFrame {
 		lbllast_1.setOpaque(true);
 		lbllast_1.setBounds(917, 433, 24, 24);
 		getContentPane().add(lbllast_1);
-
+		
+		hidenextlast();
 	}
 	
 	//load
@@ -420,11 +442,11 @@ public class Manage_Departments extends JInternalFrame {
 
 	protected void btnGetIntoMouseEntered(MouseEvent e) {
 		btnInsert.setBackground(new Color(106,90,205));
-		btnInsert.setForeground(Color.black);
+		btnInsert.setForeground(Color.white);
 	}
 	protected void btnGetIntoMouseExited(MouseEvent e) {
 		btnInsert.setBackground(SystemColor.textHighlight);
-		btnInsert.setForeground(Color.black);
+		btnInsert.setForeground(Color.white);
 	}	
 	public void refresh() {
 		DefaultTableModel model = (DefaultTableModel)tbemp.getModel();
@@ -495,11 +517,11 @@ public class Manage_Departments extends JInternalFrame {
 
 	protected void btnUpdateMouseEntered(MouseEvent e) {
 		btnUpdate.setBackground(new Color(106,90,205));
-		btnUpdate.setForeground(Color.black);
+		btnUpdate.setForeground(Color.white);
 	}
 	protected void btnUpdateMouseExited(MouseEvent e) {
-		btnUpdate.setBackground(Color.yellow);
-		btnUpdate.setForeground(Color.black);
+		btnUpdate.setBackground(new Color(0, 255, 128));
+		btnUpdate.setForeground(Color.white);
 	};
 	protected void btnDeleteActionPerformed(ActionEvent e) {
 	    // Kiểm tra xem có dòng nào được chọn không
@@ -526,11 +548,11 @@ public class Manage_Departments extends JInternalFrame {
 
 	protected void btnDeleteMouseEntered(MouseEvent e) {
 		btnDelete.setBackground(new Color(106,90,205));
-		btnDelete.setForeground(Color.black);
+		btnDelete.setForeground(Color.white);
 	}
 	protected void btnDeleteMouseExited(MouseEvent e) {
 		btnDelete.setBackground(Color.red);
-		btnDelete.setForeground(Color.black);
+		btnDelete.setForeground(Color.white);
 	}
 	protected void textSearchActionPerformed(ActionEvent e) {
 	    String find = textSearch.getText();
@@ -594,22 +616,7 @@ public class Manage_Departments extends JInternalFrame {
 		textPage.setText(pagenumber.toString());
 		refresh();
 	}
-	public void hidenextlast() {
-		if(pagenumber == 1) {
-			lblfirst_1.setVisible(false);
-			lblprevious.setVisible(false);
-		}else {
-			lblfirst_1.setVisible(true);
-			lblprevious.setVisible(true);
-		}
-		if(pagenumber == totalPage.intValue()) {
-			lblnext.setVisible(false);
-			lbllast_1.setVisible(false);
-		}else {
-			lblnext.setVisible(true);
-			lbllast_1.setVisible(true);
-		}
-	}
+	
 	protected void textPageActionPerformed(ActionEvent e) {
 		int num = Integer.parseInt(textPage.getText()) ;
 		if(num>0 && num<totalPage.intValue()) {

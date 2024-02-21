@@ -93,6 +93,22 @@ public class Job_Position extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
+	public void hidenextlast() {
+		if(pageNumber == 1) {
+			lblfirst.setVisible(false);
+			lblprevious.setVisible(false);
+		}else {
+			lblfirst.setVisible(true);
+			lblprevious.setVisible(true);
+		}
+		if(pageNumber == totalPage.intValue()) {
+			lblnext.setVisible(false);
+			lbllast.setVisible(false);
+		}else {
+			lblnext.setVisible(true);
+			lbllast.setVisible(true);
+		}
+	}
 	public void Quit() {
 		Barca = ((javax.swing.plaf.basic.BasicInternalFrameUI) getUI()).getNorthPane();
 		DimensionBarca =Barca.getPreferredSize();
@@ -103,7 +119,7 @@ public class Job_Position extends JInternalFrame {
 	public Job_Position() {
 		Quit();
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
-		getContentPane().setBackground(SystemColor.menu);
+		getContentPane().setBackground(Color.WHITE);
 		setBounds(223, 37, 957, 626);
 		getContentPane().setLayout(null);
 		
@@ -120,17 +136,18 @@ public class Job_Position extends JInternalFrame {
 		
 		lblID = new JLabel("ID :");
 		lblID.setBackground(SystemColor.controlHighlight);
-		lblID.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		lblID.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		lblID.setBounds(15, 80, 50, 30);
 		getContentPane().add(lblID);
 		
 		lblName = new JLabel("NAME :");
 		lblName.setBackground(SystemColor.controlHighlight);
-		lblName.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		lblName.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		lblName.setBounds(15, 140, 50, 30);
 		getContentPane().add(lblName);
 		
 		btnInsert = new JButton("ADD");
+		btnInsert.setForeground(new Color(255, 255, 255));
 		btnInsert.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -147,11 +164,12 @@ public class Job_Position extends JInternalFrame {
 				btnInsertActionPerformed(e);
 			}
 		});
-		btnInsert.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		btnInsert.setBounds(127, 270, 122, 35);
+		btnInsert.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		btnInsert.setBounds(266, 433, 100, 30);
 		getContentPane().add(btnInsert);
 		
 		btnUpdate = new JButton("UPDATE");
+		btnUpdate.setForeground(new Color(255, 255, 255));
 		btnUpdate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -162,14 +180,14 @@ public class Job_Position extends JInternalFrame {
 				btnUpdateMouseExited(e);
 			}
 		});
-		btnUpdate.setBackground(Color.YELLOW);
+		btnUpdate.setBackground(new Color(0, 255, 0));
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnUpdateActionPerformed(e);
 			}
 		});
-		btnUpdate.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		btnUpdate.setBounds(127, 320, 122, 35);
+		btnUpdate.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		btnUpdate.setBounds(149, 277, 100, 30);
 		getContentPane().add(btnUpdate);
 		
 		scrollPane = new JScrollPane();
@@ -189,6 +207,7 @@ public class Job_Position extends JInternalFrame {
 		scrollPane.setViewportView(tbemp);
 		tbemp.setBorder(new LineBorder(SystemColor.controlHighlight, 2));	
 		btnDelete = new JButton("DELETE");
+		btnDelete.setForeground(new Color(255, 255, 255));
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -205,12 +224,12 @@ public class Job_Position extends JInternalFrame {
 				btnDeleteActionPerformed(e);
 			}
 		});
-		btnDelete.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		btnDelete.setBounds(127, 370, 122, 35);
+		btnDelete.setFont(new Font("Times New Roman", Font.BOLD, 10));
+		btnDelete.setBounds(149, 344, 100, 30);
 		getContentPane().add(btnDelete);
 		
 		lblTextsearch = new JLabel(" Search :");
-		lblTextsearch.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblTextsearch.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		lblTextsearch.setBounds(266, 12, 67, 25);
 		getContentPane().add(lblTextsearch);
 		
@@ -223,14 +242,12 @@ public class Job_Position extends JInternalFrame {
 		textSearch.setColumns(10);
 		textSearch.setBounds(326, 11, 62, 25);
 		getContentPane().add(textSearch);
-		lblprevious.setIcon(new ImageIcon("C:images\\icons8-next-24 (2).png"));
-		lblnext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
 		loadPosition();
 		tbemp.setRowHeight(35);
 		
 		lblfirst = new JLabel("");
-		lblfirst.setBackground(SystemColor.menu);
 		lblfirst.setIcon(new ImageIcon("images\\icons8-last-24 (1).png"));
+		lblfirst.setBackground(SystemColor.menu);
 		lblfirst.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -246,10 +263,11 @@ public class Job_Position extends JInternalFrame {
 			}
 		});
 		lblfirst.setOpaque(true);
-		lblfirst.setBounds(773, 433, 24, 24);
+		lblfirst.setBounds(783, 433, 24, 24);
 		getContentPane().add(lblfirst);
 		
 		lblprevious = new JLabel("");
+		lblprevious.setIcon(new ImageIcon("images\\icons8-next-24 (2).png"));
 		lblprevious.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -266,8 +284,7 @@ public class Job_Position extends JInternalFrame {
 		});
 		lblprevious.setOpaque(true);
 		lblprevious.setBackground(SystemColor.menu);
-		lblprevious.setIcon(new ImageIcon("images\\icons8-next-24 (2).png"));
-		lblprevious.setBounds(806, 433, 24, 24);
+		lblprevious.setBounds(812, 433, 24, 24);
 		getContentPane().add(lblprevious);
 		
 		textPage = new JTextField();
@@ -283,6 +300,7 @@ public class Job_Position extends JInternalFrame {
 		getContentPane().add(textPage);
 		
 		lblnext = new JLabel("");
+		lblnext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
 		lblnext.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -299,12 +317,12 @@ public class Job_Position extends JInternalFrame {
 		});
 		lblnext.setOpaque(true);
 		lblnext.setBackground(SystemColor.menu);
-		lblnext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
 		
 		lblnext.setBounds(884, 433, 24, 24);
 		getContentPane().add(lblnext);
 		
 		lbllast = new JLabel("");
+		lbllast.setIcon(new ImageIcon("images\\icons8-last-24.png"));
 		lbllast.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -320,26 +338,12 @@ public class Job_Position extends JInternalFrame {
 			}
 		});
 		lbllast.setOpaque(true);
-		lbllast.setBounds(918, 433, 24, 24);
-		lbllast.setIcon(new ImageIcon("images\\icons8-last-24.png"));
+		lbllast.setBounds(913, 433, 24, 24);
 		getContentPane().add(lbllast);
+		
+		hidenextlast();
 	}
-	public void hidenextlast() {
-		if(pageNumber == 1) {
-			lblfirst.setVisible(false);
-			lblprevious.setVisible(false);
-		}else {
-			lblfirst.setVisible(true);
-			lblprevious.setVisible(true);
-		}
-		if(pageNumber == totalPage.intValue()) {
-			lblnext.setVisible(false);
-			lbllast.setVisible(false);
-		}else {
-			lblnext.setVisible(true);
-			lbllast.setVisible(true);
-		}
-	}
+	
 	//load
 	public void loadPosition() {
 		DefaultTableModel model = new DefaultTableModel() {
@@ -431,27 +435,27 @@ public class Job_Position extends JInternalFrame {
 	}
 	protected void btnInsertMouseEntered(MouseEvent e) {
 		btnInsert.setBackground(new Color(106,90,205));
-		btnInsert.setForeground(Color.black);
+		btnInsert.setForeground(Color.white);
 	}
 	protected void btnInsertMouseExited(MouseEvent e) {
 		btnInsert.setBackground(SystemColor.textHighlight);
-		btnInsert.setForeground(Color.black);
+		btnInsert.setForeground(Color.white);
 	}
 	protected void btnUpdateMouseEntered(MouseEvent e) {
 		btnUpdate.setBackground(new Color(106,90,205));
-		btnUpdate.setForeground(Color.black);
+		btnUpdate.setForeground(Color.white);
 	}
 	protected void btnUpdateMouseExited(MouseEvent e) {
-		btnUpdate.setBackground(Color.yellow);
-		btnUpdate.setForeground(Color.black);
+		btnUpdate.setBackground(new Color(0, 255, 0));
+		btnUpdate.setForeground(Color.white);
 	}
 	protected void btnDeleteMouseEntered(MouseEvent e) {
 		btnDelete.setBackground(new Color(106,90,205));
-		btnDelete.setForeground(Color.black);
+		btnDelete.setForeground(Color.white);
 	}
 	protected void btnDeleteMouseExited(MouseEvent e) {
 		btnDelete.setBackground(Color.red);
-		btnDelete.setForeground(Color.black);
+		btnDelete.setForeground(Color.white);
 	}
 	protected void textFieldActionPerformed(ActionEvent e) {
 	    String find = textSearch.getText();

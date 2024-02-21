@@ -24,7 +24,6 @@ import Gui.Accounts;
 import Gui.Atiendances;
 
 import Gui.Work_Schedules;
-import User_GUI.UserLogin;
 import crud.AddDepartment;
 import crud.Addaccount;
 import crud.Addemployee;
@@ -114,14 +113,10 @@ public class App_Admin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					if (!AdminLogin.isLoggedIn()) {
-			            JOptionPane.showMessageDialog(null, "Please log in first.");
-			        }else {
 					App_Admin frame = new App_Admin();
 					frame.setLocationRelativeTo(null);
 					frame.setUndecorated(true);
 					frame.setVisible(true);
-			        }
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -171,6 +166,20 @@ public class App_Admin extends JFrame {
 		panelhello.setBounds(0, 0, 957, 626);
 		lblClose.setBounds(901, 7, 46, 20);
 		mostarBotones();
+	}
+	public void hidehello() {
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+	      if(frames != null) {
+	    	  lblPic.setVisible(false);
+				lblHello.setVisible(false);
+				lblName.setVisible(false);
+				lblpatern.setVisible(false);
+				txtrtext.setVisible(false);
+				txtrtext.setVisible(false);
+				lblMail.setVisible(false);
+				lblWish.setVisible(false);
+				panel_1.setVisible(false);
+	      }
 	}
 	public App_Admin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -525,18 +534,18 @@ public class App_Admin extends JFrame {
 			dep.setApp(this);
 			dep.show();
 		}
-	}	public void openPosition() {
+	}	public void openPos() {
 		JInternalFrame[] frames = desktopPane.getAllFrames();
         for (JInternalFrame frame : frames) {
             frame.doDefaultCloseAction();
         }
-		if(Pos == null || Pos.isClosed()) {
-			Pos = new Job_Position() ;
-			Pos.setBounds(0,0,957,626);
-			desktopPane.add(Pos);
-			Pos.setApp(this);
-			Pos.show();
-		}
+        if(Pos == null || Pos.isClosed()) {
+        	Pos = new Job_Position();
+        	Pos.setBounds(0, 0,957,626);
+        	desktopPane.add(Pos);
+        	Pos.setApp(this);
+        	Pos.show();
+        }
 	}
 	public void openAttendance() {
 		JInternalFrame[] frames = desktopPane.getAllFrames();
@@ -588,12 +597,12 @@ public class App_Admin extends JFrame {
 				panelAcc.setVisible(false);
 				panelAtt.setVisible(false);
 				panelDepart.setVisible(true);
-			
 				panelWork.setVisible(false);
 				panelPos.setVisible(false);
 			}
 			opensidebar();
 			openDepart();
+			hidehello();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -612,6 +621,7 @@ public class App_Admin extends JFrame {
 			}
 			opensidebar();
 			loadEmployeeForm();
+			hidehello();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -670,6 +680,7 @@ public class App_Admin extends JFrame {
 			}
 			opensidebar();
 			loadAccountForm();
+			hidehello();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -683,12 +694,12 @@ public class App_Admin extends JFrame {
 				panelAcc.setVisible(false);
 				panelAtt.setVisible(false);
 				panelDepart.setVisible(false);
-				
 				panelWork.setVisible(true);
-				openWorkSchedule();
 				panelPos.setVisible(false);
+				openWorkSchedule();
 			}
 			opensidebar();
+			hidehello();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -708,6 +719,7 @@ public class App_Admin extends JFrame {
 				openAttendance();
 			}
 			opensidebar();
+			hidehello();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -772,11 +784,10 @@ public class App_Admin extends JFrame {
 				
 				panelWork.setVisible(false);
 				panelPos.setVisible(true);
-				
+				openPos();
 			}
-
 			opensidebar();
-			openPosition();
+			hidehello();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}

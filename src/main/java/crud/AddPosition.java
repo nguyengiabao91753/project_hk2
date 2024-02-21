@@ -44,21 +44,26 @@ import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.Cursor;
 public class AddPosition extends JInternalFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
-	private JTextField txtID;
 	private JTextField txtNAME;
-	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_2;
 	private JButton btnInput;
-	private JButton btnNewButton_1;
-	private JLabel lblCreateDepartment;
 	private static AddPosition instance ;
 	AddDepartment AddDep ;
 	private Object DimensionBarca;
 	private JComponent Barca;
+	private JPanel panel_1;
+	private JLabel lblNewLabel;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_3;
+	private JPanel panel_2;
 	/**
 	 * Launch the application.
 	 */
@@ -94,70 +99,87 @@ public class AddPosition extends JInternalFrame {
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
 		quit();
 		getContentPane().setBackground(new Color(255, 255, 255));
-		setBounds(0,0,957,626);
+		setBounds(100, 100, 637, 265);
 		
 		panel = new JPanel();
-		panel.setBackground(SystemColor.controlHighlight);
-		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(69)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 788, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(100, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(52)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 343, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(204, Short.MAX_VALUE))
-		);
+		panel.setBounds(0, 0, 637, 265);
+		panel.setBackground(new Color(255, 255, 255));
 		panel.setLayout(null);
 		
-		txtID = new JTextField();
-		txtID.setEnabled(false);
-		txtID.setBounds(139, 162, 214, 38);
-		panel.add(txtID);
-		txtID.setColumns(10);
-		
 		txtNAME = new JTextField();
+		txtNAME.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtNAME.setColumns(10);
-		txtNAME.setBounds(549, 162, 214, 38);
+		txtNAME.setBounds(194, 109, 347, 40);
 		panel.add(txtNAME);
 		
-		lblNewLabel = new JLabel(" ID :");
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblNewLabel.setBounds(29, 162, 100, 38);
-		panel.add(lblNewLabel);
-		
-		lblNewLabel_2 = new JLabel("NAME");
-		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblNewLabel_2.setBounds(423, 162, 125, 38);
+		lblNewLabel_2 = new JLabel("NAME :");
+		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		lblNewLabel_2.setBounds(112, 109, 82, 40);
 		panel.add(lblNewLabel_2);
 		
-		btnInput = new JButton("CREATE");
+		panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setBackground(new Color(102, 0, 255));
+		panel_1.setBounds(0, 0, 636, 56);
+		panel.add(panel_1);
+		
+		lblNewLabel = new JLabel("<html>\r\n\t<p style=\"font-size: 24px;color:white\">&#10006;</p>\r\n</html>");
+		lblNewLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblNewLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblNewLabelMouseEntered(e);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblNewLabelMouseClicked(e);
+			}
+		});
+		lblNewLabel.setBounds(601, 11, 25, 34);
+		panel_1.add(lblNewLabel);
+		
+		lblNewLabel_1 = new JLabel("    Job Position");
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 23));
+		lblNewLabel_1.setBounds(10, 18, 159, 25);
+		panel_1.add(lblNewLabel_1);
+		
+		lblNewLabel_3 = new JLabel("-Create");
+		lblNewLabel_3.setForeground(Color.WHITE);
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_3.setBounds(167, 27, 63, 14);
+		panel_1.add(lblNewLabel_3);
+		
+		panel_2 = new JPanel();
+		panel_2.setLayout(null);
+		panel_2.setBackground(new Color(235, 234, 233));
+		panel_2.setBounds(0, 199, 636, 65);
+		panel.add(panel_2);
+		
+		btnInput = new JButton("Submit");
+		btnInput.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnInput.setForeground(new Color(255, 255, 255));
+		btnInput.setBounds(71, 11, 90, 37);
+		panel_2.add(btnInput);
+		btnInput.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnInputMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnInputMouseExited(e);
+			}
+		});
 		btnInput.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnInputActionPerformed(e);
 			}
 		});
+		getContentPane().setLayout(null);
 		btnInput.setBackground(Color.BLUE);
-		btnInput.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		btnInput.setBounds(319, 276, 142, 38);
-		panel.add(btnInput);
-		
-		btnNewButton_1 = new JButton("New button");
-		btnNewButton_1.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\Back (1).png"));
-		btnNewButton_1.setBounds(10, 14, 60, 38);
-		panel.add(btnNewButton_1);
-		
-		lblCreateDepartment = new JLabel("     CREATE POSITION");
-		lblCreateDepartment.setForeground(Color.BLUE);
-		lblCreateDepartment.setFont(new Font("Times New Roman", Font.BOLD, 30));
-		lblCreateDepartment.setBounds(229, 14, 357, 52);
-		panel.add(lblCreateDepartment);
-		getContentPane().setLayout(groupLayout);
+		btnInput.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		getContentPane().add(panel);
 	}
 	protected void btnInputActionPerformed(ActionEvent e) {
 		if(validatePosition()!=0) {
@@ -168,20 +190,37 @@ public class AddPosition extends JInternalFrame {
 	PositionDAO workdao = new PositionDAO();
 	if(workdao.insert(Pos)) {
 		JOptionPane.showMessageDialog(null, "Add successfully!");
-		Job_Position work = new Job_Position();
-		work.setVisible(true);;
-		App_Admin app = new App_Admin();
-		app.desktopPane.add(work);
-		this.hide();
+
+		}
+	{
+		txtNAME.setText("");
 	}
 		}
-}
+	}
 	public int validatePosition() {
 		int count = 0 ;
 		if( txtNAME.getText().trim().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Please fill in all information");
+			JOptionPane.showMessageDialog(null, "Please fill in your name .");
 			count++;
 		}
 		return count;
 	}
+	protected void btnInputMouseEntered(MouseEvent e) {
+		btnInput.setBackground(new Color(106,90,205));
+		btnInput.setForeground(Color.white);
+		
+	}
+	protected void btnInputMouseExited(MouseEvent e) {
+		btnInput.setBackground(Color.BLUE);
+		btnInput.setForeground(Color.white);
+	}
+	
+	protected void lblNewLabelMouseEntered(MouseEvent e) {
+		lblNewLabel.setBackground(new Color(106,90,205));
+		lblNewLabel.setForeground(Color.white);
+	}
+	protected void lblNewLabelMouseClicked(MouseEvent e) {
+		this.setVisible(false);
+	}
+	
 }

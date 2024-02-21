@@ -315,6 +315,7 @@ public class Addemployee extends JInternalFrame {
 		getContentPane().add(panel_1);
 		
 		btnCreate = new JButton("NEXT");
+		btnCreate.setForeground(Color.WHITE);
 		btnCreate.addMouseListener(new MouseAdapter() {
 			
 		});

@@ -148,6 +148,7 @@ public class Addaccount extends JInternalFrame {
 		getContentPane().add(panel_1);
 		
 		btnSubmit = new JButton("SUBMIT");
+		btnSubmit.setForeground(Color.WHITE);
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnSubmitActionPerformed(e);
