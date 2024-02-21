@@ -60,6 +60,15 @@ public class AdminLogin extends JFrame {
 	private JButton btnReset;
 	App_Admin app = new App_Admin();
 	private static boolean isLoggedIn = false;
+	private static int adminId;
+
+	public static void setAdminId(int id) {
+		adminId = id;
+    }
+	public static int getAdminId() {
+		return adminId;
+	}
+
 	/**
 	 * Launch the application.
 	 */
@@ -238,10 +247,14 @@ public class AdminLogin extends JFrame {
 	    String loginMessage = dao.login(acc);
 
 	    if (loginMessage.equals("Login successful.")) {
-	        dispose(); 
+	    	//truyền id của Admin 
+	    	adminId = dao.getUserId(username);
+	        dispose();
+	        
+	        App_Admin app = new App_Admin();
 	        app.setUndecorated(true);
 	        app.setLocationRelativeTo(null);
-	        app.setVisible(true);
+	        app.setVisible(true); 
 	    } else {
 	        JOptionPane.showMessageDialog(null, loginMessage);
 	    }

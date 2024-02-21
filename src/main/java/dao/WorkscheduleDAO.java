@@ -148,9 +148,6 @@ public class WorkscheduleDAO {
 						rs.getDate("work_date").toLocalDate()
 						));
 			}
-			if(cs.executeUpdate() >0) {
-				JOptionPane.showMessageDialog(null, "Delete Success");
-			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

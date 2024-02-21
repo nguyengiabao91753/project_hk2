@@ -77,6 +77,7 @@ public class Work_Schedules extends JInternalFrame {
 	Double totalPage =0.0;
 	Integer totalCount =0;
 	
+	LocalDate currentDate = LocalDate.now();
 	
 	RoomDAO roomdao = new RoomDAO();
 	ShiftDAO shiftdao = new ShiftDAO();
@@ -545,10 +546,19 @@ public class Work_Schedules extends JInternalFrame {
 		refresh();
 	}
 	protected void lblDeleteMouseClicked(MouseEvent e) {
-		JOptionPane.showConfirmDialog(null,"Are you sure want to delete?","Delete",JOptionPane.YES_NO_OPTION);
-		int a = Integer.parseInt(lblId.getText());
-		workdao.delete(a);
-		refresh();
+		
+		if(lblId.getText().equals("")) {
+			JOptionPane.showMessageDialog(null,"Please select row to delete");
+			
+		}else {
+			int a = Integer.parseInt(lblId.getText());
+			int choose=JOptionPane.showConfirmDialog(null,"Are you sure want to delete?","Delete",JOptionPane.YES_NO_OPTION);
+			if(choose == JOptionPane.YES_OPTION) {
+				workdao.delete(a);
+				refresh();
+			}
+		}
+		
 	}
 	
 	public boolean checkEmp_id(List<Employee> listemp, int a) {
@@ -594,8 +604,10 @@ public class Work_Schedules extends JInternalFrame {
 		}else if(!checkEmp_id(listemp, Integer.parseInt(txtEmployee.getText())) ) {
 			JOptionPane.showMessageDialog(null, "Employee_id is invalid");
 			count++;
-		}
-		else {
+		}else if(currentDate.equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) || currentDate.isAfter(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()))) {
+			JOptionPane.showMessageDialog(null, "Please choose work date is 'after' today!");
+			count++;
+		}else {
 			for (Workschedule workschedule : listwork) {
 				if(workschedule.getEmployee_id() == Integer.parseInt(txtEmployee.getText()) && workschedule.getWork_date().equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) 
 						&& workschedule.getShift_id() == (cbbShift.getSelectedIndex()+1) && workschedule.getRoom_id() == (cbbRoom.getSelectedIndex()+1)) {

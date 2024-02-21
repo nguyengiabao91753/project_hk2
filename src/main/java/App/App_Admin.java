@@ -28,6 +28,8 @@ import User_GUI.UserLogin;
 import crud.AddDepartment;
 import crud.Addaccount;
 import crud.Addemployee;
+import dao.EmployeeDAO;
+import entity.Employee;
 
 import java.awt.Color;
 import javax.swing.JDesktopPane;
@@ -51,6 +53,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import java.awt.FlowLayout;
+import javax.swing.border.LineBorder;
 
 
 public class App_Admin extends JFrame {
@@ -91,7 +94,9 @@ public class App_Admin extends JFrame {
 	Accounts acc;
 	Addemployee aemp;
 	Statistical sta;
-	
+	private JLabel lblPicture;
+	private JLabel lblNewLabel_3;
+	private JLabel lblName;
 	/**
 	 * Launch the application.
 	 */
@@ -99,14 +104,14 @@ public class App_Admin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					if (!AdminLogin.isLoggedIn()) {
-			            JOptionPane.showMessageDialog(null, "Please log in first.");
-			        }else {
+//					if (!AdminLogin.isLoggedIn()) {
+//			            JOptionPane.showMessageDialog(null, "Please log in first.");
+//			        }else {
 					App_Admin frame = new App_Admin();
 					frame.setLocationRelativeTo(null);
 					frame.setUndecorated(true);
 					frame.setVisible(true);
-			        }
+//			        }
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -179,7 +184,6 @@ public class App_Admin extends JFrame {
 		contentPane.setLayout(null);
 		
 		panelLateral = new JPanel();
-
 		panelLateral.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 
@@ -453,6 +457,27 @@ public class App_Admin extends JFrame {
 		panelLateral.add(panelPos);
 		panelPos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
+		lblPicture = new JLabel("");
+		lblPicture.setBorder(new LineBorder(new Color(102, 0, 255), 3));
+		lblPicture.setOpaque(true);
+		lblPicture.setBackground(new Color(255, 255, 255));
+		lblPicture.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPicture.setBounds(10, 502, 198, 104);
+		panelLateral.add(lblPicture);
+		
+		lblNewLabel_3 = new JLabel("Admin ");
+		lblNewLabel_3.setForeground(new Color(102, 0, 255));
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblNewLabel_3.setBounds(10, 477, 106, 26);
+		panelLateral.add(lblNewLabel_3);
+		
+		lblName = new JLabel("Name");
+		lblName.setForeground(new Color(102, 0, 255));
+		lblName.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblName.setBounds(119, 477, 100, 26);
+		panelLateral.add(lblName);
+		loadAdminInfo();
+		
 		panelTop = new JPanel();
 		panelTop.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		panelTop.setBackground(new Color(102, 0, 255));
@@ -488,6 +513,16 @@ public class App_Admin extends JFrame {
 		desktopPane.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		desktopPane.setBounds(223, 37, 957, 626);
 		contentPane.add(desktopPane);
+	}
+	
+	private void loadAdminInfo() {
+		EmployeeDAO dao = new EmployeeDAO();
+		Employee emp = dao.getUserById(AdminLogin.getAdminId());
+		ImageIcon icon = new ImageIcon(emp.getPicture());
+        Image image = icon.getImage();
+        Image scaledImage = image.getScaledInstance(lblPicture.getWidth(), lblPicture.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        lblPicture.setIcon(scaledIcon);
 	}
 	
 	public void openWorkSchedule() {
@@ -783,10 +818,11 @@ public class App_Admin extends JFrame {
 				panelEdu.setVisible(false);
 				panelWork.setVisible(false);
 				panelPos.setVisible(true);
-				openPosition();
+				
 			}
 
 			opensidebar();
+			openPosition();
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -830,5 +866,4 @@ public class App_Admin extends JFrame {
 	        acc.show();
 	    }	
 	}
-
 }

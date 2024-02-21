@@ -324,6 +324,12 @@ public class Accounts extends JInternalFrame {
 					default: return String.class;
 				}
 			}
+			@Override 
+			public boolean isCellEditable(int row , int col) {
+				switch(col){
+					default: return false;
+				}
+			}
 		};
 		
 		model.addColumn("ID");

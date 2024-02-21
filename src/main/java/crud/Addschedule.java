@@ -11,6 +11,7 @@ import com.toedter.calendar.JDateChooser;
 
 import App.App_Admin;
 import Gui.Work_Schedules;
+import dao.AttendanceDAO;
 import dao.EmployeeDAO;
 import dao.RoomDAO;
 import dao.ShiftDAO;
@@ -66,7 +67,7 @@ public class Addschedule extends JInternalFrame {
 	private JPanel panel_1;
 	private JComboBox cbbShift;
 	private JButton btnSubmit;
-	
+	LocalDate currentDate = LocalDate.now();
 	private static Addschedule instance ;
 
 	/**
@@ -314,6 +315,9 @@ public class Addschedule extends JInternalFrame {
 			count++;
 		}else if(!checkEmp_id(listemp, Integer.parseInt(txtEmp.getText())) ) {
 			JOptionPane.showMessageDialog(null, "Employee_id is invalid");
+			count++;
+		}else if(currentDate.equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) || currentDate.isAfter(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()))) {
+			JOptionPane.showMessageDialog(null, "Please choose work date is 'after' today!");
 			count++;
 		}
 		else {

@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyVetoException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -255,11 +256,12 @@ public class Schedule extends JInternalFrame {
 		System.exit(0);
 	}
 	protected void lblNewLabel_3MouseClicked(MouseEvent e) {
-//		App_User appus = new App_User();
-//		appus.setLocationRelativeTo(null);
-//		appus.setUndecorated(true);
-//		appus.setVisible(true);
-		this.dispose();
+		try {
+			this.setClosed(true);
+		} catch (PropertyVetoException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	public String nameRoom(int a) {
@@ -289,8 +291,6 @@ public class Schedule extends JInternalFrame {
 	             return false;
 	         }
 		};
-		
-		 
 		 
 		model.addColumn("Date");
 		model.addColumn("Shift");

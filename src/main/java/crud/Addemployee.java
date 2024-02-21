@@ -106,7 +106,6 @@ public class Addemployee extends JInternalFrame {
 	private String fileOld = null;
 	private String dirNew = null;
 	private String dirOld = null;
-	private JButton btnNewButton;
 	private JComboBox cbxSalaryId;
 	/**
 	 * Launch the application.
@@ -178,18 +177,14 @@ public class Addemployee extends JInternalFrame {
 		lblEmployee = new JLabel("Employee");
 		lblEmployee.setForeground(Color.WHITE);
 		lblEmployee.setFont(new Font("Tahoma", Font.PLAIN, 23));
-		lblEmployee.setBounds(114, 18, 171, 25);
+		lblEmployee.setBounds(10, 18, 171, 25);
 		panel.add(lblEmployee);
 		
 		lblNewLabel_2 = new JLabel("-Create");
 		lblNewLabel_2.setForeground(Color.WHITE);
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblNewLabel_2.setBounds(222, 18, 63, 14);
+		lblNewLabel_2.setBounds(117, 18, 63, 14);
 		panel.add(lblNewLabel_2);
-		
-		btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(0, 20, 89, 23);
-		panel.add(btnNewButton);
 		
 		lblName = new JLabel("Full name :");
 		lblName.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -487,7 +482,7 @@ public class Addemployee extends JInternalFrame {
 			emp.setGender(cbxGender.getSelectedItem().toString());
 			emp.setAddress(txtAddress.getText());
 			emp.setSalary_level(cbxSalaryId.getSelectedIndex()+1);
-			emp.setSupervisor_id(cbxSupervisorId.getSelectedIndex()+1);
+			emp.setSupervisor_id(Integer.parseInt(cbxSupervisorId.getSelectedItem().toString()));
 			emp.setDepartment_id(cbxDepartmentId.getSelectedIndex()+1);
 			emp.setEducation_id(cbxEducationId.getSelectedIndex()+1);
 			emp.setPosition_id(cbxPositionId.getSelectedIndex()+1);

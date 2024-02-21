@@ -304,7 +304,7 @@ public class EmployeeForm extends JInternalFrame {
 		
 		lblImage = new JLabel("Image :");
 		lblImage.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblImage.setBounds(22, 414, 86, 14);
+		lblImage.setBounds(22, 414, 86, 20);
 		getContentPane().add(lblImage);
 		
 		btnUpdate = new JButton("UPDATE");
@@ -565,8 +565,7 @@ public class EmployeeForm extends JInternalFrame {
 			@Override 
 			public boolean isCellEditable(int row , int col) {
 				switch(col){
-					case 11: return false;
-					default: return true;
+					default: return false;
 				}
 			}
 		}; 
@@ -910,54 +909,59 @@ public class EmployeeForm extends JInternalFrame {
 	}
 
 	protected void btnUpdateActionPerformed(ActionEvent e) {
-		if(validateEmp() != 0) {
-			return;
+		if(txtEmployeeId.getText().equals("")) {
+			JOptionPane.showMessageDialog(null,"Please select row to delete");
+			
 		}else {
-			Employee emp = new Employee();
-			emp.setId(Integer.parseInt(txtEmployeeId.getText()));
-			emp.setFull_name(txtFullName.getText());
-			emp.setEthnicity(txtEthnicity.getText());
-			emp.setDate_of_birth(
-					LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())
-			);
-			emp.setAddress(txtAddress.getText());
-			emp.setGender(cbxGender.getSelectedItem().toString());
-			emp.setSalary_level(cbxSalary.getSelectedIndex()+1);
-			emp.setSupervisor_id(cbxSupervisorId.getSelectedIndex()+1);
-			emp.setDepartment_id(cbxDepartmentId.getSelectedIndex()+1);
-			emp.setEducation_id(cbxEducationId.getSelectedIndex()+1);
-			emp.setPosition_id(cbxPositionId.getSelectedIndex()+1);
-			
-			if(fileName != null) {
-				dirNew = System.getProperty("user.dir") + "\\images";
-				Path pathOld = Paths.get(dirOld);
-				Path pathNew = Paths.get(dirNew);
-		
-				try {
-					Files.copy(
-							pathOld, 
-							pathNew.resolve(fileName),
-							StandardCopyOption.REPLACE_EXISTING
-					);
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-				emp.setPicture("images/" + fileName);
-				
-				if (!validatePicture("images/" + fileName)) {
-		               return;
-		           }
-				
+			if(validateEmp() != 0) {
+				return;
 			}else {
-				emp.setPicture(fileOld);
+				Employee emp = new Employee();
+				emp.setId(Integer.parseInt(txtEmployeeId.getText()));
+				emp.setFull_name(txtFullName.getText());
+				emp.setEthnicity(txtEthnicity.getText());
+				emp.setDate_of_birth(
+						LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())
+				);
+				emp.setAddress(txtAddress.getText());
+				emp.setGender(cbxGender.getSelectedItem().toString());
+				emp.setSalary_level(cbxSalary.getSelectedIndex()+1);
+				emp.setSupervisor_id(Integer.parseInt(cbxSupervisorId.getSelectedItem().toString()));
+				emp.setDepartment_id(cbxDepartmentId.getSelectedIndex()+1);
+				emp.setEducation_id(cbxEducationId.getSelectedIndex()+1);
+				emp.setPosition_id(cbxPositionId.getSelectedIndex()+1);
+				
+				if(fileName != null) {
+					dirNew = System.getProperty("user.dir") + "\\images";
+					Path pathOld = Paths.get(dirOld);
+					Path pathNew = Paths.get(dirNew);
+			
+					try {
+						Files.copy(
+								pathOld, 
+								pathNew.resolve(fileName),
+								StandardCopyOption.REPLACE_EXISTING
+						);
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+					emp.setPicture("images/" + fileName);
+					
+					if (!validatePicture("images/" + fileName)) {
+			               return;
+			           }
+					
+				}else {
+					emp.setPicture(fileOld);
+				}
+				
+				emp.setLevel(cbxLevel.getSelectedItem().toString());
+				
+				employeeDao.update(emp);
+				fileName =null;
+				lblPicture.setIcon(null);
+				refresh();
 			}
-			
-			emp.setLevel(cbxLevel.getSelectedItem().toString());
-			
-			employeeDao.update(emp);
-			fileName =null;
-			lblPicture.setIcon(null);
-			refresh();
 		}
 	}
 	
@@ -976,29 +980,34 @@ public class EmployeeForm extends JInternalFrame {
 	}
 	
 	protected void btnDeleteActionPerformed(ActionEvent e) {
-		String employeeName = txtFullName.getText(); 
-
-		int dialogResult = JOptionPane.showConfirmDialog(
-		            null,
-		            "Are you sure you want to delete employee '" + employeeName + "'?\nTheir account will also be deleted.",
-		            "Confirm Deletion",
-		            JOptionPane.YES_NO_OPTION);
-		 
-		if (dialogResult == JOptionPane.YES_OPTION) {
-			 	Accounts accounts = new Accounts();
-		        Employee emp = new Employee();
-		        Account acc = new Account();
-
-		        acc.setId(accounts.getAccountId()); 
-		        emp.setId(Integer.parseInt(txtEmployeeId.getText()));
-
-		        AccountDAO accDao = new AccountDAO();
-		        EmployeeDAO empDao = new EmployeeDAO();
-
-		        accDao.deleteAccountAndEmployee(acc, emp);
-		        empDao.deleteEmployeeAndAccount(emp, acc);
-
-		        refresh();
+		if(txtEmployeeId.getText().equals("")) {
+			JOptionPane.showMessageDialog(null,"Please select row to delete");
+			
+		}else {
+			String employeeName = txtFullName.getText(); 
+	
+			int dialogResult = JOptionPane.showConfirmDialog(
+			            null,
+			            "Are you sure you want to delete employee '" + employeeName + "'?\nTheir account will also be deleted.",
+			            "Confirm Deletion",
+			            JOptionPane.YES_NO_OPTION);
+			 
+			if (dialogResult == JOptionPane.YES_OPTION) {
+				 	Accounts accounts = new Accounts();
+			        Employee emp = new Employee();
+			        Account acc = new Account();
+	
+			        acc.setId(accounts.getAccountId()); 
+			        emp.setId(Integer.parseInt(txtEmployeeId.getText()));
+	
+			        AccountDAO accDao = new AccountDAO();
+			        EmployeeDAO empDao = new EmployeeDAO();
+	
+			        accDao.deleteAccountAndEmployee(acc, emp);
+			        empDao.deleteEmployeeAndAccount(emp, acc);
+	
+			        refresh();
+			}
 		}
 	}
 	
