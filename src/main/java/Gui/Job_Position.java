@@ -120,17 +120,18 @@ public class Job_Position extends JInternalFrame {
 		
 		lblID = new JLabel("ID :");
 		lblID.setBackground(SystemColor.controlHighlight);
-		lblID.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		lblID.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		lblID.setBounds(15, 80, 50, 30);
 		getContentPane().add(lblID);
 		
 		lblName = new JLabel("NAME :");
 		lblName.setBackground(SystemColor.controlHighlight);
-		lblName.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		lblName.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		lblName.setBounds(15, 140, 50, 30);
 		getContentPane().add(lblName);
 		
 		btnInsert = new JButton("ADD");
+		btnInsert.setForeground(new Color(255, 255, 255));
 		btnInsert.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -147,11 +148,12 @@ public class Job_Position extends JInternalFrame {
 				btnInsertActionPerformed(e);
 			}
 		});
-		btnInsert.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		btnInsert.setBounds(127, 270, 122, 35);
+		btnInsert.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		btnInsert.setBounds(266, 433, 100, 30);
 		getContentPane().add(btnInsert);
 		
 		btnUpdate = new JButton("UPDATE");
+		btnUpdate.setForeground(new Color(255, 255, 255));
 		btnUpdate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -162,14 +164,14 @@ public class Job_Position extends JInternalFrame {
 				btnUpdateMouseExited(e);
 			}
 		});
-		btnUpdate.setBackground(Color.YELLOW);
+		btnUpdate.setBackground(new Color(0, 255, 0));
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnUpdateActionPerformed(e);
 			}
 		});
-		btnUpdate.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		btnUpdate.setBounds(127, 320, 122, 35);
+		btnUpdate.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		btnUpdate.setBounds(149, 277, 100, 30);
 		getContentPane().add(btnUpdate);
 		
 		scrollPane = new JScrollPane();
@@ -189,6 +191,7 @@ public class Job_Position extends JInternalFrame {
 		scrollPane.setViewportView(tbemp);
 		tbemp.setBorder(new LineBorder(SystemColor.controlHighlight, 2));	
 		btnDelete = new JButton("DELETE");
+		btnDelete.setForeground(new Color(255, 255, 255));
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -205,12 +208,12 @@ public class Job_Position extends JInternalFrame {
 				btnDeleteActionPerformed(e);
 			}
 		});
-		btnDelete.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		btnDelete.setBounds(127, 370, 122, 35);
+		btnDelete.setFont(new Font("Times New Roman", Font.BOLD, 10));
+		btnDelete.setBounds(149, 344, 100, 30);
 		getContentPane().add(btnDelete);
 		
 		lblTextsearch = new JLabel(" Search :");
-		lblTextsearch.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblTextsearch.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		lblTextsearch.setBounds(266, 12, 67, 25);
 		getContentPane().add(lblTextsearch);
 		
@@ -429,27 +432,27 @@ public class Job_Position extends JInternalFrame {
 	}
 	protected void btnInsertMouseEntered(MouseEvent e) {
 		btnInsert.setBackground(new Color(106,90,205));
-		btnInsert.setForeground(Color.black);
+		btnInsert.setForeground(Color.white);
 	}
 	protected void btnInsertMouseExited(MouseEvent e) {
 		btnInsert.setBackground(SystemColor.textHighlight);
-		btnInsert.setForeground(Color.black);
+		btnInsert.setForeground(Color.white);
 	}
 	protected void btnUpdateMouseEntered(MouseEvent e) {
 		btnUpdate.setBackground(new Color(106,90,205));
-		btnUpdate.setForeground(Color.black);
+		btnUpdate.setForeground(Color.white);
 	}
 	protected void btnUpdateMouseExited(MouseEvent e) {
-		btnUpdate.setBackground(Color.yellow);
-		btnUpdate.setForeground(Color.black);
+		btnUpdate.setBackground(new Color(0, 255, 0));
+		btnUpdate.setForeground(Color.white);
 	}
 	protected void btnDeleteMouseEntered(MouseEvent e) {
 		btnDelete.setBackground(new Color(106,90,205));
-		btnDelete.setForeground(Color.black);
+		btnDelete.setForeground(Color.white);
 	}
 	protected void btnDeleteMouseExited(MouseEvent e) {
 		btnDelete.setBackground(Color.red);
-		btnDelete.setForeground(Color.black);
+		btnDelete.setForeground(Color.white);
 	}
 	protected void textFieldActionPerformed(ActionEvent e) {
 	    String find = textSearch.getText();

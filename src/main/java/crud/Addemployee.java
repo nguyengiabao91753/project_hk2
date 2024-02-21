@@ -355,9 +355,9 @@ public class Addemployee extends JInternalFrame {
 		
 		listSalary.forEach(salary -> salaryModel.addElement(salary.getBase_salary()));
 		listSupervisor.forEach(emp -> supervisorModel.addElement(emp.getId()));
-		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_id()));
-		listEducation.forEach(edu -> educationModel.addElement(edu.getId()));
-		listPosition.forEach(pos -> positionModel.addElement(pos.getPosition_id()));
+//		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_id()));
+//		listEducation.forEach(edu -> educationModel.addElement(edu.getId()));
+//		listPosition.forEach(pos -> positionModel.addElement(pos.getPosition_id()));
 		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_name()));
 		listEducation.forEach(edu -> educationModel.addElement(edu.getDegree_name()));
 		listPosition.forEach(pos -> positionModel.addElement(pos.getPosition_name()));
@@ -487,7 +487,7 @@ public class Addemployee extends JInternalFrame {
 			emp.setGender(cbxGender.getSelectedItem().toString());
 			emp.setAddress(txtAddress.getText());
 			emp.setSalary_level(cbxSalaryId.getSelectedIndex()+1);
-			emp.setSupervisor_id(cbxSupervisorId.getSelectedIndex()+1);
+			emp.setSupervisor_id(Integer.parseInt(cbxSupervisorId.getSelectedItem().toString()));
 			emp.setDepartment_id(cbxDepartmentId.getSelectedIndex()+1);
 			emp.setEducation_id(cbxEducationId.getSelectedIndex()+1);
 			emp.setPosition_id(cbxPositionId.getSelectedIndex()+1);

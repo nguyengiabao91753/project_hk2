@@ -566,9 +566,12 @@ public class EmployeeForm extends JInternalFrame {
 			public boolean isCellEditable(int row , int col) {
 				switch(col){
 					case 11: return false;
-					default: return true;
+					default: return false;
 				}
+				
 			}
+			
+			
 		}; 
 		
 		model.addColumn("ID");

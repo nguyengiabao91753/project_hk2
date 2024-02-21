@@ -208,18 +208,19 @@ public class Addaccount extends JInternalFrame {
 		    acc.setPassword(password);
 
 		    int defaultStatus = 1;
-		    if (accountDAO.insert(acc,defaultStatus )) {
+		    if (accountDAO.insert(acc,defaultStatus)) {
 		        JOptionPane.showMessageDialog(null, "Add successfully!");
 		        var empForm = new EmployeeForm();
 		        empForm.setVisible(true);;
 		        App_Admin app = new App_Admin();
 		        app.desktopPane.add(empForm);
 		        this.hide();
+		        return;
 		    } else {
 		        JOptionPane.showMessageDialog(null, "Add Fail!");
 		    }
 		} else {
-		    JOptionPane.showMessageDialog(null, "Addemployee Fail!");
+		    JOptionPane.showMessageDialog(null, "Addemplogyee Fail!");
 		}
 
 	}	

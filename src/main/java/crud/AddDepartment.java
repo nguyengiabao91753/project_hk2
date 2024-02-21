@@ -175,22 +175,48 @@ public class AddDepartment extends JInternalFrame {
 		panel.setLayout(null);
 		
 		txtDepparment = new JTextField();
-		txtDepparment.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		txtDepparment.setFont(new Font("Times New Roman", Font.PLAIN, 11));
 		txtDepparment.setColumns(10);
 		txtDepparment.setBounds(180, 129, 300, 40);
 		panel.add(txtDepparment);
 		
 		lblNewLabel_2 = new JLabel("DEPARTMENT :");
-		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		lblNewLabel_2.setBounds(49, 130, 121, 40);
 		panel.add(lblNewLabel_2);
 		
 		lblNewLabel_3 = new JLabel("ROOM :");
-		lblNewLabel_3.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblNewLabel_3.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		lblNewLabel_3.setBounds(49, 211, 82, 40);
 		panel.add(lblNewLabel_3);
 		
+		txtRoom = new JTextField();
+		txtRoom.setFont(new Font("Times New Roman", Font.PLAIN, 11));
+		txtRoom.setColumns(10);
+		txtRoom.setBounds(180, 210, 300, 40);
+		panel.add(txtRoom);
+		
+		lblNewLabel_5 = new JLabel("NAME :");
+		lblNewLabel_5.setFont(new Font("Times New Roman", Font.BOLD, 11));
+		lblNewLabel_5.setBounds(49, 50, 82, 40);
+		panel.add(lblNewLabel_5);
+		
+		txtName = new JTextField();
+		txtName.setFont(new Font("Times New Roman", Font.PLAIN, 11));
+		txtName.setColumns(10);
+		txtName.setBounds(180, 49, 300, 40);
+		panel.add(txtName);
+		
+		panel_2 = new JPanel();
+		panel_2.setLayout(null);
+		panel_2.setBackground(new Color(235, 234, 233));
+		panel_2.setBounds(-11, 312, 636, 65);
+		panel.add(panel_2);
+		
 		btnInput = new JButton("Submit");
+		btnInput.setForeground(new Color(255, 255, 255));
+		btnInput.setBounds(293, 18, 100, 30);
+		panel_2.add(btnInput);
 		btnInput.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -207,32 +233,7 @@ public class AddDepartment extends JInternalFrame {
 			}
 		});
 		btnInput.setBackground(new Color(0, 0, 255));
-		btnInput.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		btnInput.setBounds(236, 324, 150, 40);
-		panel.add(btnInput);
-		
-		txtRoom = new JTextField();
-		txtRoom.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		txtRoom.setColumns(10);
-		txtRoom.setBounds(180, 210, 300, 40);
-		panel.add(txtRoom);
-		
-		lblNewLabel_5 = new JLabel("NAME :");
-		lblNewLabel_5.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblNewLabel_5.setBounds(49, 50, 82, 40);
-		panel.add(lblNewLabel_5);
-		
-		txtName = new JTextField();
-		txtName.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		txtName.setColumns(10);
-		txtName.setBounds(180, 49, 300, 40);
-		panel.add(txtName);
-		
-		panel_2 = new JPanel();
-		panel_2.setLayout(null);
-		panel_2.setBackground(new Color(235, 234, 233));
-		panel_2.setBounds(-11, 312, 636, 65);
-		panel.add(panel_2);
+		btnInput.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		getContentPane().setLayout(groupLayout);
 		loadDep();
 	}
@@ -243,7 +244,7 @@ public class AddDepartment extends JInternalFrame {
 	Department newDEP = new Department();
 	newDEP.setDepartment_name(txtName.getText()+1);
 	newDEP.setHead_of_department(txtDepparment.getText()+1);
-	newDEP.setHead_of_department(txtRoom.getText()+1);
+	newDEP.setRoom(txtRoom.getText()+1);
 	Manage_DepartmentsDAO workdao = new Manage_DepartmentsDAO();
 	if(workdao.insert(newDEP)) {
 		JOptionPane.showMessageDialog(null, "Add successfully!");
@@ -278,11 +279,11 @@ public class AddDepartment extends JInternalFrame {
 	}
 	protected void btnInputMouseEntered(MouseEvent e) {
 		btnInput.setBackground(new Color(106,90,205));
-		btnInput.setForeground(Color.black);
+		btnInput.setForeground(Color.white);
 	}
 	protected void btnInputMouseExited(MouseEvent e) {
 		btnInput.setBackground(new Color(102, 0, 255));
-		btnInput.setForeground(Color.black);
+		btnInput.setForeground(Color.white);
 		
 	}
 	protected void lblNewLabelMouseClicked(MouseEvent e) {

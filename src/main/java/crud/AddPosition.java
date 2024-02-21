@@ -116,13 +116,13 @@ public class AddPosition extends JInternalFrame {
 		panel.setLayout(null);
 		
 		txtNAME = new JTextField();
-		txtNAME.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtNAME.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtNAME.setColumns(10);
 		txtNAME.setBounds(169, 136, 347, 40);
 		panel.add(txtNAME);
 		
 		lblNewLabel_2 = new JLabel("NAME :");
-		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		lblNewLabel_2.setBounds(64, 136, 82, 40);
 		panel.add(lblNewLabel_2);
 		
@@ -164,8 +164,9 @@ public class AddPosition extends JInternalFrame {
 		panel_2.setBounds(0, 266, 636, 65);
 		panel.add(panel_2);
 		
-		btnInput = new JButton("CREATE");
-		btnInput.setBounds(246, 11, 150, 40);
+		btnInput = new JButton("Submit");
+		btnInput.setForeground(new Color(255, 255, 255));
+		btnInput.setBounds(278, 18, 100, 30);
 		panel_2.add(btnInput);
 		btnInput.addMouseListener(new MouseAdapter() {
 			@Override
@@ -183,7 +184,7 @@ public class AddPosition extends JInternalFrame {
 			}
 		});
 		btnInput.setBackground(Color.BLUE);
-		btnInput.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		btnInput.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		getContentPane().setLayout(groupLayout);
 	}
 	protected void btnInputActionPerformed(ActionEvent e) {
@@ -195,14 +196,13 @@ public class AddPosition extends JInternalFrame {
 	PositionDAO workdao = new PositionDAO();
 	if(workdao.insert(Pos)) {
 		JOptionPane.showMessageDialog(null, "Add successfully!");
-		Job_Position work = new Job_Position();
-		work.setVisible(true);;
-		App_Admin app = new App_Admin();
-		app.desktopPane.add(work);
-		this.hide();
+
+		}
+	{
+		txtNAME.setText("");
 	}
 		}
-}
+	}
 	public int validatePosition() {
 		int count = 0 ;
 		if( txtNAME.getText().trim().isEmpty()) {
@@ -213,17 +213,17 @@ public class AddPosition extends JInternalFrame {
 	}
 	protected void btnInputMouseEntered(MouseEvent e) {
 		btnInput.setBackground(new Color(106,90,205));
-		btnInput.setForeground(Color.black);
+		btnInput.setForeground(Color.white);
 		
 	}
 	protected void btnInputMouseExited(MouseEvent e) {
-		btnInput.setBackground(new Color(0, 191, 255));
-		btnInput.setForeground(Color.black);
+		btnInput.setBackground(Color.BLUE);
+		btnInput.setForeground(Color.white);
 	}
 	
 	protected void lblNewLabelMouseEntered(MouseEvent e) {
 		lblNewLabel.setBackground(new Color(106,90,205));
-		lblNewLabel.setForeground(Color.black);
+		lblNewLabel.setForeground(Color.white);
 	}
 	protected void lblNewLabelMouseClicked(MouseEvent e) {
 		this.setVisible(false);
