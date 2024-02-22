@@ -379,14 +379,21 @@ public class Attendance extends JInternalFrame {
 		List<entity.Attendance> listatt =  attdao.getAttpersonal(UserLogin.getUserId());
 		for (entity.Attendance att : listatt) {
 			LocalDate dateFromData = LocalDate.parse(showDate(att.getWorkschedule_id()), DateTimeFormatter.ofPattern("yyyy-M-d"));
+			
 			if(currentDate.isEqual(dateFromData) && att.getArrival_time() == null && att.getLeave_type().equals("WP")) {
 				model.addElement("<html><body style='width: 491px; padding: 5px; border-bottom: 1px solid black;'>"+
 						"(Id: "+att.getAttendance_id()+") "+showDate(att.getWorkschedule_id())+": Please check-in"
 						+"</body></html>");
 			}else if(currentDate.isAfter(dateFromData) || currentDate.isEqual(dateFromData)) {
+				if(att.getDeparture_time()==null) {
+					model.addElement("<html><body style='width: 491px; padding: 5px; border-bottom: 1px solid black;'>"+
+							"(Id: "+att.getAttendance_id()+") "+showDate(att.getWorkschedule_id())+": "+statusPresent(att)
+							+"</body></html>");
+				}else {
 				model.addElement("<html><body style='width: 491px; padding: 5px; border-bottom: 1px solid black;'>"+
 						"(Id: "+att.getAttendance_id()+") "+showDate(att.getWorkschedule_id())+": "+statusPresent(att)
 						+ " / "+statusLeave(att)+"</body></html>");
+				}
 			}
 		}
 //		attdao.getAttpersonal(1).stream().forEach(att ->model.addElement("<html><body style='width: 491px; padding: 5px; border-bottom: 1px solid black;'>"+

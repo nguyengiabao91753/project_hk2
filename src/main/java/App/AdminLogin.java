@@ -119,6 +119,7 @@ public class AdminLogin extends JFrame {
 		panel.setBackground(new Color(255, 255, 255));
 		
 		txtUsername = new JTextField();
+		txtUsername.setFont(new Font("Tahoma", Font.BOLD, 15));
 		txtUsername.setBounds(713, 309, 329, 52);
 		txtUsername.setColumns(10);
 		
@@ -171,6 +172,7 @@ public class AdminLogin extends JFrame {
 		contentPane.add(lblClose);
 		
 		txtPassword = new JPasswordField();
+		txtPassword.setFont(new Font("Tahoma", Font.BOLD, 15));
 		txtPassword.setBounds(713, 433, 329, 52);
 		contentPane.add(txtPassword);
 		

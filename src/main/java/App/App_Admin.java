@@ -104,14 +104,14 @@ public class App_Admin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-//					if (!AdminLogin.isLoggedIn()) {
-//			            JOptionPane.showMessageDialog(null, "Please log in first.");
-//			        }else {
+					if (!AdminLogin.isLoggedIn()) {
+			            JOptionPane.showMessageDialog(null, "Please log in first.");
+			        }else {
 					App_Admin frame = new App_Admin();
 					frame.setLocationRelativeTo(null);
 					frame.setUndecorated(true);
 					frame.setVisible(true);
-//			        }
+			        }
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -458,7 +458,7 @@ public class App_Admin extends JFrame {
 		panelPos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		lblPicture = new JLabel("");
-		lblPicture.setBorder(new LineBorder(new Color(102, 0, 255), 3));
+		lblPicture.setBorder(null);
 		lblPicture.setOpaque(true);
 		lblPicture.setBackground(new Color(255, 255, 255));
 		lblPicture.setHorizontalAlignment(SwingConstants.CENTER);

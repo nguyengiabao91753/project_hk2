@@ -204,6 +204,16 @@ public class Accounts extends JInternalFrame {
 		scrollPane.setViewportView(table);
 		
 		btnUpdate = new JButton("UPDATE");
+		btnUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUpdateMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnUpdateMouseExited(e);
+			}
+		});
 		btnUpdate.setBorder(null);
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -215,6 +225,16 @@ public class Accounts extends JInternalFrame {
 		getContentPane().add(btnUpdate);
 		
 		btnBlock = new JButton("BLOCK");
+		btnBlock.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnBlockMouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnBlockMouseExited(e);
+			}
+		});
 		btnBlock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnBlockActionPerformed(e);
@@ -324,6 +344,7 @@ public class Accounts extends JInternalFrame {
 					default: return String.class;
 				}
 			}
+
 			@Override 
 			public boolean isCellEditable(int row , int col) {
 				switch(col){
@@ -331,6 +352,7 @@ public class Accounts extends JInternalFrame {
 				}
 			}
 		};
+
 		
 		model.addColumn("ID");
 		model.addColumn("Username");
@@ -605,5 +627,27 @@ public class Accounts extends JInternalFrame {
 			JOptionPane.showMessageDialog(txtPage, "page must be 1 to" + totalPage.intValue());
 			txtPage.setText(pageNumber.toString());
 		}
+	}
+	
+	protected void btnUpdateMouseEntered(MouseEvent e) {
+		btnUpdate.setForeground(new Color(0, 255, 64));
+		btnUpdate.setBorder(new LineBorder(new Color(0, 255, 64)));
+		btnUpdate.setBackground(Color.white);
+	}
+	
+	protected void btnUpdateMouseExited(MouseEvent e) {
+		btnUpdate.setForeground(Color.WHITE);
+		btnUpdate.setBackground(new Color(0, 255, 64));
+	}
+	
+	protected void btnBlockMouseEntered(MouseEvent e) {
+		btnBlock.setForeground(Color.RED);
+		btnBlock.setBorder(new LineBorder(Color.RED));
+		btnBlock.setBackground(Color.white);
+	}
+	
+	protected void btnBlockMouseExited(MouseEvent e) {
+		btnBlock.setForeground(Color.white);
+		btnBlock.setBackground(Color.RED);
 	}
 }

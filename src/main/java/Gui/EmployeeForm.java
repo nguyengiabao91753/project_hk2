@@ -308,6 +308,7 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(lblImage);
 		
 		btnUpdate = new JButton("UPDATE");
+		btnUpdate.setBorder(null);
 		btnUpdate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -328,6 +329,7 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(btnUpdate);
 		
 		btnDelete = new JButton("DELETE");
+		btnDelete.setBorder(null);
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -424,6 +426,7 @@ public class EmployeeForm extends JInternalFrame {
 		txtSearch.setColumns(10);
 		
 		btnInsert = new JButton("ADD");
+		btnInsert.setBorder(null);
 		btnInsert.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -565,9 +568,14 @@ public class EmployeeForm extends JInternalFrame {
 			@Override 
 			public boolean isCellEditable(int row , int col) {
 				switch(col){
+
+					case 11: return false;
+
 					default: return false;
 				}
+				
 			}
+			
 		}; 
 		
 		model.addColumn("ID");
@@ -984,8 +992,39 @@ public class EmployeeForm extends JInternalFrame {
 			JOptionPane.showMessageDialog(null,"Please select row to delete");
 			
 		}else {
-			String employeeName = txtFullName.getText(); 
-	
+			int employeeId = Integer.parseInt(txtEmployeeId.getText());
+			String employeeName = txtFullName.getText();
+			
+			int selectedRow = table.getSelectedRow();
+		    if (selectedRow >= 0) {
+		      int selectedEmployeeId = Integer.parseInt(table.getValueAt(selectedRow, 0).toString()); // Lấy ID employee từ table
+
+		      // Kiểm tra xem employee có supervisor là selectedEmployeeId hay không
+		      EmployeeDAO dao = new EmployeeDAO();
+		      List<Employee> listEmp = dao.selectAllEmployee();
+		      boolean isSupervisor = false;
+		      for (Employee employee : listEmp) {
+		        if (employee.getSupervisor_id() == selectedEmployeeId) {
+		          isSupervisor = true;
+		          break;
+		        }
+		      }
+
+		      // Hiển thị thông báo nếu employee là supervisor
+		      if (isSupervisor) {
+		        JOptionPane.showMessageDialog(null, "Cannot delete this employee because they are a supervisor.");
+		        return;
+		      }
+		    }
+//			EmployeeDAO dao = new EmployeeDAO();
+//			List<Employee> listEmp = dao.selectAllEmployee();
+//			for(Employee employee : listEmp) {
+//				if(employee.getId() == supervisorId) {
+//					JOptionPane.showMessageDialog(null, "Cannot delete this employee because you are a supervisor.");
+//					return;
+//				}
+//			}
+			
 			int dialogResult = JOptionPane.showConfirmDialog(
 			            null,
 			            "Are you sure you want to delete employee '" + employeeName + "'?\nTheir account will also be deleted.",
@@ -998,13 +1037,14 @@ public class EmployeeForm extends JInternalFrame {
 			        Account acc = new Account();
 	
 			        acc.setId(accounts.getAccountId()); 
-			        emp.setId(Integer.parseInt(txtEmployeeId.getText()));
+			        emp.setId(employeeId);
 	
 			        AccountDAO accDao = new AccountDAO();
 			        EmployeeDAO empDao = new EmployeeDAO();
-	
+					
 			        accDao.deleteAccountAndEmployee(acc, emp);
 			        empDao.deleteEmployeeAndAccount(emp, acc);
+			        
 	
 			        refresh();
 			}
@@ -1028,6 +1068,27 @@ public class EmployeeForm extends JInternalFrame {
 	
 	private void deleteRow(ActionEvent e) {
 		String employeeName = txtFullName.getText(); 
+		
+		int selectedRow = table.getSelectedRow();
+	    if (selectedRow >= 0) {
+	      int selectedEmployeeId = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());
+
+	      EmployeeDAO dao = new EmployeeDAO();
+	      List<Employee> listEmp = dao.selectAllEmployee();
+	      boolean isSupervisor = false;
+	      for (Employee employee : listEmp) {
+	        if (employee.getSupervisor_id() == selectedEmployeeId) {
+	          isSupervisor = true;
+	          break;
+	        }
+	      }
+
+	      if (isSupervisor) {
+	        JOptionPane.showMessageDialog(null, "Cannot delete this employee because they are a supervisor.");
+	        return;
+	      }
+	    }
+		
 		int dialogResult = JOptionPane.showConfirmDialog(
 	            null,
 	            "Are you sure you want to delete employee '" + employeeName + "'?\nTheir account will also be deleted.",
