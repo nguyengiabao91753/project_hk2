@@ -148,6 +148,7 @@ public class Addaccount extends JInternalFrame {
 		getContentPane().add(panel_1);
 		
 		btnSubmit = new JButton("SUBMIT");
+		btnSubmit.setForeground(Color.WHITE);
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnSubmitActionPerformed(e);
@@ -185,6 +186,10 @@ public class Addaccount extends JInternalFrame {
 		this.setVisible(false);
 	}
 	
+	public void resetAccount() {
+		lblUsername.setText("");
+		lblPassword.setText("");
+	}
 
 	protected void btnSubmitActionPerformed(ActionEvent e) {
 		String username = txtUsername.getText();
@@ -222,6 +227,6 @@ public class Addaccount extends JInternalFrame {
 		} else {
 		    JOptionPane.showMessageDialog(null, "Addemplogyee Fail!");
 		}
-
+		resetAccount();
 	}	
 }

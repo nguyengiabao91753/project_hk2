@@ -250,9 +250,9 @@ public class AdminLogin extends JFrame {
 
 	    if (loginMessage.equals("Login successful.")) {
 	    	//truyền id của Admin 
+	    	isLoggedIn = true;
 	    	adminId = dao.getUserId(username);
-	        dispose();
-	        
+	        dispose(); 
 	        App_Admin app = new App_Admin();
 	        app.setUndecorated(true);
 	        app.setLocationRelativeTo(null);

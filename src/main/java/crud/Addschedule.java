@@ -47,6 +47,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Cursor;
 
 public class Addschedule extends JInternalFrame {
 
@@ -148,6 +149,7 @@ public class Addschedule extends JInternalFrame {
 		panel.setLayout(null);
 		
 		lblNewLabel_2 = new JLabel("<html>\r\n\t<p style=\"font-size: 24px;color:white\">&#10006;</p>\r\n</html>");
+		lblNewLabel_2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblNewLabel_2.setBounds(601, 3, 25, 49);
 		panel.add(lblNewLabel_2);
 		
@@ -174,6 +176,7 @@ public class Addschedule extends JInternalFrame {
 		panel_1.setLayout(null);
 		
 		btnSubmit = new JButton("Submit");
+		btnSubmit.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnSubmit.setForeground(Color.WHITE);
 		btnSubmit.setBackground(new Color(0, 102, 255));
 		btnSubmit.addActionListener(new ActionListener() {

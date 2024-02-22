@@ -97,18 +97,18 @@ public class Locations extends JInternalFrame {
 				lblNewLabel_5MouseClicked(e);
 			}
 		});
-		lblBack.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\icons8-back-32 (1).png"));
-		lblBack.setBounds(10, 21, 40, 40);
+		lblBack.setIcon(new ImageIcon("images\\icons8-back-arrow-48.png"));
+		lblBack.setBounds(10, 21, 48, 40);
 		panel.add(lblBack);
 		JPanel panelContent = new JPanel();
 		panelContent.setForeground(Color.BLACK);
 		panelContent.setBackground(Color.WHITE);
-		panelContent.setBounds(0, 101, 1180, 536);
+		panelContent.setBounds(10, 90, 1180, 536);
 		getContentPane().add(panelContent);
 		panelContent.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\HP\\Downloads\\icons8-done-16.png"));
+		lblNewLabel.setIcon(new ImageIcon("images\\icons8-location-30.png"));
 		lblNewLabel.setBounds(25, 22, 30, 50);
 		panelContent.add(lblNewLabel);
 		

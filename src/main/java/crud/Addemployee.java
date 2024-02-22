@@ -310,6 +310,7 @@ public class Addemployee extends JInternalFrame {
 		getContentPane().add(panel_1);
 		
 		btnCreate = new JButton("NEXT");
+		btnCreate.setForeground(Color.WHITE);
 		btnCreate.addMouseListener(new MouseAdapter() {
 			
 		});
@@ -471,6 +472,20 @@ public class Addemployee extends JInternalFrame {
 		    return true; 
 	}
 	
+	public void resetField() {
+		txtFullName.setText("");
+		txtEthnicity.setText("");
+		cbxGender.setSelectedItem(null);
+		txtAddress.setText("");
+		cbxSalaryId.setSelectedItem(null);
+		cbxSupervisorId.setSelectedItem(null);
+		cbxDepartmentId.setSelectedItem(null);
+		cbxEducationId.setSelectedItem(null);
+		cbxPositionId.setSelectedItem(null);
+		lblPicture.setIcon(null);
+		cbxLevel.setSelectedItem(null);
+	}
+	
 	protected void btnCreateActionPerformed(ActionEvent e) {
 		if(validateAddEmployee() !=0) {
 			return;
@@ -512,8 +527,6 @@ public class Addemployee extends JInternalFrame {
 			
 			emp.setLevel(cbxLevel.getSelectedItem().toString());
 			
-			var employeeDao = new EmployeeDAO();
-			
 			Addaccount add = Addaccount.getInstance();
 			add.setEmp(emp);
 	        if (!add.isVisible()) {
@@ -522,6 +535,7 @@ public class Addemployee extends JInternalFrame {
 	            add.toFront();
 	            this.hide();
 	        }
+	        resetField();
 		}
 		
 	}

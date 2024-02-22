@@ -217,7 +217,7 @@ public class App_User extends JFrame {
 				lblNewLabel_7MouseClicked(e);
 			}
 		});
-		lblNewLabel_7.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-attendance-96.png"));
+		lblNewLabel_7.setIcon(new ImageIcon("images\\icons8-attendance-96.png"));
 
 		lblNewLabel_7.setIcon(new ImageIcon("images\\icons8-attendance-96.png"));
 
