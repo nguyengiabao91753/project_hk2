@@ -586,8 +586,9 @@ public class Manage_Departments extends JInternalFrame {
 	    txtID.setText(tbemp.getValueAt(rowIndex, 0).toString());
 	    txtName.setText(tbemp.getValueAt(rowIndex, 1).toString());
 	    txtDeparment.setText(tbemp.getValueAt(rowIndex, 2).toString());
-		var roommodel = new DefaultComboBoxModel();
-		List<Room> listRoom = RoomDAO.selectAllRoom();
+//		var roommodel = new DefaultComboBoxModel();
+		
+//		List<Room> listRoom = RoomDAO.selectAllRoom();
 //		comboBox.setModel(roommodel);
 //		for (Room room : listRoom) {
 //			var room_select = tbemp.getValueAt(rowIndex, 3).toString();

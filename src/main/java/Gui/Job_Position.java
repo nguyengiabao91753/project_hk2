@@ -430,7 +430,7 @@ public class Job_Position extends JInternalFrame {
 			EmployeeDAO Posdao = new EmployeeDAO();
 			for (Employee Pos : Posdao.selectAllEmployee()) {
 				if(Pos.getDepartment_id() == a) {
-					JOptionPane.showMessageDialog(null, "This department is still having employees! So cannot delete");
+					JOptionPane.showMessageDialog(null, "This position is still having employees! So cannot delete .");
 					return;
 				}
 			}
