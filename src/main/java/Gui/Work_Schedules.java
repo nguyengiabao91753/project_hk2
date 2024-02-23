@@ -400,6 +400,14 @@ public class Work_Schedules extends JInternalFrame {
 		}
 		return null;
 	}
+	public Employee emp(int a) {
+		for (Employee emp : empdao.selectAllEmployee()) {
+			if(emp.getId() == a) {
+				return emp;
+			}
+		}
+		return null;
+	}
 	
 	public void loadWorkSchedule() {
 		DefaultTableModel model = new DefaultTableModel() {
@@ -420,7 +428,9 @@ public class Work_Schedules extends JInternalFrame {
 		//tìm số trang của bảng 
 		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
 		
-		workdao.getSchedule(pageNumber, rowOfPage).stream().forEach(work -> model.addRow(new Object[] {
+		workdao.getSchedule(pageNumber, rowOfPage).stream()
+		.filter(work -> emp(work.getEmployee_id()).getStatus() ==1)
+		.forEach(work -> model.addRow(new Object[] {
 				work.getId(),
 				work.getEmployee_id(),
 				nameRoom(work.getRoom_id()),
@@ -438,7 +448,9 @@ public class Work_Schedules extends JInternalFrame {
 		model.setRowCount(0);  
 		totalCount = workdao.countSchedule();
 		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
-		workdao.getSchedule(pageNumber, rowOfPage).stream().forEach(work -> model.addRow(new Object[] {
+		workdao.getSchedule(pageNumber, rowOfPage).stream()
+		.filter(work -> emp(work.getEmployee_id()).getStatus() ==1)
+		.forEach(work -> model.addRow(new Object[] {
 				work.getId(),
 				work.getEmployee_id(),
 				nameRoom(work.getRoom_id()),
