@@ -333,6 +333,12 @@ public class Addemployee extends JInternalFrame {
 		cbxSalaryId.setBounds(151, 259, 278, 22);
 		getContentPane().add(cbxSalaryId);
 		loadcbx();
+		cbxGender.setSelectedItem(null);
+		cbxSalaryId.setSelectedItem(null);
+		cbxSupervisorId.setSelectedItem(null);
+		cbxDepartmentId.setSelectedItem(null);
+		cbxEducationId.setSelectedItem(null);
+		cbxPositionId.setSelectedItem(null);
 	}
 	
 	protected void loadcbx() {
@@ -350,7 +356,7 @@ public class Addemployee extends JInternalFrame {
 		
 		
 		listSalary.forEach(salary -> salaryModel.addElement(salary.getBase_salary()));
-		listSupervisor.forEach(emp -> supervisorModel.addElement(emp.getId()));
+		listSupervisor.stream().filter(emp -> emp.getStatus()== 1).forEach(emp -> supervisorModel.addElement(emp.getId()));
 //		listDepartment.forEach(dep -> departmentModel.addElement(dep.getDepartment_id()));
 //		listEducation.forEach(edu -> educationModel.addElement(edu.getId()));
 //		listPosition.forEach(pos -> positionModel.addElement(pos.getPosition_id()));

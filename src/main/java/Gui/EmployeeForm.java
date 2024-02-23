@@ -69,6 +69,7 @@ import java.util.List;
 
 import com.toedter.calendar.JDateChooser;
 
+import App.AdminLogin;
 import App.App_Admin;
 import crud.Addemployee;
 import crud.Addschedule;
@@ -600,6 +601,7 @@ public class EmployeeForm extends JInternalFrame {
 		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
 		dao.selectEmployee(pageNumber, rowOfPage)
 			.stream()
+			.filter(emp -> emp.getStatus()== 1)
 			.forEach(emp -> model.addRow(new Object[] {
 				emp.getId(),
 				emp.getFull_name(),
@@ -660,7 +662,7 @@ public class EmployeeForm extends JInternalFrame {
 //		lblTotal.setText("total customer: "+totalCount);
 
 		
-		dao.selectEmployee(pageNumber, rowOfPage).stream().forEach(
+		dao.selectEmployee(pageNumber, rowOfPage).stream().filter(emp -> emp.getStatus()== 1).forEach(
 				emp ->model.addRow(new Object[] {
 						emp.getId(),
 						emp.getFull_name(),
@@ -993,6 +995,10 @@ public class EmployeeForm extends JInternalFrame {
 			
 		}else {
 			int employeeId = Integer.parseInt(txtEmployeeId.getText());
+			if (employeeId == AdminLogin.getAdminId()) {
+			    JOptionPane.showMessageDialog(null, "You are logged in with this account, so you cannot delete it.");
+			    return;
+			}
 			String employeeName = txtFullName.getText();
 			
 			int selectedRow = table.getSelectedRow();
@@ -1067,6 +1073,10 @@ public class EmployeeForm extends JInternalFrame {
 	}
 	
 	private void deleteRow(ActionEvent e) {
+		if (Integer.parseInt(txtEmployeeId.getText()) == AdminLogin.getAdminId()) {
+		    JOptionPane.showMessageDialog(null, "You are logged in with this account, so you cannot delete it.");
+		    return;
+		}
 		String employeeName = txtFullName.getText(); 
 		
 		int selectedRow = table.getSelectedRow();

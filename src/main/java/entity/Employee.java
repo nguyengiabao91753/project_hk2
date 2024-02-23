@@ -19,14 +19,16 @@ public class Employee {
 	private int position_id;
 	private String picture;
 	private String level;
+	private int status;
 	
 	public Employee() {
 		
 	}
 
+
 	public Employee(int id, String full_name, String ethnicity, LocalDate date_of_birth, String gender, String address,
 			int salary_level, int supervisor_id, int department_id, int education_id, int position_id, String picture,
-			String level) {
+			String level, int status) {
 		super();
 		this.id = id;
 		this.full_name = full_name;
@@ -41,6 +43,7 @@ public class Employee {
 		this.position_id = position_id;
 		this.picture = picture;
 		this.level = level;
+		this.status = status;
 	}
 
 	public int getId() {
@@ -146,15 +149,27 @@ public class Employee {
 	public void setLevel(String level) {
 		this.level = level;
 	}
+	
+	
+
+	public int getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", full_name=" + full_name + ", ethnicity=" + ethnicity + ", date_of_birth="
 				+ date_of_birth + ", gender=" + gender + ", address=" + address + ", salary_level=" + salary_level
 				+ ", supervisor_id=" + supervisor_id + ", department_id=" + department_id + ", education_id="
-				+ education_id + ", position_id=" + position_id + ", picture=" + picture + ", level=" + level + "]";
+				+ education_id + ", position_id=" + position_id + ", picture=" + picture + ", level=" + level
+				+ ", status=" + status + "]";
 	}
-
 
 	
 }
