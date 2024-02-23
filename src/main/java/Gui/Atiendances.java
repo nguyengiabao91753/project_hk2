@@ -20,9 +20,11 @@ import javax.swing.JOptionPane;
 import com.toedter.calendar.JDateChooser;
 
 import dao.AttendanceDAO;
+import dao.EmployeeDAO;
 import dao.ShiftDAO;
 import dao.WorkscheduleDAO;
 import entity.Attendance;
+import entity.Employee;
 import entity.Shift;
 import entity.Workschedule;
 
@@ -75,7 +77,7 @@ public class Atiendances extends JInternalFrame {
 	private JLabel lblType;
 	private JLabel lblFemp;
 	private JLabel lblEmployeeid;
-	
+	EmployeeDAO emdao = new EmployeeDAO();
 	AttendanceDAO attdao = new AttendanceDAO();
 	private JLabel lblUpdate;
 	private JLabel lblDelete;
@@ -433,6 +435,15 @@ public class Atiendances extends JInternalFrame {
 		}
 		return date;
 	}
+	
+	public Employee emp(int a) {
+		for (Employee emp : emdao.selectAllEmployee()) {
+			if(emp.getId() == a) {
+				return emp;
+			}
+		}
+		return null;
+	}
 	public void loadAtt() {
 		DefaultTableModel model = new DefaultTableModel() {
 			@Override
@@ -455,7 +466,9 @@ public class Atiendances extends JInternalFrame {
 		//tìm số trang của bảng 
 		totalPage = Math.ceil(totalCount.doubleValue() / rowOfPage.doubleValue());
 		
-		attdao.getAtt(pageNumber,rowOfPage).stream().forEach(att -> model.addRow(new Object[] {
+		attdao.getAtt(pageNumber,rowOfPage).stream()
+		.filter(att -> emp(showEmp_id(att.getWorkschedule_id())).getStatus() ==1)
+		.forEach(att -> model.addRow(new Object[] {
 						att.getAttendance_id(),
 						att.getWorkschedule_id(),
 						showEmp_id(att.getWorkschedule_id()),

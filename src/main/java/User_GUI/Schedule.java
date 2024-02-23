@@ -329,7 +329,7 @@ public class Schedule extends JInternalFrame {
 		model.setRowCount(0);  
 		workdao.getpersonSchedule(UserLogin.getUserId())
         .stream()
-        .filter(work -> work.getWork_date().getMonthValue() == Integer.parseInt(cbbMonth.getSelectedItem().toString())  )
+        .filter(work -> work.getWork_date().getMonthValue() == Integer.parseInt(cbbMonth.getSelectedItem().toString()))
         .forEach(work -> model.addRow(new Object[] {
                 work.getWork_date(),
                 nameShift(work.getShift_id()),
