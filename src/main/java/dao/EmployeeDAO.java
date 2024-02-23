@@ -36,6 +36,7 @@ public class EmployeeDAO {
 				emp.setPosition_id(rs.getInt("position_id"));
 				emp.setPicture(rs.getString("image"));
 				emp.setLevel(rs.getString("level"));
+				emp.setStatus(rs.getInt("status"));
 				list.add(emp);
 			}
 		} catch (Exception e) {
@@ -69,6 +70,7 @@ public class EmployeeDAO {
 				emp.setPosition_id(rs.getInt("position_id"));
 				emp.setPicture(rs.getString("image"));
 				emp.setLevel(rs.getString("level"));
+				emp.setStatus(rs.getInt("status"));
 				list.add(emp);
 			}
 			
@@ -151,20 +153,20 @@ public class EmployeeDAO {
 	}
 	
 	//Delete
-	public void delete(Employee emp) {
-		try(
-				var con = DBCon.getConnection();
-				var cs = con.prepareCall("{call deleteEmployee(?)}")
-				) {
-			cs.setInt(1, emp.getId());
-			if(cs.executeUpdate() >0) {
-				JOptionPane.showMessageDialog(null, "Delete Success");
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-	}
+//	public void delete(Employee emp) {
+//		try(
+//				var con = DBCon.getConnection();
+//				var cs = con.prepareCall("{call deleteEmployee(?)}")
+//				) {
+//			cs.setInt(1, emp.getId());
+//			if(cs.executeUpdate() >0) {
+//				JOptionPane.showMessageDialog(null, "Delete Success");
+//			}
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//			e.printStackTrace();
+//		}
+//	}
 	
 	public void deleteEmployeeAndAccount(Employee emp, Account acc) {
 	    try (

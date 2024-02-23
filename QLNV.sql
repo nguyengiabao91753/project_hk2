@@ -179,7 +179,7 @@ GO
 
 
 ALTER TABLE EMPLOYEES
-ALTER COLUMN  SUPERVISOR_ID INT NULL
+ADD STATUS INT null
 GO
 
 ALTER TABLE DEPARTMENTS
@@ -320,16 +320,14 @@ VALUES
 GO
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-DBCC CHECKIDENT ('EMPLOYEES', RESEED, 5);
-DBCC CHECKIDENT ('ACCOUNTS', RESEED, 5);
-=======
-=======
 
->>>>>>> 668cfd0e8381e37352a37299bb44663f62d13c9f
+--DBCC CHECKIDENT ('EMPLOYEES', RESEED, 30);
+--DBCC CHECKIDENT ('ACCOUNTS', RESEED, 30);
+
+
+
 --DBCC CHECKIDENT ('EMPLOYEES', RESEED, 1);
->>>>>>> ac6dc72b66875928adecce0ee471275552b638ad
+
 
 
  INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE, LEVEL)
@@ -427,12 +425,13 @@ BEGIN
 END
 GO
 
+
 CREATE PROC insertEmployee
 @fullname NVARCHAR(50), @ethnicity NVARCHAR(50), @date_of_birth DATE, @gender NVARCHAR(10),@address NVARCHAR(100),@salary_level INT,@supervisor_id INT,@department_id INT,@education_id INT,@position_id INT,@picture VARCHAR(255),@level VARCHAR(50)
 AS
 BEGIN
-	INSERT INTO EMPLOYEES(FULL_NAME,ETHNICITY,DATE_OF_BIRTH,GENDER,ADDRESS,SALARY_LEVEL,SUPERVISOR_ID,DEPARTMENT_ID,EDUCATION_ID,POSITION_ID,IMAGE,LEVEL)
-	VALUES(@fullname, @ethnicity, @date_of_birth, @gender,@address,@salary_level,@supervisor_id,@department_id,@education_id,@position_id,@picture,@level)
+	INSERT INTO EMPLOYEES(FULL_NAME,ETHNICITY,DATE_OF_BIRTH,GENDER,ADDRESS,SALARY_LEVEL,SUPERVISOR_ID,DEPARTMENT_ID,EDUCATION_ID,POSITION_ID,IMAGE,LEVEL,STATUS)
+	VALUES(@fullname, @ethnicity, @date_of_birth, @gender,@address,@salary_level,@supervisor_id,@department_id,@education_id,@position_id,@picture,@level,1)
 END
 GO
 
@@ -702,12 +701,13 @@ CREATE PROC deleteEmployeeAndAccount
 @accountId INT
 AS
 BEGIN
-	 BEGIN TRANSACTION;
-    DELETE FROM EMPLOYEES
-    WHERE EMPLOYEE_ID = @employeeId;
+	BEGIN TRANSACTION;
+    UPDATE EMPLOYEES
+    SET STATUS = 0 , SUPERVISOR_ID = null 
+	WHERE EMPLOYEE_ID = @employeeId
     DELETE FROM ACCOUNTS
     WHERE ACCOUNT_ID = @accountId;
-	 COMMIT;
+	COMMIT;
 END
 GO
 
@@ -718,22 +718,27 @@ AS
 BEGIN
     BEGIN TRANSACTION;
     DELETE FROM ACCOUNTS WHERE ACCOUNT_ID = @accountId;
-    DELETE FROM EMPLOYEES WHERE EMPLOYEE_ID = @employeeId;
+    UPDATE EMPLOYEES
+    SET STATUS = 0 ,SUPERVISOR_ID = null
+	WHERE EMPLOYEE_ID = @employeeId
     COMMIT;
 END;
 GO
 
 
-CREATE PROC CheckUsernameExists
-    @username VARCHAR(255)
+CREATE PROCEDURE CheckUsernameExists
+  @username VARCHAR(255)
 AS
 BEGIN
-    SET NOCOUNT ON;
+  SET NOCOUNT ON;
 
-    IF EXISTS (SELECT 1 FROM ACCOUNTS WHERE USERNAME = @username)
-        SELECT 1 AS UsernameExists;
-    ELSE
-        SELECT 0 AS UsernameExists;
+  DECLARE @usernameNormalized VARCHAR(255)
+
+  SET @usernameNormalized = LOWER(@username)
+
+  SELECT COUNT(*) AS UsernameExists
+  FROM ACCOUNTS
+  WHERE LOWER(USERNAME) = @usernameNormalized;
 END
 GO
 
@@ -744,7 +749,7 @@ CREATE PROC LoginAdmin
     @password VARCHAR(50)
 AS
 BEGIN
-    SET NOCOUNT ON;
+    SET NOCOUNT ON;	
 
     DECLARE @status INT, @level VARCHAR(50);
     
