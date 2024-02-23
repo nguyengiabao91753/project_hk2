@@ -20,8 +20,7 @@ public class RoomDAO {
 			while(rs.next()) {
 				list.add(new Room(
 						rs.getInt("room_id"),
-						rs.getString("name"),
-						rs.getInt("department_id")
+						rs.getString("name")
 						));
 			}
 			
