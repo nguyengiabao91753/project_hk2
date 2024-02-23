@@ -152,13 +152,18 @@ ADD CONSTRAINT FK_WORK_SCHEDULE_EMPLOYEES
 FOREIGN KEY  (EMPLOYEE_ID)
 REFERENCES EMPLOYEES(EMPLOYEE_ID)
 GO
+ALTER TABLE WORK_SCHEDULES  
+ADD CONSTRAINT FK_WORK_SCHEDULE_PATIENTROOM
+FOREIGN KEY  (ROOM_ID)
+REFERENCES PATIENTROOMS(ROOM_ID)
+GO
 
 --LIÊN KẾT RÀNG BUỘC CHO PHÒNG BỆNH
-ALTER TABLE PATIENTROOMS  
-ADD CONSTRAINT FK_PATIENTROOM_DEPARTMENT
-FOREIGN KEY  (DEPARTMENT_ID)
-REFERENCES DEPARTMENTS(DEPARTMENT_ID)
-GO
+--ALTER TABLE PATIENTROOMS  
+--ADD CONSTRAINT FK_PATIENTROOM_DEPARTMENT
+--FOREIGN KEY  (DEPARTMENT_ID)
+--REFERENCES DEPARTMENTS(DEPARTMENT_ID)
+--GO
 
 --LIEN KẾT RÀNG BUỘC CHO BẢNG CHUYÊN CẦN
 
@@ -270,32 +275,32 @@ VALUES
 	('HIGH SCHOOL GRADUATION', NULL);
 GO
 
-INSERT INTO PATIENTROOMS (NAME, DEPARTMENT_ID)
+INSERT INTO PATIENTROOMS (NAME)
 VALUES 
-    ('Room A.101', 3),
-    ('Room A.102', 3),
-    ('Room A.103', 3),
-    ('Room A.104', 3),
-    ('Room A.201', 4),
-    ('Room A.202', 4),
-	('Room A.203', 4),
-	('Room A.204', 4),
-    ('Room A.301', 5),
-    ('Room A.302', 5),
-    ('Room A.401', 6),
-    ('Room A.402', 6),
-    ('Room B.101', 7),
-    ('Room B.102', 7),
-    ('Room B.201', 8),
-    ('Room B.202', 8),
-    ('Room B.301', 9),
-    ('Room B.302', 9),
-    ('Room C.101', 10),
-    ('Room C.102', 10),
-    ('Room C.201', 11),
-    ('Room C.202', 11),
-    ('Room D.101', 12),
-    ('Room D.102', 12);
+    ('Room A.101'),
+    ('Room A.102'),
+    ('Room A.103'),
+    ('Room A.104'),
+    ('Room A.201'),
+    ('Room A.202'),
+	('Room A.203'),
+	('Room A.204'),
+    ('Room A.301'),
+    ('Room A.302'),
+    ('Room A.401'),
+    ('Room A.402'),
+    ('Room B.101'),
+    ('Room B.102'),
+    ('Room B.201'),
+    ('Room B.202'),
+    ('Room B.301'),
+    ('Room B.302'),
+    ('Room C.101'),
+    ('Room C.102'),
+    ('Room C.201' ),
+    ('Room C.202' ),
+    ('Room D.101'),
+    ('Room D.102');
 GO
 
 
@@ -323,18 +328,14 @@ GO
 
 
 
- INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE, LEVEL)
-VALUES ('Boss', 'Asian', '1990-05-15', 'Male', '123 Main Street', 1, NuLL, 1, 1, 1, null, 'Admin');
+ INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE, LEVEL,STATUS)
+VALUES ('Boss', 'Asian', '1990-05-15', 'Male', '123 Main Street', 1, NuLL, 1, 1, 1, null, 'Admin',1);
 GO
 
 INSERT INTO ACCOUNTS (USERNAME, PASSWORD, STATUS)
 VALUES ('Admin', 'Admin12345', 1);
 GO
 
-
-
-INSERT INTO EMPLOYEES (FULL_NAME, ETHNICITY, DATE_OF_BIRTH, GENDER, ADDRESS, SALARY_LEVEL, SUPERVISOR_ID, DEPARTMENT_ID, EDUCATION_ID, POSITION_ID, IMAGE, LEVEL)
-VALUES ('John Doe', 'Asian', '1990-05-15', 'Male', '123 Main Street', 3, 4, 2, 2, 2, 'john_doe.jpg', 'Admin');
 
 --DBCC CHECKIDENT ('ACCOUNTS', RESEED, 9);
 
@@ -1016,19 +1017,19 @@ BEGIN
 END
 GO
 
---position
---LẤY từ dòng nào đến , và lấy bao nhiêu dòng .
+----position
+----LẤY từ dòng nào đến , và lấy bao nhiêu dòng .
 
-CREATE PROC getPosition
-@pageNumber int , @rowsOfPage int 
-AS
-BEGIN
-	SELECT * FROM POSITIONS
-	ORDER BY POSITION_ID
-	OFFSET (@pageNumber - 1)*@rowsOfPage ROWS
-	FETCH NEXT @rowsOfPage ROWS ONLY
-END
-GO
+--CREATE PROC getPosition
+--@pageNumber int , @rowsOfPage int 
+--AS
+--BEGIN
+--	SELECT * FROM POSITIONS
+--	ORDER BY POSITION_ID
+--	OFFSET (@pageNumber - 1)*@rowsOfPage ROWS
+--	FETCH NEXT @rowsOfPage ROWS ONLY
+--END
+--GO
 
 CREATE Proc countPosition
 AS
