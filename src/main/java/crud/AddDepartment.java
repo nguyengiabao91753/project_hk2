@@ -225,24 +225,7 @@ public class AddDepartment extends JInternalFrame {
 		getContentPane().add(panel_1);
 		loadDep();
 	}
-	protected void btnbtnInputActionPerformed(ActionEvent e) {
-		if(validateDepartment()!=0) {
-			return;
-		}else {
-	Department newDEP = new Department();
-	newDEP.setDepartment_name(txtName.getText()+1);
-	newDEP.setHead_of_department(txtDepparment.getText()+1);
-	newDEP.setRoom(txtRoom.getText()+1);
-	Manage_DepartmentsDAO workdao = new Manage_DepartmentsDAO();
-	if(workdao.insert(newDEP)) {
-		JOptionPane.showMessageDialog(null, "Add successfully!");
-		}
-    	txtName.setText("");
-    	txtDepparment.setText("");
-    	txtRoom.setText("");
-		}
-
-}
+	
 	public int validateDepartment() {
 		int count = 0 ;
 		String room_name;
@@ -265,6 +248,27 @@ public class AddDepartment extends JInternalFrame {
 		return count;
 
 	}
+	
+	protected void btnbtnInputActionPerformed(ActionEvent e) {
+		if(validateDepartment()!=0) {
+			return;
+		}else {
+	Department newDEP = new Department();
+	newDEP.setDepartment_name(txtName.getText()+1);
+	newDEP.setHead_of_department(txtDepparment.getText()+1);
+	newDEP.setRoom(txtRoom.getText()+1);
+	Manage_DepartmentsDAO workdao = new Manage_DepartmentsDAO();
+	if(workdao.insert(newDEP)) {
+		JOptionPane.showMessageDialog(null, "Add successfully!");
+		}
+    	txtName.setText("");
+    	txtDepparment.setText("");
+    	txtRoom.setText("");
+    	this.hide();
+		}
+
+}
+	
 	protected void btnInputMouseEntered(MouseEvent e) {
 		btnInput.setBackground(new Color(106,90,205));
 		btnInput.setForeground(Color.white);

@@ -319,7 +319,8 @@ public class Addschedule extends JInternalFrame {
 		}else if(!checkEmp_id(listemp, Integer.parseInt(txtEmp.getText())) ) {
 			JOptionPane.showMessageDialog(null, "Employee_id is invalid");
 			count++;
-		}else if(currentDate.equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) || currentDate.isAfter(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()))) {
+		}
+		else if(currentDate.equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) || currentDate.isAfter(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()))) {
 			JOptionPane.showMessageDialog(null, "Please choose work date is 'after' today!");
 			count++;
 		}
@@ -357,6 +358,12 @@ public class Addschedule extends JInternalFrame {
 		}
 		return count;
 	}
+	public void resetField() {
+		txtEmp.setText("");
+		cbbRoom.setSelectedItem(null);
+		cbbShift.setSelectedItem(null);
+		dateChooser.setDate(null);
+	}
 	protected void btnNewButtonActionPerformed(ActionEvent e) {
 		if(validateSchedule() !=0) {
 			return;
@@ -373,6 +380,7 @@ public class Addschedule extends JInternalFrame {
 			work.setVisible(true);;
 			App_Admin app = new App_Admin();
 			app.desktopPane.add(work);
+			resetField();
 			this.hide();
 		}else {
 			JOptionPane.showMessageDialog(null, "Add Fail!");

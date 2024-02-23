@@ -185,16 +185,14 @@ public class AddPosition extends JInternalFrame {
 		if(validatePosition()!=0) {
 			return;
 		}else {
-	Position Pos = new Position();
-	Pos.setPosition_name(txtNAME.getText()+1);
-	PositionDAO workdao = new PositionDAO();
-	if(workdao.insert(Pos)) {
-		JOptionPane.showMessageDialog(null, "Add successfully!");
-
-		}
-	{
-		txtNAME.setText("");
-	}
+			Position Pos = new Position();
+			Pos.setPosition_name(txtNAME.getText()+1);
+			PositionDAO workdao = new PositionDAO();
+			if(workdao.insert(Pos)) {
+				JOptionPane.showMessageDialog(null, "Add successfully!");
+				txtNAME.setText("");
+				this.setClosable(true);
+				}
 		}
 	}
 	public int validatePosition() {
