@@ -304,10 +304,11 @@ public class EmployeeForm extends JInternalFrame {
 		
 		lblImage = new JLabel("Image :");
 		lblImage.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblImage.setBounds(22, 414, 86, 14);
+		lblImage.setBounds(22, 414, 86, 20);
 		getContentPane().add(lblImage);
 		
 		btnUpdate = new JButton("UPDATE");
+		btnUpdate.setBorder(null);
 		btnUpdate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -328,6 +329,7 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(btnUpdate);
 		
 		btnDelete = new JButton("DELETE");
+		btnDelete.setBorder(null);
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -424,6 +426,7 @@ public class EmployeeForm extends JInternalFrame {
 		txtSearch.setColumns(10);
 		
 		btnInsert = new JButton("ADD");
+		btnInsert.setBorder(null);
 		btnInsert.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -565,12 +568,13 @@ public class EmployeeForm extends JInternalFrame {
 			@Override 
 			public boolean isCellEditable(int row , int col) {
 				switch(col){
+
 					case 11: return false;
+
 					default: return false;
 				}
 				
 			}
-			
 			
 		}; 
 		
@@ -913,54 +917,59 @@ public class EmployeeForm extends JInternalFrame {
 	}
 
 	protected void btnUpdateActionPerformed(ActionEvent e) {
-		if(validateEmp() != 0) {
-			return;
+		if(txtEmployeeId.getText().equals("")) {
+			JOptionPane.showMessageDialog(null,"Please select row to delete");
+			
 		}else {
-			Employee emp = new Employee();
-			emp.setId(Integer.parseInt(txtEmployeeId.getText()));
-			emp.setFull_name(txtFullName.getText());
-			emp.setEthnicity(txtEthnicity.getText());
-			emp.setDate_of_birth(
-					LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())
-			);
-			emp.setAddress(txtAddress.getText());
-			emp.setGender(cbxGender.getSelectedItem().toString());
-			emp.setSalary_level(cbxSalary.getSelectedIndex()+1);
-			emp.setSupervisor_id(cbxSupervisorId.getSelectedIndex()+1);
-			emp.setDepartment_id(cbxDepartmentId.getSelectedIndex()+1);
-			emp.setEducation_id(cbxEducationId.getSelectedIndex()+1);
-			emp.setPosition_id(cbxPositionId.getSelectedIndex()+1);
-			
-			if(fileName != null) {
-				dirNew = System.getProperty("user.dir") + "\\images";
-				Path pathOld = Paths.get(dirOld);
-				Path pathNew = Paths.get(dirNew);
-		
-				try {
-					Files.copy(
-							pathOld, 
-							pathNew.resolve(fileName),
-							StandardCopyOption.REPLACE_EXISTING
-					);
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-				emp.setPicture("images/" + fileName);
-				
-				if (!validatePicture("images/" + fileName)) {
-		               return;
-		           }
-				
+			if(validateEmp() != 0) {
+				return;
 			}else {
-				emp.setPicture(fileOld);
+				Employee emp = new Employee();
+				emp.setId(Integer.parseInt(txtEmployeeId.getText()));
+				emp.setFull_name(txtFullName.getText());
+				emp.setEthnicity(txtEthnicity.getText());
+				emp.setDate_of_birth(
+						LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())
+				);
+				emp.setAddress(txtAddress.getText());
+				emp.setGender(cbxGender.getSelectedItem().toString());
+				emp.setSalary_level(cbxSalary.getSelectedIndex()+1);
+				emp.setSupervisor_id(Integer.parseInt(cbxSupervisorId.getSelectedItem().toString()));
+				emp.setDepartment_id(cbxDepartmentId.getSelectedIndex()+1);
+				emp.setEducation_id(cbxEducationId.getSelectedIndex()+1);
+				emp.setPosition_id(cbxPositionId.getSelectedIndex()+1);
+				
+				if(fileName != null) {
+					dirNew = System.getProperty("user.dir") + "\\images";
+					Path pathOld = Paths.get(dirOld);
+					Path pathNew = Paths.get(dirNew);
+			
+					try {
+						Files.copy(
+								pathOld, 
+								pathNew.resolve(fileName),
+								StandardCopyOption.REPLACE_EXISTING
+						);
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+					emp.setPicture("images/" + fileName);
+					
+					if (!validatePicture("images/" + fileName)) {
+			               return;
+			           }
+					
+				}else {
+					emp.setPicture(fileOld);
+				}
+				
+				emp.setLevel(cbxLevel.getSelectedItem().toString());
+				
+				employeeDao.update(emp);
+				fileName =null;
+				lblPicture.setIcon(null);
+				refresh();
 			}
-			
-			emp.setLevel(cbxLevel.getSelectedItem().toString());
-			
-			employeeDao.update(emp);
-			fileName =null;
-			lblPicture.setIcon(null);
-			refresh();
 		}
 	}
 	
@@ -979,29 +988,66 @@ public class EmployeeForm extends JInternalFrame {
 	}
 	
 	protected void btnDeleteActionPerformed(ActionEvent e) {
-		String employeeName = txtFullName.getText(); 
+		if(txtEmployeeId.getText().equals("")) {
+			JOptionPane.showMessageDialog(null,"Please select row to delete");
+			
+		}else {
+			int employeeId = Integer.parseInt(txtEmployeeId.getText());
+			String employeeName = txtFullName.getText();
+			
+			int selectedRow = table.getSelectedRow();
+		    if (selectedRow >= 0) {
+		      int selectedEmployeeId = Integer.parseInt(table.getValueAt(selectedRow, 0).toString()); // Lấy ID employee từ table
 
-		int dialogResult = JOptionPane.showConfirmDialog(
-		            null,
-		            "Are you sure you want to delete employee '" + employeeName + "'?\nTheir account will also be deleted.",
-		            "Confirm Deletion",
-		            JOptionPane.YES_NO_OPTION);
-		 
-		if (dialogResult == JOptionPane.YES_OPTION) {
-			 	Accounts accounts = new Accounts();
-		        Employee emp = new Employee();
-		        Account acc = new Account();
+		      // Kiểm tra xem employee có supervisor là selectedEmployeeId hay không
+		      EmployeeDAO dao = new EmployeeDAO();
+		      List<Employee> listEmp = dao.selectAllEmployee();
+		      boolean isSupervisor = false;
+		      for (Employee employee : listEmp) {
+		        if (employee.getSupervisor_id() == selectedEmployeeId) {
+		          isSupervisor = true;
+		          break;
+		        }
+		      }
 
-		        acc.setId(accounts.getAccountId()); 
-		        emp.setId(Integer.parseInt(txtEmployeeId.getText()));
-
-		        AccountDAO accDao = new AccountDAO();
-		        EmployeeDAO empDao = new EmployeeDAO();
-
-		        accDao.deleteAccountAndEmployee(acc, emp);
-		        empDao.deleteEmployeeAndAccount(emp, acc);
-
-		        refresh();
+		      // Hiển thị thông báo nếu employee là supervisor
+		      if (isSupervisor) {
+		        JOptionPane.showMessageDialog(null, "Cannot delete this employee because they are a supervisor.");
+		        return;
+		      }
+		    }
+//			EmployeeDAO dao = new EmployeeDAO();
+//			List<Employee> listEmp = dao.selectAllEmployee();
+//			for(Employee employee : listEmp) {
+//				if(employee.getId() == supervisorId) {
+//					JOptionPane.showMessageDialog(null, "Cannot delete this employee because you are a supervisor.");
+//					return;
+//				}
+//			}
+			
+			int dialogResult = JOptionPane.showConfirmDialog(
+			            null,
+			            "Are you sure you want to delete employee '" + employeeName + "'?\nTheir account will also be deleted.",
+			            "Confirm Deletion",
+			            JOptionPane.YES_NO_OPTION);
+			 
+			if (dialogResult == JOptionPane.YES_OPTION) {
+				 	Accounts accounts = new Accounts();
+			        Employee emp = new Employee();
+			        Account acc = new Account();
+	
+			        acc.setId(accounts.getAccountId()); 
+			        emp.setId(employeeId);
+	
+			        AccountDAO accDao = new AccountDAO();
+			        EmployeeDAO empDao = new EmployeeDAO();
+					
+			        accDao.deleteAccountAndEmployee(acc, emp);
+			        empDao.deleteEmployeeAndAccount(emp, acc);
+			        
+	
+			        refresh();
+			}
 		}
 	}
 	
@@ -1022,6 +1068,27 @@ public class EmployeeForm extends JInternalFrame {
 	
 	private void deleteRow(ActionEvent e) {
 		String employeeName = txtFullName.getText(); 
+		
+		int selectedRow = table.getSelectedRow();
+	    if (selectedRow >= 0) {
+	      int selectedEmployeeId = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());
+
+	      EmployeeDAO dao = new EmployeeDAO();
+	      List<Employee> listEmp = dao.selectAllEmployee();
+	      boolean isSupervisor = false;
+	      for (Employee employee : listEmp) {
+	        if (employee.getSupervisor_id() == selectedEmployeeId) {
+	          isSupervisor = true;
+	          break;
+	        }
+	      }
+
+	      if (isSupervisor) {
+	        JOptionPane.showMessageDialog(null, "Cannot delete this employee because they are a supervisor.");
+	        return;
+	      }
+	    }
+		
 		int dialogResult = JOptionPane.showConfirmDialog(
 	            null,
 	            "Are you sure you want to delete employee '" + employeeName + "'?\nTheir account will also be deleted.",

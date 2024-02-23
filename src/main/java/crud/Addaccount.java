@@ -186,6 +186,10 @@ public class Addaccount extends JInternalFrame {
 		this.setVisible(false);
 	}
 	
+	public void resetAccount() {
+		lblUsername.setText("");
+		lblPassword.setText("");
+	}
 
 	protected void btnSubmitActionPerformed(ActionEvent e) {
 		String username = txtUsername.getText();
@@ -223,6 +227,6 @@ public class Addaccount extends JInternalFrame {
 		} else {
 		    JOptionPane.showMessageDialog(null, "Addemplogyee Fail!");
 		}
-
+		resetAccount();
 	}	
 }

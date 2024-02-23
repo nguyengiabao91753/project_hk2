@@ -291,6 +291,7 @@ public class Schedule extends JInternalFrame {
 	             return false;
 	         }
 		};
+
 		model.addColumn("Date");
 		model.addColumn("Shift");
 		model.addColumn("Room");

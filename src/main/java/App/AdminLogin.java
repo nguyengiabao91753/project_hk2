@@ -58,9 +58,17 @@ public class AdminLogin extends JFrame {
 	private JPasswordField txtPassword;
 	private JButton btnLogin;
 	private JButton btnReset;
-	private static int adminId;
 	App_Admin app = new App_Admin();
 	private static boolean isLoggedIn = false;
+	private static int adminId;
+
+	public static void setAdminId(int id) {
+		adminId = id;
+    }
+	public static int getAdminId() {
+		return adminId;
+	}
+
 	/**
 	 * Launch the application.
 	 */
@@ -111,6 +119,7 @@ public class AdminLogin extends JFrame {
 		panel.setBackground(new Color(255, 255, 255));
 		
 		txtUsername = new JTextField();
+		txtUsername.setFont(new Font("Tahoma", Font.BOLD, 15));
 		txtUsername.setBounds(713, 309, 329, 52);
 		txtUsername.setColumns(10);
 		
@@ -163,6 +172,7 @@ public class AdminLogin extends JFrame {
 		contentPane.add(lblClose);
 		
 		txtPassword = new JPasswordField();
+		txtPassword.setFont(new Font("Tahoma", Font.BOLD, 15));
 		txtPassword.setBounds(713, 433, 329, 52);
 		contentPane.add(txtPassword);
 		
@@ -239,12 +249,14 @@ public class AdminLogin extends JFrame {
 	    String loginMessage = dao.login(acc);
 
 	    if (loginMessage.equals("Login successful.")) {
+	    	//truyền id của Admin 
 	    	isLoggedIn = true;
 	    	adminId = dao.getUserId(username);
 	        dispose(); 
+	        App_Admin app = new App_Admin();
 	        app.setUndecorated(true);
 	        app.setLocationRelativeTo(null);
-	        app.setVisible(true);
+	        app.setVisible(true); 
 	    } else {
 	        JOptionPane.showMessageDialog(null, loginMessage);
 	    }

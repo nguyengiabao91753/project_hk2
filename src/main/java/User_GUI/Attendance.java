@@ -378,8 +378,6 @@ public class Attendance extends JInternalFrame {
 		return "Leave - "+durationLeaveTime(showShift(att.getWorkschedule_id()), att.getDeparture_time().toString());
 	}
 	public void load() {
-		
-		
 		DefaultListModel model = new DefaultListModel();
 		List<entity.Attendance> listatt =  attdao.getAttpersonal(UserLogin.getUserId());
 		for (entity.Attendance att : listatt) {

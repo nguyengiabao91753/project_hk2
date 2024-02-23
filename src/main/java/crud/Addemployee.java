@@ -106,7 +106,6 @@ public class Addemployee extends JInternalFrame {
 	private String fileOld = null;
 	private String dirNew = null;
 	private String dirOld = null;
-	private JButton btnNewButton;
 	private JComboBox cbxSalaryId;
 	/**
 	 * Launch the application.
@@ -178,18 +177,14 @@ public class Addemployee extends JInternalFrame {
 		lblEmployee = new JLabel("Employee");
 		lblEmployee.setForeground(Color.WHITE);
 		lblEmployee.setFont(new Font("Tahoma", Font.PLAIN, 23));
-		lblEmployee.setBounds(114, 18, 171, 25);
+		lblEmployee.setBounds(10, 18, 171, 25);
 		panel.add(lblEmployee);
 		
 		lblNewLabel_2 = new JLabel("-Create");
 		lblNewLabel_2.setForeground(Color.WHITE);
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblNewLabel_2.setBounds(222, 18, 63, 14);
+		lblNewLabel_2.setBounds(117, 18, 63, 14);
 		panel.add(lblNewLabel_2);
-		
-		btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(0, 20, 89, 23);
-		panel.add(btnNewButton);
 		
 		lblName = new JLabel("Full name :");
 		lblName.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -477,6 +472,20 @@ public class Addemployee extends JInternalFrame {
 		    return true; 
 	}
 	
+	public void resetField() {
+		txtFullName.setText("");
+		txtEthnicity.setText("");
+		cbxGender.setSelectedItem(null);
+		txtAddress.setText("");
+		cbxSalaryId.setSelectedItem(null);
+		cbxSupervisorId.setSelectedItem(null);
+		cbxDepartmentId.setSelectedItem(null);
+		cbxEducationId.setSelectedItem(null);
+		cbxPositionId.setSelectedItem(null);
+		lblPicture.setIcon(null);
+		cbxLevel.setSelectedItem(null);
+	}
+	
 	protected void btnCreateActionPerformed(ActionEvent e) {
 		if(validateAddEmployee() !=0) {
 			return;
@@ -518,8 +527,6 @@ public class Addemployee extends JInternalFrame {
 			
 			emp.setLevel(cbxLevel.getSelectedItem().toString());
 			
-			var employeeDao = new EmployeeDAO();
-			
 			Addaccount add = Addaccount.getInstance();
 			add.setEmp(emp);
 	        if (!add.isVisible()) {
@@ -528,6 +535,7 @@ public class Addemployee extends JInternalFrame {
 	            add.toFront();
 	            this.hide();
 	        }
+	        resetField();
 		}
 		
 	}
@@ -558,4 +566,6 @@ public class Addemployee extends JInternalFrame {
 			);
 		}
 	}
+	
+	
 }

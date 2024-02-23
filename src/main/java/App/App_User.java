@@ -75,20 +75,17 @@ public class App_User extends JFrame {
 	private int xx, xy;
 
 	public static JDesktopPane desktopPane;
-	private int userId;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_2;
-	
+//	private int userId;
+	private JLabel lblPosition;
 
 
-
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
+//	public int getUserId() {
+//		return userId;
+//	}
+//
+//	public void setUserId(int userId) {
+//		this.userId = userId;
+//	}
 
 	
 	/**
@@ -162,31 +159,27 @@ public class App_User extends JFrame {
 		lblPicture = new JLabel("");
 		lblPicture.setIcon(new ImageIcon("images\\icons8-employee-16.png"));
 		lblPicture.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPicture.setBounds(41, 25, 147, 164);
+		lblPicture.setBounds(27, 33, 147, 164);
 		panel.add(lblPicture);
 		
 		lblFullName = new JLabel("Full Name");
 		lblFullName.setForeground(new Color(255, 255, 255));
 		lblFullName.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblFullName.setBounds(198, 69, 242, 27);
+		lblFullName.setBounds(198, 33, 242, 27);
 		panel.add(lblFullName);
 		
 		lblGender = new JLabel("Gender");
 		lblGender.setForeground(new Color(255, 255, 255));
 		lblGender.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblGender.setBounds(198, 170, 93, 27);
+		lblGender.setBounds(198, 103, 242, 27);
 		panel.add(lblGender);
 		desktopPane.add(panel);
 		
-		lblNewLabel_1 = new JLabel("FULL NAME");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 28));
-		lblNewLabel_1.setBounds(198, 25, 180, 38);
-		panel.add(lblNewLabel_1);
-		
-		lblNewLabel_2 = new JLabel("GENDER");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 28));
-		lblNewLabel_2.setBounds(198, 132, 125, 27);
-		panel.add(lblNewLabel_2);
+		lblPosition = new JLabel("Position");
+		lblPosition.setForeground(new Color(255, 255, 255));
+		lblPosition.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lblPosition.setBounds(198, 170, 242, 27);
+		panel.add(lblPosition);
 		
 		lblNewLabel_5 = new JLabel("");
 		lblNewLabel_5.setOpaque(true);
@@ -227,7 +220,7 @@ public class App_User extends JFrame {
 				lblNewLabel_7MouseClicked(e);
 			}
 		});
-		lblNewLabel_7.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-attendance-96.png"));
+		lblNewLabel_7.setIcon(new ImageIcon("images\\icons8-attendance-96.png"));
 
 		lblNewLabel_7.setIcon(new ImageIcon("images\\icons8-attendance-96.png"));
 
@@ -348,12 +341,6 @@ public class App_User extends JFrame {
 			desktopPane.add(schedule);
 			schedule.show();
 			schedule.toFront();
-//			Component[] frames = desktopPane.getComponents();
-//	        for (Component frame : frames) {
-//	            frame.setVisible(false);
-//	        }
-
-			//this.setVisible(false);
 	        schedule.setVisible(true); 
 	    }
 	}
@@ -366,15 +353,6 @@ public class App_User extends JFrame {
 			desktopPane.add(schedule);
 			schedule.show();
 			schedule.toFront();
-//			Component[] frames = desktopPane.getComponents();
-//	        for (Component frame : frames) {
-//	            frame.setVisible(false);
-//	        }
-
-			
-			
-			//this.setVisible(false);
-
 			schedule.setVisible(true);
 
 		}
@@ -393,10 +371,6 @@ public class App_User extends JFrame {
 	protected void lblAttendanceMouseClicked(MouseEvent e) {
 		if(att == null || att.isClosed()) {
 			att = new Attendance();
-//			Component[] frames = desktopPane.getComponents();
-//	        for (Component frame : frames) {
-//	            frame.setVisible(false);
-//	        }
 			att.setBounds(0, 0, 1180, 664);
 			desktopPane.add(att);
 			att.show();
@@ -437,12 +411,6 @@ public class App_User extends JFrame {
 	        pro.show();
 	        desktopPane.add(pro);
 	        pro.toFront();
-//	        Component[] frames = desktopPane.getComponents();
-//	        for (Component frame : frames) {
-//	            if (frame != pro) {
-//	                frame.setVisible(false);
-//	            }
-//	        }
 	    	pro.setVisible(true);
 	    }
 	}

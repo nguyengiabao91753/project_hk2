@@ -97,7 +97,7 @@ public class Locations extends JInternalFrame {
 				lblNewLabel_5MouseClicked(e);
 			}
 		});
-		lblBack.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-back-arrow-48.png"));
+		lblBack.setIcon(new ImageIcon("images\\icons8-back-arrow-48.png"));
 		lblBack.setBounds(10, 21, 48, 40);
 		panel.add(lblBack);
 		JPanel panelContent = new JPanel();
@@ -108,7 +108,7 @@ public class Locations extends JInternalFrame {
 		panelContent.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-location-30.png"));
+		lblNewLabel.setIcon(new ImageIcon("images\\icons8-location-30.png"));
 		lblNewLabel.setBounds(25, 22, 30, 50);
 		panelContent.add(lblNewLabel);
 		

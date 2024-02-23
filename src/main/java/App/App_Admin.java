@@ -24,9 +24,12 @@ import Gui.Accounts;
 import Gui.Atiendances;
 
 import Gui.Work_Schedules;
+import User_GUI.UserLogin;
 import crud.AddDepartment;
 import crud.Addaccount;
 import crud.Addemployee;
+import dao.EmployeeDAO;
+import entity.Employee;
 
 import java.awt.Color;
 import javax.swing.JDesktopPane;
@@ -51,6 +54,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import java.awt.FlowLayout;
 import javax.swing.border.LineBorder;
+
 import java.awt.SystemColor;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
@@ -60,6 +64,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.JTextArea;
+
 
 
 public class App_Admin extends JFrame {
@@ -96,15 +101,17 @@ public class App_Admin extends JFrame {
 	Accounts acc;
 	Addemployee aemp;
 	Statistical sta;
+	private JLabel lblName;
+
 	private JPanel panelhello;
 	private JLabel lblHello;
-	private JLabel lblName;
-	private JLabel lblPic;
-	private JLabel lblpatern;
+	private JLabel lblPicture;
+	private JLabel lblPattern;
 	private JTextArea txtrtext;
 	private JLabel lblMail;
 	private JLabel lblWish;
 	private JPanel panel_1;
+	
 	
 	/**
 	 * Launch the application.
@@ -113,10 +120,14 @@ public class App_Admin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					if (!AdminLogin.isLoggedIn()) {
+			            JOptionPane.showMessageDialog(null, "Please log in first.");
+			        }else {
 					App_Admin frame = new App_Admin();
 					frame.setLocationRelativeTo(null);
 					frame.setUndecorated(true);
 					frame.setVisible(true);
+			        }
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -143,8 +154,8 @@ public class App_Admin extends JFrame {
 		btnPosition.setBounds(10, 330, 187, 37);
 		btnPosition.setText("");
 	}
+	
 	public void mostarBotones() {
-		
 		btnEmployee.setBounds(10, 105, 187, 37);
 		btnEmployee.setText("Employee");
 		btnAccount.setBounds(10, 150, 187, 37);
@@ -156,9 +167,9 @@ public class App_Admin extends JFrame {
 		btnDepartment.setBounds(10, 285, 187, 37);
 		btnDepartment.setText("Department");
 		btnPosition.setBounds(10, 330, 187, 37);
-		btnPosition.setText("Position");
-		
+		btnPosition.setText("Position");	
 	}
+	
 	public void opensidebar() {
 		panelLateral.setBounds(0,0,219,663);
 		panelTop.setBounds(223, 0, 957, 37);
@@ -167,13 +178,14 @@ public class App_Admin extends JFrame {
 		lblClose.setBounds(901, 7, 46, 20);
 		mostarBotones();
 	}
+	
 	public void hidehello() {
 		JInternalFrame[] frames = desktopPane.getAllFrames();
 	      if(frames != null) {
-	    	  lblPic.setVisible(false);
+	    	  lblPicture.setVisible(false);
 				lblHello.setVisible(false);
 				lblName.setVisible(false);
-				lblpatern.setVisible(false);
+				lblPattern.setVisible(false);
 				txtrtext.setVisible(false);
 				txtrtext.setVisible(false);
 				lblMail.setVisible(false);
@@ -181,6 +193,7 @@ public class App_Admin extends JFrame {
 				panel_1.setVisible(false);
 	      }
 	}
+	
 	public App_Admin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1180, 664);
@@ -203,7 +216,6 @@ public class App_Admin extends JFrame {
 		contentPane.setLayout(null);
 		
 		panelLateral = new JPanel();
-
 		panelLateral.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 
@@ -467,17 +479,17 @@ public class App_Admin extends JFrame {
 		lblName.setBounds(146, 51, 218, 72);
 		panelhello.add(lblName);
 		
-		lblPic = new JLabel("");
-		lblPic.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPic.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-boss-100.png"));
-		lblPic.setBounds(701, 39, 210, 219);
-		panelhello.add(lblPic);
+		lblPicture = new JLabel("");
+		lblPicture.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPicture.setIcon(new ImageIcon("images\\icons8-boss-100.png"));
+		lblPicture.setBounds(701, 39, 210, 219);
+		panelhello.add(lblPicture);
 		
-		lblpatern = new JLabel("");
-		lblpatern.setIcon(new ImageIcon("C:\\Users\\Admin\\eclipse-workspace\\doan_ky2\\images\\icons8-confetti-64.png"));
-		lblpatern.setHorizontalAlignment(SwingConstants.CENTER);
-		lblpatern.setBounds(335, 39, 75, 100);
-		panelhello.add(lblpatern);
+		lblPattern = new JLabel("");
+		lblPattern.setIcon(new ImageIcon("images\\icons8-confetti-64.png"));
+		lblPattern.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPattern.setBounds(234, 39, 176, 100);
+		panelhello.add(lblPattern);
 		
 		lblMail = new JLabel(" bydcompany@system.com");
 		lblMail.setForeground(new Color(0, 102, 255));
@@ -505,8 +517,18 @@ public class App_Admin extends JFrame {
 		panel_1.setBackground(SystemColor.menu);
 		panel_1.setBounds(0, 540, 957, 86);
 		panelhello.add(panel_1);
-		
-		
+		loadAdminInfo();
+	}
+	
+	private void loadAdminInfo() {
+		EmployeeDAO dao = new EmployeeDAO();
+		Employee emp = dao.getUserById(AdminLogin.getAdminId());
+		lblName.setText(emp.getFull_name());
+		ImageIcon icon = new ImageIcon(emp.getPicture());
+        Image image = icon.getImage();
+        Image scaledImage = image.getScaledInstance(lblPicture.getWidth(), lblPicture.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        lblPicture.setIcon(scaledIcon);
 	}
 	
 	public void openWorkSchedule() {
@@ -732,20 +754,20 @@ public class App_Admin extends JFrame {
 	}
 	public void panelHellomenu() {
 		if(panelhello.getBounds().width ==957) {
-			lblPic.setBounds(701, 39, 210, 219);
+			lblPicture.setBounds(701, 39, 210, 219);
 			lblHello.setBounds(37, 51, 99, 72);
 			lblName.setBounds(146, 51, 218, 72);
-			lblpatern.setBounds(335, 39, 75, 100);
+			lblPattern.setBounds(335, 39, 75, 100);
 			txtrtext.setBounds(29, 121, 685, 82);
 			txtrtext.setBounds(29, 121, 685, 82);
 			lblMail.setBounds(316, 176, 230, 26);
 			lblWish.setBounds(37, 203, 327, 49);
 			panel_1.setBounds(0, 540, 957, 86);
 		}else {
-			lblPic.setBounds(855, 39, 210, 219);
+			lblPicture.setBounds(855, 39, 210, 219);
 			lblHello.setBounds(191, 51, 99, 72);
 			lblName.setBounds(300, 51, 218, 72);
-			lblpatern.setBounds(489, 39, 75, 100);
+			lblPattern.setBounds(489, 39, 75, 100);
 			txtrtext.setBounds(183, 121, 685, 82);
 			txtrtext.setBounds(183, 121, 685, 82);
 			lblMail.setBounds(470, 176, 230, 26);
