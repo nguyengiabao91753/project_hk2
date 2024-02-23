@@ -5,11 +5,11 @@ import java.sql.DriverManager;
 
 public class DBCon {
     private static String url = "jdbc:sqlserver://";
-    private static String serverName = "LAPTOP-2V0L4U98";
+    private static String serverName = "DESKTOP-V4SS9V4\\SQLEXPRESS";
     private static String portNumber = "1433";
     private static String databaseName = "QLNV";
     private static String username = "sa";
-    private static String password = "1234567890";
+    private static String password = "123456789";
 
     public static String getUrl() {
         return url + serverName + ":" + portNumber + "; databaseName=" + databaseName + "; user=" + username + "; password=" + password;
