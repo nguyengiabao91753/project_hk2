@@ -470,13 +470,13 @@ public class App_Admin extends JFrame {
 		lblHello = new JLabel("HELLO,");
 		lblHello.setForeground(UIManager.getColor("CheckBox.darkShadow"));
 		lblHello.setFont(new Font("STKaiti", Font.BOLD, 26));
-		lblHello.setBounds(37, 51, 99, 72);
+		lblHello.setBounds(106, 49, 99, 72);
 		panelhello.add(lblHello);
 		
 		lblName = new JLabel("BAO NGUYEN");
 		lblName.setForeground(new Color(51, 102, 255));
 		lblName.setFont(new Font("STKaiti", Font.BOLD, 26));
-		lblName.setBounds(146, 51, 218, 72);
+		lblName.setBounds(215, 49, 218, 72);
 		panelhello.add(lblName);
 		
 		lblPicture = new JLabel("");
@@ -488,7 +488,7 @@ public class App_Admin extends JFrame {
 		lblPattern = new JLabel("");
 		lblPattern.setIcon(new ImageIcon("images\\icons8-confetti-64.png"));
 		lblPattern.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPattern.setBounds(234, 39, 176, 100);
+		lblPattern.setBounds(10, 21, 107, 100);
 		panelhello.add(lblPattern);
 		
 		lblMail = new JLabel(" bydcompany@system.com");
