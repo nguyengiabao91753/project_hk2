@@ -39,6 +39,8 @@ import entity.Employee;
 import entity.Salary;
 
 import java.awt.SystemColor;
+import javax.swing.border.LineBorder;
+import javax.swing.UIManager;
 
 public class App_User extends JFrame {
 
@@ -132,7 +134,7 @@ public class App_User extends JFrame {
 		getContentPane().setLayout(null);
 		
 		desktopPane = new JDesktopPane();
-		desktopPane.setBackground(new Color(255, 255, 255));
+		desktopPane.setBackground(new Color(240, 248, 255));
 		desktopPane.setBounds(0, 0, 1180, 664);
 		getContentPane().add(desktopPane);
 		
@@ -180,6 +182,7 @@ public class App_User extends JFrame {
 		panel.add(lblPosition);
 		
 		lblNewLabel_5 = new JLabel("");
+		lblNewLabel_5.setOpaque(true);
 		lblNewLabel_5.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -188,9 +191,9 @@ public class App_User extends JFrame {
 		});
 		lblNewLabel_5.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblNewLabel_5.setIcon(new ImageIcon("images\\icons8-test-account-96.png"));
-		lblNewLabel_5.setBackground(new Color(255, 255, 255));
+		lblNewLabel_5.setBackground(new Color(240, 248, 255));
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_5.setBounds(357, 270, 132, 132);
+		lblNewLabel_5.setBounds(296, 270, 132, 132);
 		desktopPane.add(lblNewLabel_5);
 		
 		lblNewLabel_6 = new JLabel("");
@@ -203,9 +206,9 @@ public class App_User extends JFrame {
 		});
 		lblNewLabel_6.setIcon(new ImageIcon("images\\icons8-schedule-96.png"));
 		lblNewLabel_6.setOpaque(true);
-		lblNewLabel_6.setBackground(new Color(255, 255, 255));
+		lblNewLabel_6.setBackground(new Color(240, 248, 255));
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_6.setBounds(516, 270, 132, 132);
+		lblNewLabel_6.setBounds(524, 270, 132, 132);
 		desktopPane.add(lblNewLabel_6);
 		
 		lblNewLabel_7 = new JLabel("");
@@ -222,9 +225,9 @@ public class App_User extends JFrame {
 		lblNewLabel_7.setIcon(new ImageIcon("images\\icons8-attendance-96.png"));
 
 		lblNewLabel_7.setOpaque(true);
-		lblNewLabel_7.setBackground(new Color(255, 255, 255));
+		lblNewLabel_7.setBackground(new Color(240, 248, 255));
 		lblNewLabel_7.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_7.setBounds(675, 270, 132, 132);
+		lblNewLabel_7.setBounds(752, 268, 132, 132);
 		desktopPane.add(lblNewLabel_7);
 		
 		lblNewLabel_9 = new JLabel("");
@@ -237,9 +240,9 @@ public class App_User extends JFrame {
 		});
 		lblNewLabel_9.setIcon(new ImageIcon("images\\icons8-salary-96.png"));
 		lblNewLabel_9.setOpaque(true);
-		lblNewLabel_9.setBackground(new Color(255, 255, 255));
+		lblNewLabel_9.setBackground(new Color(240, 248, 255));
 		lblNewLabel_9.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_9.setBounds(439, 442, 132, 132);
+		lblNewLabel_9.setBounds(411, 457, 132, 132);
 		desktopPane.add(lblNewLabel_9);
 		
 		lblNewLabel_8 = new JLabel("");
@@ -251,9 +254,9 @@ public class App_User extends JFrame {
 		});
 		lblNewLabel_8.setIcon(new ImageIcon("images\\icons8-address-96.png"));
 		lblNewLabel_8.setOpaque(true);
-		lblNewLabel_8.setBackground(new Color(255, 255, 255));
+		lblNewLabel_8.setBackground(new Color(240, 248, 255));
 		lblNewLabel_8.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_8.setBounds(601, 442, 132, 132);
+		lblNewLabel_8.setBounds(638, 457, 132, 132);
 		desktopPane.add(lblNewLabel_8);
 		
 		lblprofile = new JLabel("Profile");
@@ -266,7 +269,7 @@ public class App_User extends JFrame {
 		lblprofile.setForeground(new Color(51, 102, 153));
 		lblprofile.setHorizontalAlignment(SwingConstants.CENTER);
 		lblprofile.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblprofile.setBounds(374, 398, 98, 31);
+		lblprofile.setBounds(313, 398, 98, 31);
 		desktopPane.add(lblprofile);
 		
 		lblSchedule = new JLabel("Schedule");
@@ -280,7 +283,7 @@ public class App_User extends JFrame {
 		lblSchedule.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSchedule.setForeground(new Color(51, 102, 153));
 		lblSchedule.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblSchedule.setBounds(533, 400, 98, 31);
+		lblSchedule.setBounds(541, 400, 98, 31);
 		desktopPane.add(lblSchedule);
 		
 		lblAttendance = new JLabel("Attendance");
@@ -294,10 +297,11 @@ public class App_User extends JFrame {
 		lblAttendance.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAttendance.setForeground(new Color(51, 102, 153));
 		lblAttendance.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblAttendance.setBounds(698, 400, 98, 31);
+		lblAttendance.setBounds(769, 398, 98, 31);
 		desktopPane.add(lblAttendance);
 		
 		lblSalary = new JLabel("Salary");
+		lblSalary.setBounds(428, 591, 98, 31);
 		lblSalary.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblSalary.addMouseListener(new MouseAdapter() {
 			@Override
@@ -308,8 +312,8 @@ public class App_User extends JFrame {
 		lblSalary.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSalary.setForeground(new Color(51, 102, 153));
 		lblSalary.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblSalary.setBounds(456, 565, 98, 31);
 		desktopPane.add(lblSalary);
+		
 		
 		lblLocation = new JLabel("Locations");
 		lblLocation.addMouseListener(new MouseAdapter() {
@@ -321,7 +325,7 @@ public class App_User extends JFrame {
 		lblLocation.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLocation.setForeground(new Color(51, 102, 153));
 		lblLocation.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblLocation.setBounds(618, 576, 98, 31);
+		lblLocation.setBounds(655, 591, 98, 31);
 		desktopPane.add(lblLocation);
 		displayUserInfo();
 	}

@@ -365,7 +365,10 @@ public class Attendance extends JInternalFrame {
 		        }
 		        return "Overtime: "+minutes +"m";
 	        }else if(time2Value.isBefore(time1End)) {
-	        	return "Early: "+hours +"m";
+	        	if(hours!=0) {
+	        		return "Early: "+Math.abs(hours) +"h " + Math.abs(minutes)+"m";
+	        	}
+	        	return "Early: "+Math.abs(minutes) +"m";
 	        }else {
 	        	return "on time";
 	        }
