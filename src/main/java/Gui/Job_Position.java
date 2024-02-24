@@ -387,6 +387,7 @@ public class Job_Position extends JInternalFrame {
 		if(!add.isVisible()) {
 			add.setVisible(true);
 			app.desktopPane.add(add);
+			add.setJob(this);
 			add.toFront();
 //			this.hide();
 		}else {
