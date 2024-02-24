@@ -45,6 +45,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -96,6 +97,18 @@ public class Addemployee extends JInternalFrame {
 	private App_Admin app;
 	private Employee emp;
 	
+	EmployeeForm empform;
+	
+	public EmployeeForm getEmpform() {
+		return empform;
+	}
+
+
+	public void setEmpform(EmployeeForm empform) {
+		this.empform = empform;
+	}
+
+
 	SalaryDAO salaryDao = new SalaryDAO();
 	EmployeeDAO employeeDao = new EmployeeDAO();
 	Manage_DepartmentsDAO departmentDao = new Manage_DepartmentsDAO();
@@ -131,7 +144,7 @@ public class Addemployee extends JInternalFrame {
 	}
 	
 	public static Addemployee getInstance() {
-        if (instance == null) {
+        if (instance == null || instance.isClosed()) {
             instance = new Addemployee();
         }
         return instance;
@@ -372,7 +385,7 @@ public class Addemployee extends JInternalFrame {
 	}
 	
 	protected void lblCloseMouseClicked(MouseEvent e) {
-		this.setVisible(false);
+		this.dispose();
 	}
 	
 	private boolean areImagePathsEqual(String path1, String path2) {
@@ -535,11 +548,15 @@ public class Addemployee extends JInternalFrame {
 			
 			Addaccount add = Addaccount.getInstance();
 			add.setEmp(emp);
+			add.setEmpform(empform);
+			
 	        if (!add.isVisible()) {
 	            add.setVisible(true);
 	            app.desktopPane.add(add);
 	            add.toFront();
 	            this.hide();
+	        }else {
+	        	add.toFront();
 	        }
 	        resetField();
 		}

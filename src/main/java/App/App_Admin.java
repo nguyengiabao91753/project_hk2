@@ -824,7 +824,7 @@ public class App_Admin extends JFrame {
 		
 	}
 	
-	void loadEmployeeForm() {
+	public void loadEmployeeForm() {
 		JInternalFrame[] frames = desktopPane.getAllFrames();
         for (JInternalFrame frame : frames) {
             frame.doDefaultCloseAction();

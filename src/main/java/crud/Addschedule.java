@@ -70,6 +70,17 @@ public class Addschedule extends JInternalFrame {
 	private JButton btnSubmit;
 	LocalDate currentDate = LocalDate.now();
 	private static Addschedule instance ;
+	
+	Work_Schedules work = new Work_Schedules();
+	
+	
+	public Work_Schedules getWork() {
+		return work;
+	}
+
+	public void setWork(Work_Schedules work) {
+		this.work = work;
+	}
 
 	/**
 	 * Launch the application.
@@ -90,7 +101,7 @@ public class Addschedule extends JInternalFrame {
 	}
 	
 	public static Addschedule getInstance() {
-        if (instance == null) {
+        if (instance == null || instance.isClosed()) {
             instance = new Addschedule();
         }
         return instance;
@@ -199,7 +210,7 @@ public class Addschedule extends JInternalFrame {
 		loadcbb();
 	}
 	protected void lblNewLabel_2MouseClicked(MouseEvent e) {
-		this.setVisible(false);
+		this.dispose();
 	}
 	protected void loadcbb() {
 		// TODO Auto-generated method stub
@@ -376,12 +387,13 @@ public class Addschedule extends JInternalFrame {
 		WorkscheduleDAO workdao = new WorkscheduleDAO();
 		if(workdao.insert(newwork)) {
 			JOptionPane.showMessageDialog(null, "Add successfully!");
-			Work_Schedules work = new Work_Schedules();
-			work.setVisible(true);;
-			App_Admin app = new App_Admin();
-			app.desktopPane.add(work);
+			
+			work.refresh();
+//			work.setVisible(true);;
+//			App_Admin app = new App_Admin();
+//			app.desktopPane.add(work);
 			resetField();
-			this.hide();
+			this.dispose();
 		}else {
 			JOptionPane.showMessageDialog(null, "Add Fail!");
 		}

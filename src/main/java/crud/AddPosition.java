@@ -80,7 +80,7 @@ public class AddPosition extends JInternalFrame {
 		});
 	}
 	public static AddPosition getInstance() {
-        if (instance == null) {
+        if (instance == null|| instance.isClosed()) {
             instance = new AddPosition();
         }
         return instance;
@@ -191,7 +191,7 @@ public class AddPosition extends JInternalFrame {
 			if(workdao.insert(Pos)) {
 				JOptionPane.showMessageDialog(null, "Add successfully!");
 				txtNAME.setText("");
-				this.setClosable(true);
+				this.dispose();
 				}
 		}
 	}
@@ -218,7 +218,7 @@ public class AddPosition extends JInternalFrame {
 		lblNewLabel.setForeground(Color.white);
 	}
 	protected void lblNewLabelMouseClicked(MouseEvent e) {
-		this.setVisible(false);
+		this.dispose();
 	}
 	
 }

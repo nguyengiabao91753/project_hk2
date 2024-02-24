@@ -477,13 +477,17 @@ public class Work_Schedules extends JInternalFrame {
 //		}
 		
 		Addschedule add =  Addschedule.getInstance();
+		add.setWork(this);
+//		Addschedule add =  new Addschedule();
 		if(!add.isVisible()) {
 			add.setVisible(true);
 			
 			app.desktopPane.add(add);
 			add.toFront();
-			this.hide();
+			//this.hide();
 			//app.pack();
+		}else {
+			add.toFront();
 		}
 	}
 	protected void tableMouseClicked(MouseEvent e) {

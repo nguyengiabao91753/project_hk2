@@ -492,7 +492,9 @@ public class Manage_Departments extends JInternalFrame {
 			
 			app.desktopPane.add(add);
 			add.toFront();
-			this.hide();
+//			this.hide();
+		}else {
+			add.toFront();
 		}
 	}
 	

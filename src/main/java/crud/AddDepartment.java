@@ -89,7 +89,7 @@ public class AddDepartment extends JInternalFrame {
 		});
 	}
 	public static AddDepartment getInstance() {
-        if (instance == null) {
+        if (instance == null || instance.isClosed()) {
             instance = new AddDepartment();
         }
         return instance;
@@ -264,7 +264,7 @@ public class AddDepartment extends JInternalFrame {
     	txtName.setText("");
     	txtDepparment.setText("");
     	txtRoom.setText("");
-    	this.hide();
+    	this.dispose();
 		}
 
 }
@@ -279,7 +279,7 @@ public class AddDepartment extends JInternalFrame {
 		
 	}
 	protected void lblNewLabelMouseClicked(MouseEvent e) {
-		this.setVisible(false);
+		this.dispose();
 	}
 	protected void lblNewLabelMouseEntered(MouseEvent e) {
 		lblNewLabel.setBackground(new Color(106,90,205));
