@@ -113,7 +113,7 @@ public class EmployeeForm extends JInternalFrame {
 
 	
 	Integer pageNumber = 1 ;
-	Integer rowOfPage = 10 ;
+	Integer rowOfPage = 7 ;
 	Integer totalCount = 0 ;
 	Double totalPage = 0.0;
 	
@@ -161,22 +161,7 @@ public class EmployeeForm extends JInternalFrame {
 		return app;
 	}
 	
-	public void hidenextlast() {
-		if(pageNumber==1) {
-			btnFirst.setVisible(false);
-			btnPrevious.setVisible(false);
-		}else {
-			btnFirst.setVisible(true);
-			btnPrevious.setVisible(true);
-		}
-		if(pageNumber == totalPage.intValue()) {
-			btnNext.setVisible(false);
-			btnLast.setVisible(false);
-		}else {
-			btnNext.setVisible(true);
-			btnLast.setVisible(true);
-		}
-	}
+	
 	
 
 	public static void main(String[] args) {
@@ -207,6 +192,22 @@ public class EmployeeForm extends JInternalFrame {
 
 	}
 
+	public void hidenextlast() {
+		if(pageNumber==1) {
+			btnFirst.setVisible(false);
+			btnPrevious.setVisible(false);
+		}else {
+			btnFirst.setVisible(true);
+			btnPrevious.setVisible(true);
+		}
+		if(pageNumber == totalPage.intValue()) {
+			btnNext.setVisible(false);
+			btnLast.setVisible(false);
+		}else {
+			btnNext.setVisible(true);
+			btnLast.setVisible(true);
+		}
+	}
 	
 	public EmployeeForm() {
 		this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
@@ -309,6 +310,7 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(lblImage);
 		
 		btnUpdate = new JButton("UPDATE");
+		btnUpdate.setForeground(new Color(255, 255, 255));
 		btnUpdate.setBorder(null);
 		btnUpdate.addMouseListener(new MouseAdapter() {
 			@Override
@@ -330,6 +332,7 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(btnUpdate);
 		
 		btnDelete = new JButton("DELETE");
+		btnDelete.setForeground(new Color(255, 255, 255));
 		btnDelete.setBorder(null);
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
@@ -427,6 +430,7 @@ public class EmployeeForm extends JInternalFrame {
 		txtSearch.setColumns(10);
 		
 		btnInsert = new JButton("ADD");
+		btnInsert.setForeground(new Color(255, 255, 255));
 		btnInsert.setBorder(null);
 		btnInsert.addMouseListener(new MouseAdapter() {
 			@Override
@@ -448,7 +452,7 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(btnInsert);
 		
 		btnFirst = new JButton("");
-		btnFirst.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-last-24 (1).png"));
+		btnFirst.setIcon(new ImageIcon("images\\icons8-last-24 (1).png"));
 		btnFirst.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnFirstActionPerformed(e);
@@ -459,7 +463,7 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(btnFirst);
 		
 		btnPrevious = new JButton("");
-		btnPrevious.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-next-24 (2).png"));
+		btnPrevious.setIcon(new ImageIcon("images\\icons8-next-24 (2).png"));
 		btnPrevious.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnPreviousActionPerformed(e);
@@ -469,7 +473,7 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(btnPrevious);
 		
 		btnNext = new JButton("");
-		btnNext.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-next-24 (1).png"));
+		btnNext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnNextActionPerformed(e);
@@ -479,7 +483,7 @@ public class EmployeeForm extends JInternalFrame {
 		getContentPane().add(btnNext);
 		
 		btnLast = new JButton("");
-		btnLast.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-last-24.png"));
+		btnLast.setIcon(new ImageIcon("images\\icons8-last-24.png"));
 		btnLast.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnLastActionPerformed(e);
@@ -648,7 +652,7 @@ public class EmployeeForm extends JInternalFrame {
 //	}
 
 	
-	private void refresh() {
+	public void refresh() {
 		DefaultTableModel model =  (DefaultTableModel)table.getModel();
 		model.setRowCount(0); 
 		EmployeeDAO dao = new EmployeeDAO();
@@ -684,6 +688,7 @@ public class EmployeeForm extends JInternalFrame {
 				)
 			);
 		table.setModel(model);
+		hidenextlast();
 	}
 	
 	protected void tableMouseClicked(MouseEvent e) {
@@ -979,13 +984,16 @@ public class EmployeeForm extends JInternalFrame {
 	
 	protected void btnInsertActionPerformed(ActionEvent e) {
 	        Addemployee add = Addemployee.getInstance();
-
-	        if (!add.isVisible()) {
+	        add.setEmpform(this);
+	        this.toBack();
+	        if (!add.isVisible() || add.isClosed() ) {
 	            add.setVisible(true);
 	            add.setApp(app);
 	            app.desktopPane.add(add);
 	            add.toFront();
-	            this.hide();
+	            //this.hide();
+	        }else {
+	        	add.toFront();
 	        }
 	}
 	

@@ -25,8 +25,10 @@ import javax.swing.table.TableRowSorter;
 import App.App_Admin;
 import crud.AddDepartment;
 import crud.AddPosition;
+import dao.EmployeeDAO;
 import dao.PositionDAO;
 import entity.Department;
+import entity.Employee;
 import entity.Position;
 
 import java.awt.Color;
@@ -386,7 +388,9 @@ public class Job_Position extends JInternalFrame {
 			add.setVisible(true);
 			app.desktopPane.add(add);
 			add.toFront();
-			this.hide();
+//			this.hide();
+		}else {
+			add.toFront();
 		}
 	}
 	public int validatePosition() {
@@ -425,6 +429,13 @@ public class Job_Position extends JInternalFrame {
 	    if (dialogResult == JOptionPane.YES_OPTION) {
 	        // Lấy ID từ dòng được chọn
 			int a = Integer.parseInt(txtID.getText());
+			EmployeeDAO Posdao = new EmployeeDAO();
+			for (Employee Pos : Posdao.selectAllEmployee()) {
+				if(Pos.getDepartment_id() == a) {
+					JOptionPane.showMessageDialog(null, "This position is still having employees! So cannot delete .");
+					return;
+				}
+			}
 
 	        // Xóa dòng được chọn
 	        PosDAO.delete(a);

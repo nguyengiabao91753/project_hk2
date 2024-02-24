@@ -54,6 +54,16 @@ public class Addaccount extends JInternalFrame {
 	private App_Admin app;
 	private Employee emp;
 	
+	EmployeeForm empform = new EmployeeForm();
+	
+	public EmployeeForm getEmpform() {
+		return empform;
+	}
+
+
+	public void setEmpform(EmployeeForm empform) {
+		this.empform = empform;
+	}
 
 	public void setApp(App_Admin app) {
 		this.app = app;
@@ -85,7 +95,7 @@ public class Addaccount extends JInternalFrame {
 	}
 	
 	public static Addaccount getInstance() {
-        if (instance == null) {
+        if (instance == null || instance.isClosed()) {
             instance = new Addaccount();
         }
         return instance;
@@ -173,6 +183,12 @@ public class Addaccount extends JInternalFrame {
 		getContentPane().add(txtPassword);
 
 	}
+<<<<<<< HEAD
+=======
+	protected void lblCloseMouseClicked(MouseEvent e) {
+		this.dispose();
+	}
+>>>>>>> 504635e2edb826f7678d00ddfcbc4ba77aaeff1d
 	
 	public void resetAccount() {
 		lblUsername.setText("");
@@ -203,6 +219,7 @@ public class Addaccount extends JInternalFrame {
 		    int defaultStatus = 1;
 		    if (accountDAO.insert(acc,defaultStatus)) {
 		        JOptionPane.showMessageDialog(null, "Add successfully!");
+<<<<<<< HEAD
 		        resetAccount();
 		        var empForm = new EmployeeForm();
 		        empForm.setVisible(true);;
@@ -210,6 +227,16 @@ public class Addaccount extends JInternalFrame {
 		        app.desktopPane.add(empForm);
 		        this.hide();
 		        return;
+=======
+		        empform.toFront();
+		        empform.refresh();
+//		        empform.refresh();
+//		        empForm.setVisible(true);;
+//		        App_Admin app = new App_Admin();
+//		        app.loadEmployeeForm();
+		        this.dispose();
+		        
+>>>>>>> 504635e2edb826f7678d00ddfcbc4ba77aaeff1d
 		    } else {
 		        JOptionPane.showMessageDialog(null, "Add Fail!");
 		    }

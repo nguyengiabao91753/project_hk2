@@ -23,6 +23,8 @@ import App.App_Admin;
 import crud.AddDepartment;
 import crud.Addschedule;
 import entity.Department;
+import entity.Employee;
+import dao.EmployeeDAO;
 import dao.Manage_DepartmentsDAO;
 import dao.RoomDAO;
 import dao.ShiftDAO;
@@ -490,7 +492,9 @@ public class Manage_Departments extends JInternalFrame {
 			
 			app.desktopPane.add(add);
 			add.toFront();
-			this.hide();
+//			this.hide();
+		}else {
+			add.toFront();
 		}
 	}
 	
@@ -535,6 +539,14 @@ public class Manage_Departments extends JInternalFrame {
 	    if (dialogResult == JOptionPane.YES_OPTION) {
 	        // Lấy ID từ dòng được chọn
 			int a = Integer.parseInt(txtID.getText());
+			EmployeeDAO emdao = new EmployeeDAO();
+			for (Employee emp : emdao.selectAllEmployee()) {
+				if(emp.getDepartment_id() == a) {
+					JOptionPane.showMessageDialog(null, "This department is still having employees! So cannot delete");
+					return;
+				}
+			}
+			
 
 	        // Xóa dòng được chọn
 	        DepDAO.delete(a);

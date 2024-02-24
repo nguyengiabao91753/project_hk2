@@ -283,7 +283,7 @@ public class Accounts extends JInternalFrame {
 				btnLastActionPerformed(e);
 			}
 		});
-		btnLast.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-last-24.png"));
+		btnLast.setIcon(new ImageIcon("images\\icons8-last-24.png"));
 		btnLast.setBounds(936, 485, 21, 23);
 		getContentPane().add(btnLast);
 		
@@ -293,7 +293,7 @@ public class Accounts extends JInternalFrame {
 				btnNextActionPerformed(e);
 			}
 		});
-		btnNext.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-next-24 (1).png"));
+		btnNext.setIcon(new ImageIcon("images\\icons8-next-24 (1).png"));
 		btnNext.setBounds(915, 485, 21, 23);
 		getContentPane().add(btnNext);
 		
@@ -317,12 +317,12 @@ public class Accounts extends JInternalFrame {
 				btnPreviousActionPerformed(e);
 			}
 		});
-		btnPrevious.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-next-24 (2).png"));
+		btnPrevious.setIcon(new ImageIcon("images\\icons8-next-24 (2).png"));
 		btnPrevious.setBounds(761, 485, 21, 23);
 		getContentPane().add(btnPrevious);
 		
 		btnFirst = new JButton("");
-		btnFirst.setIcon(new ImageIcon("C:\\Users\\luong\\eclipse-workspace\\project-hk2\\images\\icons8-last-24 (1).png"));
+		btnFirst.setIcon(new ImageIcon("images\\icons8-last-24 (1).png"));
 		btnFirst.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnFirstActionPerformed(e);
@@ -424,7 +424,7 @@ public class Accounts extends JInternalFrame {
 		);
 		
 		table.setModel(model);
-		
+		hidenextlast();
 		}
 	
 	protected void txtSearchActionPerformed(ActionEvent e) {
