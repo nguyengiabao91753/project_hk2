@@ -42,7 +42,6 @@ public class Addaccount extends JInternalFrame {
 	private Dimension DimensionBarca =null;
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
-	private JLabel lblClose;
 	private JLabel lblAccount;
 	private JLabel lblNewLabel;
 	private JPanel panel_1;
@@ -119,16 +118,6 @@ public class Addaccount extends JInternalFrame {
 		panel.setBounds(0, 0, 463, 52);
 		getContentPane().add(panel);
 		
-		lblClose = new JLabel("<html>\r\n\t<p style=\"font-size: 24px;color:white\">&#10006;</p>\r\n</html>");
-		lblClose.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				lblCloseMouseClicked(e);
-			}
-		});
-		lblClose.setBounds(413, 3, 25, 49);
-		panel.add(lblClose);
-		
 		lblAccount = new JLabel("Account");
 		lblAccount.setForeground(Color.WHITE);
 		lblAccount.setFont(new Font("Tahoma", Font.BOLD, 23));
@@ -167,8 +156,9 @@ public class Addaccount extends JInternalFrame {
 		getContentPane().add(lblUsername);
 		
 		txtUsername = new JTextField();
+		txtUsername.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtUsername.setColumns(10);
-		txtUsername.setBounds(141, 177, 174, 20);
+		txtUsername.setBounds(94, 177, 282, 39);
 		getContentPane().add(txtUsername);
 		
 		lblPassword = new JLabel("Password : ");
@@ -178,12 +168,10 @@ public class Addaccount extends JInternalFrame {
 		getContentPane().add(lblPassword);
 		
 		txtPassword = new JPasswordField();
-		txtPassword.setBounds(141, 299, 174, 20);
+		txtPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtPassword.setBounds(94, 299, 282, 39);
 		getContentPane().add(txtPassword);
 
-	}
-	protected void lblCloseMouseClicked(MouseEvent e) {
-		this.setVisible(false);
 	}
 	
 	public void resetAccount() {
