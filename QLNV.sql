@@ -80,7 +80,7 @@ CREATE TABLE SHIFTS
 );
 GO
 
-CREATE TABLE PATIENTROOMS
+create TABLE PATIENTROOMS
 (
 	ROOM_ID INT PRIMARY KEY IDENTITY,
 	NAME VARCHAR(8),
@@ -660,11 +660,11 @@ END
 GO
 
 CREATE PROC updateAccount
-@username VARCHAR(50),@password VARCHAR(50),@id INT
+@username VARCHAR(50),@password VARCHAR(50),@id INT , @status int
 AS
 BEGIN
 	UPDATE ACCOUNTS
-	SET USERNAME = @username , PASSWORD = @password
+	SET USERNAME = @username , PASSWORD = @password , STATUS = @status
 	WHERE ACCOUNT_ID = @id
 END
 GO

@@ -36,6 +36,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.JPasswordField;
@@ -75,6 +78,8 @@ public class Accounts extends JInternalFrame {
 	private JTextField txtPage;
 	private JButton btnPrevious;
 	private JButton btnFirst;
+	private int selectedRow;
+	private String selectedUsername;
 	/**
 	 * Launch the application.
 	 */
@@ -422,6 +427,13 @@ public class Accounts extends JInternalFrame {
 		hidenextlast();
 		}
 	
+	protected void txtSearchActionPerformed(ActionEvent e) {
+		String find = txtSearch.getText();
+		DefaultRowSorter<?, ?> sorter = (DefaultRowSorter<?, ?>)table.getRowSorter();
+		sorter.setRowFilter(RowFilter.regexFilter(find));
+		sorter.setSortKeys(null);
+	}
+	
 	protected void tableMouseClicked(MouseEvent e) {
 		int rowIndex = table.getSelectedRow();
 		txtAccountId.setText(table.getValueAt(rowIndex, 0).toString()); 
@@ -436,13 +448,66 @@ public class Accounts extends JInternalFrame {
 	        txtUsername.setEnabled(true);
 	        txtPassword.setEnabled(true);
 	    }
+		selectedRow = table.getSelectedRow();
+	    selectedUsername = table.getValueAt(selectedRow, 1).toString();
 	}
 	
-	protected void txtSearchActionPerformed(ActionEvent e) {
-		String find = txtSearch.getText();
-		DefaultRowSorter<?, ?> sorter = (DefaultRowSorter<?, ?>)table.getRowSorter();
-		sorter.setRowFilter(RowFilter.regexFilter(find));
-		sorter.setSortKeys(null);
+	
+	
+	protected void btnUpdateActionPerformed(ActionEvent e) {
+		if(txtAccountId.getText().equals("")) {
+			JOptionPane.showMessageDialog(null,"Please select row to delete");
+			
+		}else {
+			String username = txtUsername.getText();
+			if (!validateUsername(username)) {
+			    return; 
+			}
+			    
+			Account acc = new Account();
+			acc.setId(Integer.parseInt(txtAccountId.getText()));
+			acc.setUsername(txtUsername.getText());
+			
+			String newUsername = txtUsername.getText();
+ 
+		    List<String> usernames = new ArrayList<>();
+		    for (int i = 0; i < table.getRowCount(); i++) {
+		        usernames.add((String) table.getValueAt(i, 1));
+		    }
+	
+		    
+		    if (usernames.contains(newUsername) && !newUsername.equals(selectedUsername)) {
+		        JOptionPane.showMessageDialog(null, "Username already exists. Please choose another username.");
+		        return;
+		    }
+		    
+		    char[] passwordChars = txtPassword.getPassword();
+		    String plainPassword = new String(passwordChars);
+		    
+		    if (!valPassword(plainPassword)) {
+		        return; 
+		    }
+		    
+		    acc.setPassword(plainPassword);
+		    
+		    String selectedStatus = cbxStatus.getSelectedItem().toString();
+		    
+		    if (selectedStatus.equals("Active")) {
+		        acc.setStatus(1);
+		        txtUsername.setEnabled(true);
+				txtPassword.setEnabled(true);
+		    } else if (selectedStatus.equals("Block")) {
+		        acc.setStatus(0);
+		        txtUsername.setEnabled(false);
+		        txtUsername.setText(""); 
+		        txtPassword.setEnabled(false);
+		        txtPassword.setText(""); 
+		    }
+		    
+			accountDao.update(acc);
+			refresh();
+			table.setValueAt(newUsername, selectedRow, 1);
+		}
 	}
 	
 	public static boolean valPassword(String password) {
@@ -499,62 +564,6 @@ public class Accounts extends JInternalFrame {
 	    return true;
 	}
 	
-	protected void btnUpdateActionPerformed(ActionEvent e) {
-		String username = txtUsername.getText();
-		if (!validateUsername(username)) {
-		    return; 
-		}
-		    
-		Account acc = new Account();
-		acc.setId(Integer.parseInt(txtAccountId.getText()));
-		acc.setUsername(txtUsername.getText());
-		
-		int selectedColumnIndex = table.getSelectedColumn(); 
-	    int usernameColumnIndex = table.getColumnModel().getColumnIndex("Username");
-		
-
-	    if (accountDao.isUsernameExists(username) && selectedColumnIndex == usernameColumnIndex) {
-	            JOptionPane.showMessageDialog(null, "Username already exists. Please choose another username.");
-	            return;
-	    }
-	    
-	    char[] passwordChars = txtPassword.getPassword();
-	    String plainPassword = new String(passwordChars);
-	    
-	    if (!valPassword(plainPassword)) {
-	        return; 
-	    }
-	    
-	    acc.setPassword(plainPassword);
-	    
-	    String selectedStatus = cbxStatus.getSelectedItem().toString();
-	    
-	    if (selectedStatus.equals("Active")) {
-	        acc.setStatus(1);
-	        txtUsername.setEnabled(true);
-			txtPassword.setEnabled(true);
-	    } else if (selectedStatus.equals("Block")) {
-	        acc.setStatus(0);
-	        txtUsername.setEnabled(false);
-	        txtUsername.setText(""); 
-	        txtPassword.setEnabled(false);
-	        txtPassword.setText(""); 
-	    }
-	    
-//	    int statusColumnIndex = table.getColumnModel().getColumnIndex("Status");
-//	    int rowIndex = table.getSelectedRow();
-//	    int currentStatus = (int) table.getValueAt(rowIndex, statusColumnIndex);
-//
-//	    if ((currentStatus == 0 && acc.getStatus() == 0) || (currentStatus == 1 && acc.getStatus() == 1)) {
-//	        String message = (currentStatus == 0) ? "This account is already blocked." : "This account is already active.";
-//	        JOptionPane.showMessageDialog(null, message);
-//	        return;
-//	    }
-	    
-		accountDao.update(acc);
-		refresh();
-	}
-	
 	
 	protected void btnBlockActionPerformed(ActionEvent e) {
 		int statusColumnIndex = table.getColumnModel().getColumnIndex("Status");
@@ -565,8 +574,8 @@ public class Accounts extends JInternalFrame {
 	    for (int row = 0; row < table.getRowCount(); row++) {
 	        int status = (int) table.getValueAt(row, statusColumnIndex);
 	        if (status == 0) { 
-	            table.setValueAt(false, row, usernameColumnIndex); 
-	            table.setValueAt(false, row, passwordColumnIndex);
+	            table.setValueAt(null, row, usernameColumnIndex); 
+	            table.setValueAt(null, row, passwordColumnIndex);
 	            isAlreadyBlocked = true;
 	        }
 	    }

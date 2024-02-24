@@ -97,8 +97,8 @@ public class AccountDAO {
 			) {
 			cs.setString(1, acc.getUsername());
 			cs.setString(2, acc.getPassword());
-			cs.setInt(3,acc.getStatus());
-			cs.setInt(4, acc.getId());
+			cs.setInt(3, acc.getId());
+			cs.setInt(4,acc.getStatus());
 			
 			JOptionPane.showMessageDialog(null, cs.executeUpdate() >0 ? "update success" : "nothing to update" );
 			
