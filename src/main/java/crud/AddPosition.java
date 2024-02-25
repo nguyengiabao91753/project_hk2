@@ -64,6 +64,14 @@ public class AddPosition extends JInternalFrame {
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_3;
 	private JPanel panel_2;
+	Job_Position job = new Job_Position();
+	
+	public Job_Position getJob() {
+		return job;
+	}
+	public void setJob(Job_Position job) {
+		this.job = job;
+	}
 	/**
 	 * Launch the application.
 	 */
@@ -191,6 +199,7 @@ public class AddPosition extends JInternalFrame {
 			if(workdao.insert(Pos)) {
 				JOptionPane.showMessageDialog(null, "Add successfully!");
 				txtNAME.setText("");
+				job.refresh();
 				this.dispose();
 				}
 		}

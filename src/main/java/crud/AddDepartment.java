@@ -70,6 +70,15 @@ public class AddDepartment extends JInternalFrame {
 	private JLabel lblNewLabel_5;
 	private JTextField txtName;
 	private JPanel panel_2;
+	
+	Manage_Departments mande = new Manage_Departments();
+	
+	public Manage_Departments getMande() {
+		return mande;
+	}
+	public void setMande(Manage_Departments mande) {
+		this.mande = mande;
+	}
 	/**
 	 * Launch the application.
 	 */
@@ -264,6 +273,7 @@ public class AddDepartment extends JInternalFrame {
     	txtName.setText("");
     	txtDepparment.setText("");
     	txtRoom.setText("");
+    	mande.refresh();
     	this.dispose();
 		}
 

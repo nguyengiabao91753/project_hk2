@@ -489,8 +489,8 @@ public class Manage_Departments extends JInternalFrame {
 		AddDepartment add =  AddDepartment.getInstance();
 		if(!add.isVisible()) {
 			add.setVisible(true);
-			
 			app.desktopPane.add(add);
+			add.setMande(this);
 			add.toFront();
 //			this.hide();
 		}else {
