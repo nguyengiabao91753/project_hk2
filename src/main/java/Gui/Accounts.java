@@ -1,4 +1,4 @@
-	package Gui;
+package Gui;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -184,12 +184,12 @@ public class Accounts extends JInternalFrame {
 		
 		txtAccountId = new JTextField();
 		txtAccountId.setEditable(false);
-		txtAccountId.setBounds(28, 80, 174, 20);
+		txtAccountId.setBounds(28, 80, 174, 36);
 		getContentPane().add(txtAccountId);
 		txtAccountId.setColumns(10);
 		
 		txtUsername = new JTextField();
-		txtUsername.setBounds(28, 190, 174, 20);
+		txtUsername.setBounds(28, 190, 174, 36);
 		getContentPane().add(txtUsername);
 		txtUsername.setColumns(10);
 		
@@ -262,7 +262,7 @@ public class Accounts extends JInternalFrame {
 		getContentPane().add(txtSearch);
 		
 		txtPassword = new JPasswordField();
-		txtPassword.setBounds(28, 312, 174, 20);
+		txtPassword.setBounds(28, 312, 174, 36);
 		getContentPane().add(txtPassword);
 		
 		lblStatus = new JLabel("Status :");
@@ -274,7 +274,7 @@ public class Accounts extends JInternalFrame {
 		cbxStatus = new JComboBox();
 		cbxStatus.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		cbxStatus.setModel(new DefaultComboBoxModel(new String[] {"","Block", "Active"}));
-		cbxStatus.setBounds(28, 426, 174, 22);
+		cbxStatus.setBounds(28, 426, 174, 36);
 		getContentPane().add(cbxStatus);
 		
 		btnLast = new JButton("");
@@ -567,29 +567,23 @@ public class Accounts extends JInternalFrame {
 	
 	protected void btnBlockActionPerformed(ActionEvent e) {
 		int statusColumnIndex = table.getColumnModel().getColumnIndex("Status");
-	    int usernameColumnIndex = table.getColumnModel().getColumnIndex("Username");
-	    int passwordColumnIndex = table.getColumnModel().getColumnIndex("Password");
-	    boolean isAlreadyBlocked = false;
+	    int selectedRow = table.getSelectedRow();
 
-	    for (int row = 0; row < table.getRowCount(); row++) {
-	        int status = (int) table.getValueAt(row, statusColumnIndex);
-	        if (status == 0) { 
-	            table.setValueAt(null, row, usernameColumnIndex); 
-	            table.setValueAt(null, row, passwordColumnIndex);
-	            isAlreadyBlocked = true;
+	    if (selectedRow >= 0) { 
+	        int status = (int) table.getValueAt(selectedRow, statusColumnIndex);
+	        if (status == 0) {
+	            JOptionPane.showMessageDialog(null, "This account has been already blocked.");
+	            return;
 	        }
-	    }
-	    
-	    if (isAlreadyBlocked) {
-	        JOptionPane.showMessageDialog(null, "This account has been already blocked.");
-	        return;
-	    }
 
-	    Account acc  = new Account();
-	    acc.setId(Integer.parseInt(txtAccountId.getText()));
-	    AccountDAO dao = new AccountDAO();
-	    dao.block(acc);
-	    refresh();   
+	        Account acc  = new Account();
+	        acc.setId(Integer.parseInt(txtAccountId.getText()));
+	        AccountDAO dao = new AccountDAO();
+	        dao.block(acc);
+	        refresh();
+	    } else {
+	        JOptionPane.showMessageDialog(null, "Please select an account to block.");
+	    }   
 	}
 	
 	protected void btnFirstActionPerformed(ActionEvent e) {
