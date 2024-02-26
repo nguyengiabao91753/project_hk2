@@ -545,12 +545,13 @@ public class Profile extends JInternalFrame {
 //			// TODO Auto-generated catch block
 //			e1.printStackTrace();
 //		}
-		this.setVisible(false);
+		
 		App_User appUser = (App_User) SwingUtilities.getWindowAncestor(this); // Lấy đối tượng App_User
 		appUser.dispose();
 	    UserLogin login = new UserLogin();
 	    login.setUndecorated(true);
 	    login.setLocationRelativeTo(null);
 	    login.setVisible(true);	
+	    this.dispose();
 	}
 }

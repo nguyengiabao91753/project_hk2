@@ -63,7 +63,7 @@ public class Accounts extends JInternalFrame {
 	private App_Admin app;
 	
 	Integer pageNumber = 1 ;
-	Integer rowOfPage = 10 ;
+	Integer rowOfPage = 8 ;
 	Integer totalCount = 0 ;
 	Double totalPage = 0.0;
 	private JButton btnUpdate;
@@ -381,6 +381,7 @@ public class Accounts extends JInternalFrame {
 		);
 		
 		table.setModel(model);
+		table.setRowHeight(52);
 		table.getColumnModel().getColumn(2).setCellRenderer(new PasswordRenderer());
 		for (int i = 0; i < model.getColumnCount(); i++) {
 		    if (i != 2) {

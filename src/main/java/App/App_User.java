@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -35,7 +36,11 @@ import User_GUI.Schedule;
 import User_GUI.UserLogin;
 import dao.AccountDAO;
 import dao.EmployeeDAO;
+import dao.Manage_DepartmentsDAO;
+import dao.PositionDAO;
+import entity.Department;
 import entity.Employee;
+import entity.Position;
 import entity.Salary;
 
 import java.awt.SystemColor;
@@ -50,7 +55,7 @@ public class App_User extends JFrame {
 	private JLabel lblNewLabel;
 	private JLabel lblPicture;
 	private JLabel lblFullName;
-	private JLabel lblGender;
+	private JLabel lblGend;
 	private JLabel lblNewLabel_5;
 	private JLabel lblNewLabel_6;
 	private JLabel lblNewLabel_7;
@@ -77,6 +82,7 @@ public class App_User extends JFrame {
 	public static JDesktopPane desktopPane;
 //	private int userId;
 	private JLabel lblPosition;
+	private JLabel lblId;
 
 
 //	public int getUserId() {
@@ -165,21 +171,28 @@ public class App_User extends JFrame {
 		lblFullName = new JLabel("Full Name");
 		lblFullName.setForeground(new Color(255, 255, 255));
 		lblFullName.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblFullName.setBounds(198, 33, 242, 27);
+		lblFullName.setBounds(198, 53, 242, 27);
 		panel.add(lblFullName);
 		
-		lblGender = new JLabel("Gender");
-		lblGender.setForeground(new Color(255, 255, 255));
-		lblGender.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblGender.setBounds(198, 103, 242, 27);
-		panel.add(lblGender);
+		lblGend = new JLabel("Gender");
+		lblGend.setForeground(new Color(255, 255, 255));
+		lblGend.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lblGend.setBounds(198, 103, 242, 27);
+		panel.add(lblGend);
 		desktopPane.add(panel);
 		
 		lblPosition = new JLabel("Position");
 		lblPosition.setForeground(new Color(255, 255, 255));
 		lblPosition.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblPosition.setBounds(198, 170, 242, 27);
+		lblPosition.setBounds(198, 152, 242, 27);
 		panel.add(lblPosition);
+		
+		lblId = new JLabel("");
+		lblId.setHorizontalAlignment(SwingConstants.CENTER);
+		lblId.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblId.setForeground(new Color(255, 255, 255));
+		lblId.setBounds(68, 208, 65, 20);
+		panel.add(lblId);
 		
 		lblNewLabel_5 = new JLabel("");
 		lblNewLabel_5.setOpaque(true);
@@ -246,6 +259,7 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_9);
 		
 		lblNewLabel_8 = new JLabel("");
+		lblNewLabel_8.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblNewLabel_8.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -260,6 +274,7 @@ public class App_User extends JFrame {
 		desktopPane.add(lblNewLabel_8);
 		
 		lblprofile = new JLabel("Profile");
+		lblprofile.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblprofile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -316,6 +331,7 @@ public class App_User extends JFrame {
 		
 		
 		lblLocation = new JLabel("Locations");
+		lblLocation.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblLocation.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -387,13 +403,51 @@ public class App_User extends JFrame {
         int y = e.getYOnScreen();
         App_User.this.setLocation(x - xx, y - xy);
 	}
+	public String showDepartment(int userId) {
+		String department = null;
+		Manage_DepartmentsDAO departmentDao = new Manage_DepartmentsDAO();
+		EmployeeDAO employeeDao = new EmployeeDAO();
+		List<Department> listDepartment = departmentDao.selectAllDepartment();
+		List<Employee> listEmployee = employeeDao.selectAllEmployee();
+		for(Employee emp : listEmployee) {
+			if(emp.getId() == userId) {
+				for(Department dep : listDepartment) {
+					if(dep.getDepartment_id() == emp.getDepartment_id()) {
+						department = String.valueOf(dep.getDepartment_name());
+					}
+				}
+				break;
+			}
+		}
+		return department;
+	}
+	public String showPosition (int userId) {
+		String position = null;
+		PositionDAO positionDao = new PositionDAO();
+		EmployeeDAO employeeDao = new EmployeeDAO();
+		List<Position> listPosition = positionDao.selectAllPosition();
+		List<Employee> listEmployee = employeeDao.selectAllEmployee();
+		for(Employee emp : listEmployee) {
+			if(emp.getId() == userId) {
+				for(Position pos : listPosition) {
+					if(pos.getPosition_id() == emp.getPosition_id()) {
+						position = String.valueOf(pos.getPosition_name());
+					}
+				}
+				break;
+			}
+		}
+		return position;
+	}
 	private void displayUserInfo() {
 	    EmployeeDAO dao = new EmployeeDAO();
 	    Employee emp = dao.getUserById(UserLogin.getUserId());
 
 	    if (emp != null) {
 	        lblFullName.setText(emp.getFull_name());
-	        lblGender.setText(emp.getGender());
+	        lblGend.setText(showDepartment(emp.getId()));
+	        lblPosition.setText(showPosition(emp.getId()));
+	        lblId.setText("ID:" +emp.getId());
 	        ImageIcon icon = new ImageIcon(emp.getPicture());
 	        Image image = icon.getImage();
             Image scaledImage = image.getScaledInstance(lblPicture.getWidth(), lblPicture.getHeight(), Image.SCALE_SMOOTH);

@@ -93,7 +93,6 @@ public class Salary extends JInternalFrame {
 	private JLabel lbldola;
 	private JLabel lbldola_1;
 	private JLabel lbldola_2;
-	private JButton btnNewButton_1;
 	/**
 	 * Launch the application.
 	 */
@@ -392,10 +391,6 @@ public class Salary extends JInternalFrame {
 		lbldola_2.setBounds(1013, 376, 22, 34);
 		panelContent.add(lbldola_2);
 		
-		btnNewButton_1 = new JButton("New button");
-		btnNewButton_1.setBounds(93, 384, 89, 23);
-		panelContent.add(btnNewButton_1);
-		
 		loadcbb();
 		showinfo();
 	}
@@ -441,7 +436,7 @@ public class Salary extends JInternalFrame {
 		return shift;
 	}
 	public void loadcbb() {
-		List<Attendance> listatt = attdao.getAttpersonal(7);
+		List<Attendance> listatt = attdao.getAttpersonal(UserLogin.getUserId());
 		int[] month = new int[100];
 		int[] year = new int[100];
 		int y=0,m=0,a=0,b=0;
@@ -450,11 +445,13 @@ public class Salary extends JInternalFrame {
 			LocalDate dateFromData = LocalDate.parse(showDate(att.getWorkschedule_id()), DateTimeFormatter.ofPattern("yyyy-M-d"));
 			for (int i=0;i<100;i++) {
 				y=0;
-				m=0;
 				if(year[i]==dateFromData.getYear()) {
 					y=1;
 					break;
 				}
+			}
+			for (int i=0;i<100;i++) {
+				m=0;
 				if(month[i]==dateFromData.getMonthValue()) {
 					m=1;
 					break;
@@ -533,18 +530,16 @@ public class Salary extends JInternalFrame {
 
 	        // So sánh thời gian
 	        Duration duration = Duration.between(time1Start, time2Value);
-
+	        long hours = duration.toHours();
+	        long minutes = duration.toMinutesPart();
 	        // Xuất ra sự chênh lệch
 	        if (time2Value.isAfter(time1Start)) {
-		        long hours = duration.toHours();
-		        long minutes = duration.toMinutesPart();
-		      
 		        return true; //co di tre
 	        }else {
 	        	return false;
 	        }
 	}
-	public boolean leaveearly(String time1, String time2) {
+	public int leaveearly(String time1, String time2) {
 		LocalTime time1End = LocalTime.parse(time1.split("-")[1]);
         LocalTime time2Value = LocalTime.parse(time2);
 
@@ -555,9 +550,11 @@ public class Salary extends JInternalFrame {
         long minutes = duration.toMinutesPart();
         // Xuất ra sự chênh lệch
         if (time2Value.isAfter(time1End)) {
-	        return false; //overtime
+	        return 1; //overtime
+        }else if(time2Value.isBefore(time1End)) {
+        	return 2; //ve som
         }else {
-        	return true; //ve som
+        	return 0;
         }
 	}
 	public int wrongschedule(String time, String time1, String time2) {
@@ -604,13 +601,13 @@ public class Salary extends JInternalFrame {
 			LocalDate dateFromData = LocalDate.parse(showDate(att.getWorkschedule_id()), DateTimeFormatter.ofPattern("yyyy-M-d"));
 			if(dateFromData.getMonthValue() == month && dateFromData.getYear() == year) {
 				
-				if(!att.isPresent() ) {
+				if(!att.isPresent() || att.isPresent()==false ) {
 					if(att.getLeave_type().equals("WP")) {
 						countwp++;
 					}else {
 						countp++;
 					}
-				}
+				}else {
 				if(wrongschedule(showShift(att.getWorkschedule_id()), att.getArrival_time().toString(), att.getDeparture_time().toString()) ==1) {
 					countwp++;
 				}else if(wrongschedule(showShift(att.getWorkschedule_id()), att.getArrival_time().toString(), att.getDeparture_time().toString()) ==2) {
@@ -619,13 +616,13 @@ public class Salary extends JInternalFrame {
 					if(late(showShift(att.getWorkschedule_id()), att.getArrival_time().toString()) ){
 						countlate++;
 					}
-					if(leaveearly(showShift(att.getWorkschedule_id()), att.getDeparture_time().toString())) {
+					if(leaveearly(showShift(att.getWorkschedule_id()), att.getDeparture_time().toString()) ==2) {
 						countlate++;
-					}else {
+					}else if(leaveearly(showShift(att.getWorkschedule_id()), att.getDeparture_time().toString()) ==1)  {
 						countovertime++;
 					}
 				}
-				
+				}
 			}
 		}
 		if(countp ==0) {

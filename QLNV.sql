@@ -356,11 +356,34 @@ GO
 --VALUES ('jane_smith_username', 'securepass', 1);
 
 
---INSERT INTO WORK_SCHEDULES(EMPLOYEE_ID, SHIFT_ID, ROOM_ID, WORK_DATE)
---VALUES
---	(7,1,1,'2024-01-07'),
---	(7,2,2,'2024-01-06');
---GO 
+INSERT INTO WORK_SCHEDULES(EMPLOYEE_ID, SHIFT_ID, ROOM_ID, WORK_DATE)
+VALUES
+	(2,1,1,'2024-01-01'),
+	(2,2,2,'2024-01-02'),
+	(2,2,2,'2024-01-03'),
+	(2,2,2,'2024-01-04'),
+	(2,2,2,'2024-01-05'),
+	(2,2,2,'2024-01-06'),
+	(2,2,2,'2024-01-07'),
+	(2,2,2,'2024-01-08'),
+	(2,2,2,'2024-01-09'),
+	(2,2,2,'2024-01-10'),
+	(2,2,2,'2024-01-11'),
+	(2,2,2,'2024-01-12'),
+	(2,2,2,'2024-01-13'),
+	(2,2,2,'2024-01-14'),
+	(2,2,2,'2024-01-15'),
+	(2,2,2,'2024-01-16'),
+	(2,2,2,'2024-01-17'),
+	(2,2,2,'2024-01-18'),
+	(2,2,2,'2024-01-19'),
+	(2,2,2,'2024-01-20'),
+	(2,2,2,'2024-01-21'),
+	(2,2,2,'2024-01-22'),
+	(2,2,2,'2024-01-23'),
+	(2,2,2,'2024-01-24'),
+	(2,2,2,'2024-01-25');
+GO 
 
 --INSERT INTO ATTENDANCES(WORKSCHEDULE_ID,PRESENT,ARRIVAL_TIME , DEPARTURE_TIME ,LEAVE_TYPE)
 --VALUES
@@ -979,6 +1002,36 @@ AS
 BEGIN
 	 INSERT INTO ATTENDANCES ( WORKSCHEDULE_ID,PRESENT, ARRIVAL_TIME, DEPARTURE_TIME, LEAVE_TYPE)
      VALUES (@work_id, 'False', NULL, NULL, 'WP');
+END
+GO
+
+CREATE PROC updateAtt
+@AttendanceID INT,
+    @WorkScheduleID INT,
+    @Present VARCHAR(7),
+    @ArrivalTime TIME,
+    @DepartureTime TIME,
+    @LeaveType VARCHAR(7)
+AS
+BEGIN
+    UPDATE ATTENDANCES
+    SET
+        WORKSCHEDULE_ID = @WorkScheduleID,
+        PRESENT = @Present,
+        ARRIVAL_TIME = @ArrivalTime,
+        DEPARTURE_TIME = @DepartureTime,
+        LEAVE_TYPE = @LeaveType
+    WHERE
+        ATTENDANCE_ID = @AttendanceID;
+END;
+GO
+
+CREATE PROC deleteAtt
+@a INT
+AS
+BEGIN
+	DELETE FROM ATTENDANCES
+	WHERE ATTENDANCE_ID = @a
 END
 GO
 

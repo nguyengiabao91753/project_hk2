@@ -62,8 +62,8 @@ public class Atiendances extends JInternalFrame {
 	private JLabel lblFid;
 	private JLabel lblFshift;
 	private JDateChooser dateChooser;
-	private JLabel lblArrivalTime;
-	private JLabel lblDepTime;
+	private JTextField lblArrivalTime;
+	private JTextField lblDepTime;
 	private JComboBox cbbType;
 	private JLabel lblId;
 	private JLabel lblScheduleid;
@@ -196,12 +196,12 @@ public class Atiendances extends JInternalFrame {
 		dateChooser.setBounds(127, 250, 117, 20);
 		getContentPane().add(dateChooser);
 		
-		lblArrivalTime = new JLabel("");
+		lblArrivalTime = new JTextField("");
 		lblArrivalTime.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblArrivalTime.setBounds(127, 330, 117, 20);
 		getContentPane().add(lblArrivalTime);
 		
-		lblDepTime = new JLabel("");
+		lblDepTime = new JTextField("");
 		lblDepTime.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblDepTime.setBounds(127, 360, 117, 20);
 		getContentPane().add(lblDepTime);
