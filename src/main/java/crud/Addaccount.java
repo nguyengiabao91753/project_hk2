@@ -217,6 +217,7 @@ public class Addaccount extends JInternalFrame {
 		    int defaultStatus = 1;
 		    if (accountDAO.insert(acc,defaultStatus)) {
 		        JOptionPane.showMessageDialog(null, "Add successfully!");
+
 		        resetAccount();
 //		        var empForm = new EmployeeForm();
 //		        empForm.setVisible(true);;
@@ -227,13 +228,8 @@ public class Addaccount extends JInternalFrame {
 
 		        empform.toFront();
 		        empform.refresh();
-//		        empform.refresh();
-//		        empForm.setVisible(true);;
-//		        App_Admin app = new App_Admin();
-//		        app.loadEmployeeForm();
 		        this.dispose();
 		        
-
 		    } else {
 		        JOptionPane.showMessageDialog(null, "Add Fail!");
 		    }

@@ -96,7 +96,7 @@ public class Addemployee extends JInternalFrame {
 	private static Addemployee instance;
 	private App_Admin app;
 	private Employee emp;
-	
+	LocalDate currentDate = LocalDate.now();
 	EmployeeForm empform;
 	
 	public EmployeeForm getEmpform() {
@@ -229,22 +229,22 @@ public class Addemployee extends JInternalFrame {
 		lblSalary.setBounds(42, 263, 86, 14);
 		getContentPane().add(lblSalary);
 		
-		lblSupervisorId = new JLabel("Supervisor ID :");
+		lblSupervisorId = new JLabel("Supervisor :");
 		lblSupervisorId.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblSupervisorId.setBounds(42, 294, 86, 14);
 		getContentPane().add(lblSupervisorId);
 		
-		lblDepartmentId = new JLabel("Department ID :");
+		lblDepartmentId = new JLabel("Department :");
 		lblDepartmentId.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblDepartmentId.setBounds(42, 325, 99, 14);
 		getContentPane().add(lblDepartmentId);
 		
-		lblEducationId = new JLabel("Education ID :");
+		lblEducationId = new JLabel("Education :");
 		lblEducationId.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblEducationId.setBounds(42, 356, 86, 14);
 		getContentPane().add(lblEducationId);
 		
-		lblPositionId = new JLabel("Position ID :");
+		lblPositionId = new JLabel("Position :");
 		lblPositionId.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblPositionId.setBounds(42, 387, 86, 14);
 		getContentPane().add(lblPositionId);
@@ -471,6 +471,11 @@ public class Addemployee extends JInternalFrame {
 	    	    JOptionPane.showMessageDialog(null, "Please fill in all information");
 	    	    count++;
 	    	}
+	    int bd = currentDate.getYear() - LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()).getYear();
+	    if(currentDate.equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) || currentDate.isAfter(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) && bd <=18) {
+	    	JOptionPane.showMessageDialog(null, "Must be older than 18 years old");
+    	    count++;
+	    }
 	    return count;
 	}
 	

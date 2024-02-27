@@ -174,7 +174,7 @@ public class AddDepartment extends JInternalFrame {
 		txtDepparment.setBounds(180, 129, 300, 40);
 		panel.add(txtDepparment);
 		
-		lblNewLabel_2 = new JLabel("DEPARTMENT :");
+		lblNewLabel_2 = new JLabel("HEAD:");
 		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		lblNewLabel_2.setBounds(49, 130, 121, 40);
 		panel.add(lblNewLabel_2);
@@ -190,7 +190,7 @@ public class AddDepartment extends JInternalFrame {
 		txtRoom.setBounds(180, 210, 300, 40);
 		panel.add(txtRoom);
 		
-		lblNewLabel_5 = new JLabel("NAME :");
+		lblNewLabel_5 = new JLabel("DEPARTMENT :");
 		lblNewLabel_5.setFont(new Font("Times New Roman", Font.BOLD, 11));
 		lblNewLabel_5.setBounds(49, 50, 82, 40);
 		panel.add(lblNewLabel_5);
@@ -245,13 +245,13 @@ public class AddDepartment extends JInternalFrame {
 			JOptionPane.showMessageDialog(null, "Please fill in all information");
 			count++;
 		}else if(txtName.getText().trim().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Please fill in your name");
+			JOptionPane.showMessageDialog(null, "Please fill in department name");
 			count++;
 		}else if(txtDepparment.getText().trim().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Please fill in your Department");
+			JOptionPane.showMessageDialog(null, "Please fill in head of department");
 			count++;
 		}else if(txtRoom.getText().trim().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Please fill in your Room");
+			JOptionPane.showMessageDialog(null, "Please fill in Room");
 			count++;
 		}
 		return count;
@@ -267,6 +267,23 @@ public class AddDepartment extends JInternalFrame {
 	newDEP.setHead_of_department(txtDepparment.getText()+1);
 	newDEP.setRoom(txtRoom.getText()+1);
 	Manage_DepartmentsDAO workdao = new Manage_DepartmentsDAO();
+	RoomDAO roomdao = new RoomDAO();
+	
+	for (Department dep : workdao.selectAllDepartment()) {
+		if(dep.getDepartment_name().equals(newDEP.getDepartment_name())) {
+			JOptionPane.showMessageDialog(null, "This Department aldready exists!");
+			return;
+		}else if(dep.getRoom().equals(newDEP.getRoom())) {
+			JOptionPane.showMessageDialog(null, "This Room aldready exists!");
+			return;
+		}
+	}
+	for (Room room : roomdao.selectAllRoom()) {
+		if(room.getName().equals(newDEP.getRoom())) {
+			JOptionPane.showMessageDialog(null, "This Room is patient's room");
+			return;
+		}
+	}
 	if(workdao.insert(newDEP)) {
 		JOptionPane.showMessageDialog(null, "Add successfully!");
 		}

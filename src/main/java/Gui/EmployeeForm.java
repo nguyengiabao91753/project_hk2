@@ -903,6 +903,11 @@ public class EmployeeForm extends JInternalFrame {
 	    	    JOptionPane.showMessageDialog(null, "Please fill in all information");
 	    	    count++;
 	    	}
+	    Employee emp = employeeDao.getUserById(Integer.parseInt(txtEmployeeId.getText()));
+	    if(emp.getLevel().equals("Admin") && AdminLogin.getAdminId() != Integer.parseInt(txtEmployeeId.getText())) {
+	    	JOptionPane.showMessageDialog(null, "Don't have any permission to do");
+    	    count++;
+	    }
 	    return count;
 	}
 
@@ -1007,6 +1012,7 @@ public class EmployeeForm extends JInternalFrame {
 			    JOptionPane.showMessageDialog(null, "You are logged in with this account, so you cannot delete it.");
 			    return;
 			}
+			
 			String employeeName = txtFullName.getText();
 			
 			int selectedRow = table.getSelectedRow();
@@ -1023,7 +1029,11 @@ public class EmployeeForm extends JInternalFrame {
 		          break;
 		        }
 		      }
-
+		      	Employee emp = employeeDao.getUserById(Integer.parseInt(txtEmployeeId.getText()));
+			    if(emp.getLevel().equals("Admin")) {
+			    	JOptionPane.showMessageDialog(null, "Don't have any permission to do");
+		    	    return;
+			    }
 		      // Hiển thị thông báo nếu employee là supervisor
 		      if (isSupervisor) {
 		        JOptionPane.showMessageDialog(null, "Cannot delete this employee because they are a supervisor.");

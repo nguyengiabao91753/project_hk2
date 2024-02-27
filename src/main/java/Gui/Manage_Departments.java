@@ -426,7 +426,7 @@ public class Manage_Departments extends JInternalFrame {
 		
 		model.addColumn("Department_Id");
 		model.addColumn("Department_Name");
-		model.addColumn("Dead_Of_Department");
+		model.addColumn("Head_Of_Department");
 		model.addColumn("Room");
 		//tìm trong bảng tổng số dòng
 		 totalCount = DepDAO.countDepartments();
@@ -472,13 +472,13 @@ public class Manage_Departments extends JInternalFrame {
 			JOptionPane.showMessageDialog(null, "Please fill in all information");
 			count++;
 		}else if(txtName.getText().trim().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Please fill in your name");
+			JOptionPane.showMessageDialog(null, "Please fill in department name");
 			count++;
 		}else if(txtDeparment.getText().trim().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Please fill in your Department");
+			JOptionPane.showMessageDialog(null, "Please fill in head of department");
 			count++;
 		}else if(txtRoom.getText().trim().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Please fill in your Room");
+			JOptionPane.showMessageDialog(null, "Please fill in Room");
 			count++;
 		}
 		return count;
@@ -512,6 +512,24 @@ public class Manage_Departments extends JInternalFrame {
 		DepNew.setDepartment_name(txtName.getText());
 		DepNew.setHead_of_department(txtDeparment.getText());
 		DepNew.setRoom(txtRoom.getText());
+//		Manage_DepartmentsDAO workdao = new Manage_DepartmentsDAO();
+		RoomDAO roomdao = new RoomDAO();
+		
+		for (Department dep : DepDAO.selectAllDepartment()) {
+			if(dep.getDepartment_name().equals(DepNew.getDepartment_name())) {
+				JOptionPane.showMessageDialog(null, "This Department aldready exists!");
+				return;
+			}else if(dep.getRoom().equals(DepNew.getRoom())) {
+				JOptionPane.showMessageDialog(null, "This Room aldready exists!");
+				return;
+			}
+		}
+		for (Room room : roomdao.selectAllRoom()) {
+			if(room.getName().equals(DepNew.getRoom())) {
+				JOptionPane.showMessageDialog(null, "This Room is patient's room");
+				return;
+			}
+		}
 		DepDAO.update(DepNew);
 		loadDepartment();
 		refresh();
