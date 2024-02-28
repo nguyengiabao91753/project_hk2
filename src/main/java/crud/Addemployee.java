@@ -471,6 +471,7 @@ public class Addemployee extends JInternalFrame {
 	    	    JOptionPane.showMessageDialog(null, "Please fill in all information");
 	    	    count++;
 	    	}
+	    
 	    int bd = currentDate.getYear() - LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault()).getYear();
 	    if(currentDate.equals(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) || currentDate.isAfter(LocalDate.ofInstant(dateChooser.getDate().toInstant(), ZoneId.systemDefault())) && bd <=18) {
 	    	JOptionPane.showMessageDialog(null, "Must be older than 18 years old");

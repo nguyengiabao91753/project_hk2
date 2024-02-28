@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 
 public class DBCon {
     private static String url = "jdbc:sqlserver://";
-    private static String serverName = "MSI";
+    private static String serverName = "LAPTOP-2V0L4U98";
     private static String portNumber = "1433";
     private static String databaseName = "QLNV";
     private static String username = "sa";
@@ -20,7 +20,6 @@ public class DBCon {
 
         try {
         	con = DriverManager.getConnection(getUrl());
-            System.out.println("Connected successfully");
         } catch (Exception e) {
             e.printStackTrace();
         }

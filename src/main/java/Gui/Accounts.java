@@ -19,6 +19,7 @@ import javax.swing.table.TableColumn;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import App.AdminLogin;
 import App.App_Admin;
 import dao.AccountDAO;
 import dao.EmployeeDAO;
@@ -567,13 +568,20 @@ public class Accounts extends JInternalFrame {
 	
 	
 	protected void btnBlockActionPerformed(ActionEvent e) {
-		int statusColumnIndex = table.getColumnModel().getColumnIndex("Status");
-	    int selectedRow = table.getSelectedRow();
-
-	    if (selectedRow >= 0) { 
+			int statusColumnIndex = table.getColumnModel().getColumnIndex("Status");
+		    int selectedRow = table.getSelectedRow();
+	    
+	    	if (selectedRow >= 0) { 
 	        int status = (int) table.getValueAt(selectedRow, statusColumnIndex);
 	        if (status == 0) {
 	            JOptionPane.showMessageDialog(null, "This account has been already blocked.");
+	            return;
+	        }
+	        EmployeeDAO empDao = new EmployeeDAO();
+	        Employee emp = empDao.getUserById(AdminLogin.getAdminId());
+
+	        if (emp.getLevel().equals("Admin")) {
+	            JOptionPane.showMessageDialog(null, "You cannot block an Admin account.", "Information", JOptionPane.WARNING_MESSAGE);
 	            return;
 	        }
 
